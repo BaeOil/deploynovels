@@ -188,13 +188,8 @@ func main() {
 		dashboardService,
 	)
 
-	// Health check endpoint สำหรับ Railway / uptime monitor
-	// mux จับคู่ pattern ที่เฉพาะเจาะจงกว่า "/" ก่อน จึงไม่ทับ route เดิม (แม้จะมี register ตัวที่ขึ้นต้นด้วย / อยู่)
-	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		_, _ = w.Write([]byte(`{"status":"ok"}`))
-	})
+	// หมายเหตุ: /health ถูก register ไว้แล้วใน registerCoreRoutes (auth_routes.go)
+	// จึงไม่ต้องเพิ่มใหม่ตรงนี้ ถ้าเพิ่มซ้ำ net/http จะ panic ตอน startup
 
 	// -----------------------
 	// 7. Start Server
