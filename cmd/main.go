@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	"novel-be/config"
 	"novel-be/internal/db"
@@ -27,6 +28,19 @@ func main() {
 		log.Fatalf("❌ load config fail: %v", err)
 	}
 	middleware.SetJWTSecret(cfg.JWTSecret)
+
+	// Debug summary (ไม่โชว์ค่า secret แค่บอกว่ามีค่าหรือว่าง) — ใช้วินิจฉัยตอน deploy บน Railway
+	mask := func(s string) string {
+		if strings.TrimSpace(s) == "" {
+			return "<EMPTY>"
+		}
+		return fmt.Sprintf("<set:%d chars>", len(strings.TrimSpace(s)))
+	}
+	fmt.Printf("🔧 config: PORT=%s DB=%s MINIO_ENDPOINT=%s REGION=%s PUBLIC=%s KEY=%s SECRET=%s SSL=%v ORIGINS=%s JWT=%s JWT_REFRESH=%s\n",
+		cfg.AppPort, mask(cfg.GetConnectionString()[:min(len(cfg.GetConnectionString()), 24)]),
+		mask(cfg.MinIOEndpoint), cfg.MinIORegion, mask(cfg.MinIOPublicEndpoint),
+		mask(cfg.MinIOAccessKey), mask(cfg.MinIOSecretKey), cfg.MinIOUseSSL,
+		mask(cfg.AllowedOrigins), mask(cfg.JWTSecret), mask(cfg.JWTRefreshSecret))
 
 	// -----------------------
 	// 2. Connect DB
