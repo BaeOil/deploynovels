@@ -14,8 +14,10 @@ import (
 	"novel-be/internal/routes"
 	"novel-be/internal/service"
 
-	"github.com/minio/minio-go/v7"
-	"github.com/minio/minio-go/v7/pkg/credentials"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	awsconfig "github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/credentials"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
 func main() {
@@ -57,22 +59,28 @@ func main() {
 	fmt.Println("✅ DB Connected")
 
 	// -----------------------
-	// 3. Connect MinIO / Supabase Storage (S3-compatible)
+	// 3. Connect Supabase Storage (S3-compatible) via AWS SDK for Go v2
 	// -----------------------
-	minioClient, err := minio.New(cfg.MinIOEndpoint, &minio.Options{
-		Creds:  credentials.NewStaticV4(cfg.MinIOAccessKey, cfg.MinIOSecretKey, ""),
-		Secure: cfg.MinIOUseSSL,
-		Region: cfg.MinIORegion,
-	})
+	// minio-go ใช้ไม่ได้กับ Supabase เพราะไม่รับ endpoint ที่มี path (/storage/v1/s3)
+	// AWS SDK v2 รองรับ BaseEndpoint ที่มี path + UsePathStyle ได้ จึงเลิกใช้ minio-go แล้ว
+	awsCfg, err := awsconfig.LoadDefaultConfig(context.Background(),
+		awsconfig.WithRegion(cfg.MinIORegion),
+		awsconfig.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(cfg.MinIOAccessKey, cfg.MinIOSecretKey, "")),
+	)
 	if err != nil {
-		log.Fatalf("❌ MinIO connect fail: %v", err)
+		log.Fatalf("❌ AWS config load fail: %v", err)
 	}
 
-	_, err = minioClient.ListBuckets(context.Background())
-	if err != nil {
-		log.Fatalf("❌ MinIO ping fail: %v", err)
+	s3Client := s3.NewFromConfig(awsCfg, func(o *s3.Options) {
+		o.BaseEndpoint = aws.String(cfg.MinIOEndpoint) // https://<ref>.storage.supabase.co/storage/v1/s3
+		o.UsePathStyle = true                          // path-style addressing (บังคับสำหรับ Supabase / MinIO-style S3)
+	})
+
+	// ทดสอบการเชื่อมต่อจริงด้วยการเรียก ListBuckets (ถ้า key ผิด/หมดอายุจะเจอ error ตรงนี้)
+	if _, err := s3Client.ListBuckets(context.Background(), &s3.ListBucketsInput{}); err != nil {
+		log.Fatalf("❌ Supabase Storage ping fail: %v", err)
 	}
-	fmt.Println("✅ MinIO Connected")
+	fmt.Println("✅ Supabase Storage Connected")
 
 	// -----------------------
 	// 4. Repositories
@@ -82,7 +90,7 @@ func main() {
 	chapterRepo := repository.NewChapterRepository(dbConn)
 	socialRepo := repository.NewSocialRepository(dbConn)
 	readingRepo := repository.NewReadingRepository(dbConn)
-	mediaRepo := repository.NewMinIOMediaRepository(minioClient, cfg.MinIOEndpoint, cfg.GetMinIOPublicBaseURL())
+	mediaRepo := repository.NewS3MediaRepository(s3Client, cfg.GetMinIOPublicBaseURL())
 	categoryRepo := repository.NewCategoryRepository(dbConn)
 	authRepo := repository.NewAuthRepository(dbConn)
 	writerRepo := repository.NewWriterRepository(dbConn) // 👈 ผูกเชื่อมตารางสมัครนักเขียนเข้าฐานข้อมูลจริง
