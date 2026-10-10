@@ -83,6 +83,9 @@ paths:
               properties:
                 username:
                   type: string
+                  minLength: 3
+                  maxLength: 50
+                  description: "ชื่อผู้ใช้ 3-50 อักขระ (VAL-03)"
                 email:
                   type: string
                   format: email
@@ -92,7 +95,7 @@ paths:
                 profileImage:
                   type: string
                   format: binary
-                  description: "รูปโปรไฟล์ผู้ใช้ (ไม่บังคับ)"
+                  description: "รูปโปรไฟล์ผู้ใช้ (ไม่บังคับ): ไม่เกิน 5MB ประเภทไฟล์ JPEG, PNG หรือ WebP เท่านั้น (VAL-09, VAL-10)"
       responses:
         '201':
           description: User registered successfully
@@ -219,6 +222,9 @@ paths:
               properties:
                 username:
                   type: string
+                  minLength: 3
+                  maxLength: 50
+                  description: "ชื่อผู้ใช้ 3-50 อักขระ (VAL-03)"
       responses:
         '200':
           description: Username updated
@@ -320,6 +326,7 @@ paths:
                 profileImage:
                   type: string
                   format: binary
+                  description: "รูปโปรไฟล์: ไม่เกิน 5MB ประเภทไฟล์ JPEG, PNG หรือ WebP เท่านั้น (VAL-09, VAL-10)"
       responses:
         '200':
           description: Profile picture updated
@@ -356,6 +363,7 @@ paths:
                 profileImage:
                   type: string
                   format: binary
+                  description: "รูปโปรไฟล์: ไม่เกิน 5MB ประเภทไฟล์ JPEG, PNG หรือ WebP เท่านั้น (VAL-09, VAL-10)"
       responses:
         '200':
           description: Profile picture updated
@@ -650,17 +658,24 @@ paths:
               properties:
                 title:
                   type: string
+                  maxLength: 100
+                  description: "ชื่อเรื่อง ไม่เกิน 100 อักขระ (VAL-01)"
                 captions:
                   type: string
                   nullable: true
+                  maxLength: 200
+                  description: "คำโปรย (Tagline) ไม่เกิน 200 อักขระ (VAL-02)"
                 introduction:
                   type: string
                   nullable: true
+                  description: "คำนำนิยาย (เนื้อหาแบบยาว) — ไม่จำกัดจำนวนอักขระ (VAL-11)"
                 cover_image:
                   type: string
                   nullable: true
                 category_ids:
                   type: array
+                  maxItems: 3
+                  description: "หมวดหมู่ของนิยาย ไม่เกิน 3 หมวดหมู่ (VAL-06)"
                   items:
                     type: integer
                 status:
@@ -762,17 +777,24 @@ paths:
               properties:
                 title:
                   type: string
+                  maxLength: 100
+                  description: "ชื่อเรื่อง ไม่เกิน 100 อักขระ (VAL-01)"
                 captions:
                   type: string
                   nullable: true
+                  maxLength: 200
+                  description: "คำโปรย (Tagline) ไม่เกิน 200 อักขระ (VAL-02)"
                 introduction:
                   type: string
                   nullable: true
+                  description: "คำนำนิยาย (เนื้อหาแบบยาว) — ไม่จำกัดจำนวนอักขระ (VAL-11)"
                 cover_image:
                   type: string
                   nullable: true
                 category_ids:
                   type: array
+                  maxItems: 3
+                  description: "หมวดหมู่ของนิยาย ไม่เกิน 3 หมวดหมู่ (VAL-06)"
                   items:
                     type: integer
                 status:
@@ -1204,6 +1226,7 @@ paths:
                   type: string
                 content:
                   type: string
+                  description: "เนื้อหาของฉาก (เนื้อหาแบบยาว) — ไม่จำกัดจำนวนอักขระ (VAL-11)"
                 image_url:
                   type: string
                 type:
@@ -1228,6 +1251,8 @@ paths:
                     properties:
                       label:
                         type: string
+                        maxLength: 80
+                        description: "ข้อความตัวเลือก ไม่เกิน 80 อักขระ (VAL-04)"
                       to_scene_id:
                         type: integer
                       choice_id:
@@ -1309,6 +1334,7 @@ paths:
                   type: string
                 content:
                   type: string
+                  description: "เนื้อหาของฉาก (เนื้อหาแบบยาว) — ไม่จำกัดจำนวนอักขระ (VAL-11)"
                 type:
                   type: string
                 is_ending:
@@ -1331,6 +1357,8 @@ paths:
                         type: integer
                       label:
                         type: string
+                        maxLength: 80
+                        description: "ข้อความตัวเลือก ไม่เกิน 80 อักขระ (VAL-04)"
                       to_scene_id:
                         type: integer
                       targetSubScene:
@@ -1399,6 +1427,8 @@ paths:
                   type: integer
                 label:
                   type: string
+                  maxLength: 80
+                  description: "ข้อความตัวเลือก ไม่เกิน 80 อักขระ (VAL-04)"
       responses:
         '201':
           description: Choice created successfully
@@ -1455,6 +1485,8 @@ paths:
               properties:
                 label:
                   type: string
+                  maxLength: 80
+                  description: "ข้อความตัวเลือก ไม่เกิน 80 อักขระ (VAL-04)"
                 to_scene_id:
                   type: integer
       responses:
@@ -1921,11 +1953,14 @@ paths:
                   description: "ช่องทางติดต่อเพิ่มเติม"
                 genres:
                   type: string
-                  description: "JSON array string เช่น [\"romance\",\"fantasy\"]"
+                  description: "JSON array string เช่น [\"romance\",\"fantasy\"] — ความสนใจของนักเขียน 3-5 รายการ (VAL-07)"
+                category_ids:
+                  type: string
+                  description: "JSON array string ของรหัสหมวดหมู่/ความสนใจที่เลือกตอนสมัคร 3-5 รายการ (VAL-07; ฟิลด์ multipart ที่ Backend อ่านจริง)"
                 avatar:
                   type: string
                   format: binary
-                  description: "รูปโปรไฟล์นักเขียน (ไม่บังคับ)"
+                  description: "รูปโปรไฟล์นักเขียน (ไม่บังคับ): ไม่เกิน 5MB ประเภทไฟล์ JPEG, PNG หรือ WebP เท่านั้น (VAL-09, VAL-10)"
       responses:
         '200':
           description: Writer application submitted successfully
@@ -2124,7 +2159,7 @@ paths:
                 image:
                   type: string
                   format: binary
-                  description: "ไฟล์รูปภาพ (form field name: image)"
+                  description: "ไฟล์รูปภาพ (form field name: image): ไม่เกิน 10MB ประเภทไฟล์ JPEG, PNG หรือ WebP เท่านั้น (VAL-08, VAL-10) — ใช้เป็นรูปปกนิยายเมื่อส่ง novel_id"
                 novel_id:
                   type: integer
                   description: "optional: ถ้าส่งมาจะอัปเดต cover_image ของนิยายเรื่องนั้นด้วย"

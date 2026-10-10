@@ -89,9 +89,10 @@ func (h *WriterHandler) Apply(w http.ResponseWriter, r *http.Request) {
 		}
 		if err == nil {
 			defer file.Close()
-			uploadedURL, uploadErr := h.mediaService.UploadImage(r.Context(), handler)
+			// avatar ตอนยื่นคำขอสมัครนักเขียน: จำกัด 5MB ตาม VAL-09
+			uploadedURL, uploadErr := h.mediaService.UploadImage(r.Context(), handler, service.ProfilePictureMaxBytes)
 			if uploadErr != nil {
-				WriteError(w, http.StatusBadRequest, "ไม่สามารถอัปโหลดรูปภาพได้: "+uploadErr.Error())
+				writeUploadError(w, uploadErr)
 				return
 			}
 			req.AvatarURL = uploadedURL
@@ -104,13 +105,17 @@ func (h *WriterHandler) Apply(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := h.service.ApplyForWriter(r.Context(), uint(userID), req); err != nil {
-		statusCode := http.StatusInternalServerError
-		if errors.Is(err, service.ErrAlreadyWriter) {
-			statusCode = http.StatusForbidden
-		} else if errors.Is(err, service.ErrAlreadyApply) {
-			statusCode = http.StatusBadRequest
+		switch {
+		case errors.Is(err, service.ErrAlreadyWriter):
+			WriteError(w, http.StatusForbidden, err.Error())
+		case errors.Is(err, service.ErrAlreadyApply),
+			errors.Is(err, service.ErrWriterApplyMissingRequired),
+			errors.Is(err, service.ErrWriterApplyInvalidEmail),
+			errors.Is(err, dto.ErrInvalidWriterInterests):
+			WriteError(w, http.StatusBadRequest, err.Error())
+		default:
+			writeInternalError(w, err)
 		}
-		WriteError(w, statusCode, err.Error())
 		return
 	}
 
@@ -131,7 +136,7 @@ func (h *WriterHandler) GetPendingRequests(w http.ResponseWriter, r *http.Reques
 
 	requests, err := h.service.GetPendingRequests(r.Context(), status, page, limit)
 	if err != nil {
-		WriteError(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 
@@ -164,7 +169,11 @@ func (h *WriterHandler) Approve(w http.ResponseWriter, r *http.Request) {
 	writerID, _ := strconv.Atoi(writerIDStr)
 
 	if err := h.service.ApproveWriter(r.Context(), uint(writerID), adminID); err != nil {
-		WriteError(w, writerActionStatusCode(err), err.Error())
+		if status := writerActionStatusCode(err); status == http.StatusInternalServerError {
+			writeInternalError(w, err)
+		} else {
+			WriteError(w, status, err.Error())
+		}
 		return
 	}
 
@@ -198,7 +207,7 @@ func (h *WriterHandler) GetApplicationStatus(w http.ResponseWriter, r *http.Requ
 			json.NewEncoder(w).Encode(map[string]interface{}{"status": "none"})
 			return
 		}
-		WriteError(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 
@@ -339,7 +348,7 @@ func (h *WriterHandler) UpdateProfile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := h.service.UpdateWriterProfile(r.Context(), writer.WriterID, req); err != nil {
-		WriteError(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 

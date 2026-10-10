@@ -56,9 +56,10 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 	if err == nil {
 		defer file.Close()
 
-		uploadedURL, uploadErr := h.mediaService.UploadImage(r.Context(), handler)
+		// รูปโปรไฟล์ตอนสมัครสมาชิก: จำกัด 5MB ตาม VAL-09
+		uploadedURL, uploadErr := h.mediaService.UploadImage(r.Context(), handler, service.ProfilePictureMaxBytes)
 		if uploadErr != nil {
-			WriteError(w, http.StatusBadRequest, "ไม่สามารถอัปโหลดรูปภาพได้: "+uploadErr.Error())
+			writeUploadError(w, uploadErr)
 			return
 		}
 		avatarURL = uploadedURL
@@ -66,7 +67,11 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 
 	res, err := h.authService.Register(r.Context(), req, avatarURL)
 	if err != nil {
-		WriteError(w, http.StatusInternalServerError, "สมัครสมาชิกไม่สำเร็จ: "+err.Error())
+		if err.Error() == "username already in use" || err.Error() == "email already in use" {
+			WriteError(w, http.StatusConflict, err.Error())
+			return
+		}
+		writeInternalError(w, err)
 		return
 	}
 	recordAuditWithBackendActor(r, h.auditService, &res.User.ID, res.User.Role, service.AuditEvent{Action: "REGISTER", TargetType: "user", TargetID: int64Pointer(int(res.User.ID)), Status: "SUCCESS", Metadata: map[string]interface{}{"email": res.User.Email, "username": res.User.Username}})
@@ -183,7 +188,7 @@ func (h *AuthHandler) GetUserInfo(w http.ResponseWriter, r *http.Request) {
 	user, err := h.authService.GetUserByID(r.Context(), userID)
 	if err != nil {
 		fmt.Printf("❌ ERROR in GetUserByID: %v\n", err)
-		WriteError(w, http.StatusInternalServerError, "ไม่สามารถดึงข้อมูลผู้ใช้ได้: "+err.Error())
+		writeInternalError(w, err)
 		return
 	}
 	if user == nil {
@@ -248,7 +253,7 @@ func (h *AuthHandler) UpdateOwnUsername(w http.ResponseWriter, r *http.Request) 
 			WriteError(w, http.StatusBadRequest, err.Error())
 			return
 		}
-		WriteError(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 	recordAudit(r, h.auditService, service.AuditEvent{Action: "UPDATE_PROFILE", TargetType: "user", TargetID: int64Pointer(int(userID)), Status: "SUCCESS", Metadata: map[string]interface{}{"field": "username"}})
@@ -309,7 +314,7 @@ func (h *AuthHandler) UpdateOwnEmail(w http.ResponseWriter, r *http.Request) {
 			WriteError(w, http.StatusNotFound, err.Error())
 			return
 		}
-		WriteError(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 	recordAudit(r, h.auditService, service.AuditEvent{Action: "UPDATE_PROFILE", TargetType: "user", TargetID: int64Pointer(int(userID)), Status: "SUCCESS", Metadata: map[string]interface{}{"field": "email"}})
@@ -374,7 +379,7 @@ func (h *AuthHandler) UpdateOwnPassword(w http.ResponseWriter, r *http.Request) 
 			WriteError(w, http.StatusNotFound, err.Error())
 			return
 		}
-		WriteError(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 	recordAudit(r, h.auditService, service.AuditEvent{Action: "UPDATE_PROFILE", TargetType: "user", TargetID: int64Pointer(int(userID)), Status: "SUCCESS", Metadata: map[string]interface{}{"field": "password"}})
@@ -414,9 +419,10 @@ func (h *AuthHandler) UpdateOwnProfilePicture(w http.ResponseWriter, r *http.Req
 	}
 	defer file.Close()
 
-	uploadedURL, uploadErr := h.mediaService.UploadImage(r.Context(), handler)
+	// รูปโปรไฟล์: จำกัด 5MB ตาม VAL-09 (แยกจากปกนิยายที่ 10MB)
+	uploadedURL, uploadErr := h.mediaService.UploadImage(r.Context(), handler, service.ProfilePictureMaxBytes)
 	if uploadErr != nil {
-		WriteError(w, http.StatusBadRequest, "ไม่สามารถอัปโหลดรูปภาพได้: "+uploadErr.Error())
+		writeUploadError(w, uploadErr)
 		return
 	}
 
@@ -430,7 +436,7 @@ func (h *AuthHandler) UpdateOwnProfilePicture(w http.ResponseWriter, r *http.Req
 			WriteError(w, http.StatusNotFound, err.Error())
 			return
 		}
-		WriteError(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 	recordAuditWithBackendActor(r, h.auditService, nil, "", service.AuditEvent{Action: "DELETE_ACCOUNT", TargetType: "user", TargetID: nil, Status: "SUCCESS", Metadata: map[string]interface{}{"deleted_user_id": userID}})
@@ -479,7 +485,7 @@ func (h *AuthHandler) DeleteOwnAccount(w http.ResponseWriter, r *http.Request) {
 			WriteError(w, http.StatusConflict, err.Error())
 			return
 		}
-		WriteError(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 
@@ -513,7 +519,7 @@ func (h *AuthHandler) SuspendOwnAccount(w http.ResponseWriter, r *http.Request) 
 			WriteError(w, http.StatusNotFound, err.Error())
 			return
 		}
-		WriteError(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 
@@ -531,4 +537,3 @@ func (h *AuthHandler) SuspendOwnAccount(w http.ResponseWriter, r *http.Request) 
 		"message": "account suspended successfully",
 	})
 }
-

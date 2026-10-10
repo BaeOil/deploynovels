@@ -37,7 +37,7 @@ func RegisterRoutes(
 	registerCoreRoutes(mux, flow, scene, novel, writer, notificationService, analytics, audit, authHandler, notificationHandler, reportHandler)
 	registerWriterAdminRoutes(mux, writerHandler, adminUserHandler, reportHandler, auditHandler, dashboardHandler, novel, writer, notificationService, audit, category)
 	registerResourceRoutes(mux, category, novel, scene, chapter, social, writer, reading, notificationService, audit)
-	registerMediaRoutes(mux, media, novel)
+	registerMediaRoutes(mux, media, novel, writer)
 	registerReadingSocialRoutes(mux, reading, social, notificationService, scene, novel, writer, chapter)
 	registerNotificationRoutes(mux, notificationHandler)
 }

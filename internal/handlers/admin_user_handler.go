@@ -37,7 +37,7 @@ func (h *AdminUserHandler) ListUsers(w http.ResponseWriter, r *http.Request) {
 
 	users, err := h.authService.ListUsers(r.Context(), role, status, search, page, limit)
 	if err != nil {
-		WriteError(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 
@@ -60,7 +60,7 @@ func (h *AdminUserHandler) GetUserDetail(w http.ResponseWriter, r *http.Request)
 
 	user, err := h.authService.GetUserForAdmin(r.Context(), uint(userID))
 	if err != nil {
-		WriteError(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 	if user == nil {
@@ -128,7 +128,7 @@ func (h *AdminUserHandler) UpdateUserStatus(w http.ResponseWriter, r *http.Reque
 			WriteError(w, http.StatusForbidden, err.Error())
 			return
 		}
-		WriteError(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 	action := "UNSUSPEND_USER"
@@ -178,7 +178,7 @@ func (h *AdminUserHandler) DemoteUser(w http.ResponseWriter, r *http.Request) {
 			WriteError(w, http.StatusForbidden, err.Error())
 			return
 		}
-		WriteError(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 	metadata := map[string]interface{}{"new_role": "reader"}
@@ -231,7 +231,7 @@ func (h *AdminUserHandler) RestoreUserWriterAccess(w http.ResponseWriter, r *htt
 			WriteError(w, http.StatusForbidden, err.Error())
 			return
 		}
-		WriteError(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 	metadata := map[string]interface{}{"new_role": "writer"}
@@ -270,7 +270,7 @@ func (h *AdminUserHandler) DeleteUser(w http.ResponseWriter, r *http.Request) {
 
 	hasWriterNovels, err := h.authService.HasWriterNovels(r.Context(), uint(userID))
 	if err != nil {
-		WriteError(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 	if hasWriterNovels {
@@ -280,7 +280,7 @@ func (h *AdminUserHandler) DeleteUser(w http.ResponseWriter, r *http.Request) {
 
 	previous, err := h.authService.GetUserForAdmin(r.Context(), uint(userID))
 	if err != nil {
-		WriteError(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 	if previous == nil {
@@ -297,7 +297,7 @@ func (h *AdminUserHandler) DeleteUser(w http.ResponseWriter, r *http.Request) {
 			WriteError(w, http.StatusConflict, "ต้องระงับบัญชีแทนการลบ เนื่องจากมีนิยายอยู่ในระบบ")
 			return
 		}
-		WriteError(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 	metadata := map[string]interface{}{"username": previous.Username, "email": previous.Email, "role": previous.Role, "status": previous.Status}
@@ -356,7 +356,7 @@ func (h *AdminUserHandler) AdminUpdateUsername(w http.ResponseWriter, r *http.Re
 			WriteError(w, http.StatusBadRequest, err.Error())
 			return
 		}
-		WriteError(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 

@@ -42,7 +42,7 @@ func AddLikeHandler(socialService service.SocialService, notificationService ser
 		}
 
 		if err := socialService.AddLike(models.Like{UserID: req.UserID, NovelID: req.NovelID}); err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -80,7 +80,7 @@ func RemoveLikeHandler(socialService service.SocialService, notificationService 
 		}
 
 		if err := socialService.RemoveLike(int(userID), novelID); err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -126,7 +126,7 @@ func AddToBookshelfHandler(socialService service.SocialService) http.HandlerFunc
 		}
 
 		if err := socialService.AddToBookshelf(req.UserID, req.NovelID); err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -169,7 +169,7 @@ func RemoveFromBookshelfHandler(socialService service.SocialService) http.Handle
 		}
 
 		if err := socialService.RemoveFromBookshelf(int(userID), novelID); err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -204,7 +204,7 @@ func GetBookshelfHandler(socialService service.SocialService) http.HandlerFunc {
 
 		novels, err := socialService.GetBookshelfByUserID(userID)
 		if err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -233,7 +233,7 @@ func GetBookshelfCountHandler(socialService service.SocialService) http.HandlerF
 
 		count, err := socialService.GetBookshelfCountByNovelID(novelID)
 		if err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -268,7 +268,7 @@ func AddCommentHandler(socialService service.SocialService, notificationService 
 
 		commentID, err := socialService.AddComment(models.Comment{UserID: req.UserID, NovelID: req.NovelID, SceneID: req.SceneID, Content: req.Content})
 		if err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -310,7 +310,7 @@ func RemoveCommentHandler(socialService service.SocialService) http.HandlerFunc 
 				WriteError(w, http.StatusNotFound, "comment not found or not owned by user")
 				return
 			}
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -349,7 +349,7 @@ func AddFollowHandler(socialService service.SocialService, notificationService s
 				WriteError(w, http.StatusBadRequest, err.Error())
 				return
 			}
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -388,7 +388,7 @@ func FollowWriterHandler(socialService service.SocialService, notificationServic
 				WriteError(w, http.StatusBadRequest, err.Error())
 				return
 			}
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -422,7 +422,7 @@ func UnfollowWriterHandler(socialService service.SocialService) http.HandlerFunc
 		}
 
 		if err := socialService.RemoveFollow(int(userID), writerID); err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -445,7 +445,7 @@ func GetFollowingWritersHandler(socialService service.SocialService) http.Handle
 
 		writers, err := socialService.GetFollowingWriters(int(userID))
 		if err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 

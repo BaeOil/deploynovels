@@ -75,7 +75,6 @@ func (h *AuditHandler) GetMetadata(w http.ResponseWriter, r *http.Request) {
 	WriteJSON(w, http.StatusOK, metadata)
 }
 
-
 func parseAuditFilter(r *http.Request) (dto.AuditLogFilter, error) {
 	query := r.URL.Query()
 	filter := dto.AuditLogFilter{Action: strings.TrimSpace(query.Get("action")), TargetType: strings.TrimSpace(query.Get("target_type")), Status: strings.TrimSpace(query.Get("status")), Page: 1, Limit: 50}

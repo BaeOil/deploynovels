@@ -3,7 +3,21 @@ package handlers
 import (
 	"errors"
 	"strings"
+	"unicode/utf8"
 )
+
+// maxChoiceLabelLength ตาม VAL-04 ใน docs/SRS.md: label ไม่เกิน 80 อักขระ
+const maxChoiceLabelLength = 80
+
+func validateChoiceLabel(label string) error {
+	if strings.TrimSpace(label) == "" {
+		return errors.New("label is required")
+	}
+	if utf8.RuneCountInString(label) > maxChoiceLabelLength {
+		return errors.New("label must not exceed 80 characters")
+	}
+	return nil
+}
 
 type CreateChoiceRequest struct {
 	FromSceneID int    `json:"from_scene_id"`
@@ -18,10 +32,7 @@ func (r *CreateChoiceRequest) Validate() error {
 	if r.ToSceneID == 0 {
 		return errors.New("to_scene_id is required")
 	}
-	if strings.TrimSpace(r.Label) == "" {
-		return errors.New("label is required")
-	}
-	return nil
+	return validateChoiceLabel(r.Label)
 }
 
 type UpdateChoiceRequest struct {
@@ -30,11 +41,8 @@ type UpdateChoiceRequest struct {
 }
 
 func (r *UpdateChoiceRequest) Validate() error {
-	if strings.TrimSpace(r.Label) == "" {
-		return errors.New("label is required")
-	}
 	if r.ToSceneID == 0 {
 		return errors.New("to_scene_id is required")
 	}
-	return nil
+	return validateChoiceLabel(r.Label)
 }

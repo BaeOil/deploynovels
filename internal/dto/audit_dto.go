@@ -42,4 +42,3 @@ type AuditLogMetadataResponse struct {
 	TargetTypes []string `json:"target_types"`
 	Statuses    []string `json:"statuses"`
 }
-

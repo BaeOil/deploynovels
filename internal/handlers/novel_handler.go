@@ -12,6 +12,7 @@ import (
 	"novel-be/internal/dto"
 	"novel-be/internal/middleware"
 	"novel-be/internal/models"
+	"novel-be/internal/repository"
 	"novel-be/internal/service"
 )
 
@@ -21,7 +22,7 @@ func NovelsHandler(novelService service.NovelService, sceneService service.Scene
 		case http.MethodGet:
 			novels, err := novelService.ListNovels()
 			if err != nil {
-				WriteError(w, http.StatusInternalServerError, err.Error())
+				writeInternalError(w, err)
 				return
 			}
 			WriteJSON(w, http.StatusOK, novels)
@@ -62,7 +63,11 @@ func NovelsHandler(novelService service.NovelService, sceneService service.Scene
 			}
 			novelID, err := novelService.CreateNovel(newNovel)
 			if err != nil {
-				WriteError(w, http.StatusInternalServerError, err.Error())
+				if errors.Is(err, repository.ErrCategoryNotFound) {
+					WriteError(w, http.StatusBadRequest, err.Error())
+					return
+				}
+				writeInternalError(w, err)
 				return
 			}
 			recordAudit(r, auditService, service.AuditEvent{Action: "CREATE_NOVEL", TargetType: "novel", TargetID: int64Pointer(novelID), Status: "SUCCESS", Metadata: map[string]interface{}{"title": req.Title, "status": resolvedStatus}})
@@ -222,7 +227,7 @@ func AdminNovelModerationHandler(novelService service.NovelService, writerServic
 				return
 			}
 			if err := novelService.SuspendNovel(r.Context(), novelID); err != nil {
-				WriteError(w, http.StatusInternalServerError, err.Error())
+				writeInternalError(w, err)
 				return
 			}
 			if writer != nil && writer.UserID > 0 {
@@ -245,7 +250,7 @@ func AdminNovelModerationHandler(novelService service.NovelService, writerServic
 		}
 
 		if err := novelService.DeleteNovel(novelID); err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 		if writer != nil && writer.UserID > 0 {
@@ -313,7 +318,7 @@ func DeleteNovelHandler(novelService service.NovelService, writerService service
 
 		novelDetail, err := novelService.GetNovelDetail(novelID)
 		if err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -329,7 +334,7 @@ func DeleteNovelHandler(novelService service.NovelService, writerService service
 		}
 
 		if err := novelService.DeleteNovel(novelID); err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 		authorName := strings.TrimSpace(writer.PenName)
@@ -372,7 +377,7 @@ func UpdateNovelHandler(novelService service.NovelService, sceneService service.
 
 		novelDetail, err := novelService.GetNovelDetail(novelID)
 		if err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -534,7 +539,11 @@ func UpdateNovelHandler(novelService service.NovelService, sceneService service.
 		}
 
 		if err := novelService.UpdateNovel(updatedNovel); err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			if errors.Is(err, repository.ErrCategoryNotFound) {
+				WriteError(w, http.StatusBadRequest, err.Error())
+				return
+			}
+			writeInternalError(w, err)
 			return
 		}
 		action := novelAuditAction(oldIsPublished, finalIsPublished)
@@ -633,7 +642,7 @@ func UnbanNovelHandler(novelService service.NovelService, auditService service.A
 
 		// Perform unban via service
 		if err := novelService.UnbanNovel(r.Context(), novelID); err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -726,7 +735,7 @@ func NovelSubRouteHandler(sceneService service.SceneService, novelService servic
 
 		response, err := sceneService.GetStartScene(id)
 		if err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 		WriteJSON(w, http.StatusOK, response)

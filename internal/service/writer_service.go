@@ -60,14 +60,23 @@ func (s *writerService) GetLatestWriterApplicationByUserID(userID int) (*models.
 var (
 	ErrAlreadyWriter = errors.New("คุณเป็นนักเขียนอยู่แล้ว ไม่สามารถสมัครซ้ำได้")
 	ErrAlreadyApply  = errors.New("คุณได้สมัครหรือเป็นนักเขียนอยู่แล้ว หากต้องการรอแอดมินตรวจสอบหรือยื่นใหม่หลังถูกปฏิเสธ")
+
+	// Business validation errors — message คงไว้ตามเดิมเพื่อไม่เปลี่ยนข้อความที่ client ได้รับ
+	// และใช้ errors.Is เพื่อ map เป็น HTTP 400 ใน handler
+	ErrWriterApplyMissingRequired = errors.New("กรุณากรอกข้อมูลนามปากกาและช่องทางติดต่อหลักที่จำเป็นค่ะ")
+	ErrWriterApplyInvalidEmail    = errors.New("กรุณากรอกอีเมลภาษาอังกฤษให้ถูกต้อง")
 )
 
 func (s *writerService) ApplyForWriter(ctx context.Context, userID uint, req dto.WriterApplyRequest) error {
 	if req.PenName == "" || req.ContactRequired == "" {
-		return errors.New("กรุณากรอกข้อมูลนามปากกาและช่องทางติดต่อหลักที่จำเป็นค่ะ")
+		return ErrWriterApplyMissingRequired
 	}
 	if !regexp.MustCompile(`^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$`).MatchString(strings.TrimSpace(req.EmailWriter)) {
-		return errors.New("กรุณากรอกอีเมลภาษาอังกฤษให้ถูกต้อง")
+		return ErrWriterApplyInvalidEmail
+	}
+	// VAL-07: ต้องเลือกหมวดหมู่ความสนใจ 3-5 รายการ (ตรวจก่อนแตะ repository)
+	if err := req.ValidateInterests(); err != nil {
+		return err
 	}
 
 	userRole, err := s.repo.GetUserRoleByUserID(int(userID))

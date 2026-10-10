@@ -17,9 +17,12 @@ import (
 )
 
 type mockNovelService struct {
-	novel        models.Novel
-	createdNovel *models.Novel
-	updatedNovel *models.Novel
+	novel           models.Novel
+	createdNovel    *models.Novel
+	updatedNovel    *models.Novel
+	createErr       error
+	coverUpdatedID  int
+	coverUpdatedURL string
 }
 
 func (m *mockNovelService) ListNovels() ([]models.Novel, error) { return nil, nil }
@@ -32,6 +35,9 @@ func (m *mockNovelService) GetNovelsByAuthorID(int) ([]models.Novel, error) {
 	return nil, nil
 }
 func (m *mockNovelService) CreateNovel(novel models.Novel) (int, error) {
+	if m.createErr != nil {
+		return 0, m.createErr
+	}
 	m.createdNovel = &novel
 	return 0, nil
 }
@@ -39,7 +45,11 @@ func (m *mockNovelService) UpdateNovel(novel models.Novel) error {
 	m.updatedNovel = &novel
 	return nil
 }
-func (m *mockNovelService) UpdateNovelCover(int, string) error      { return nil }
+func (m *mockNovelService) UpdateNovelCover(id int, url string) error {
+	m.coverUpdatedID = id
+	m.coverUpdatedURL = url
+	return nil
+}
 func (m *mockNovelService) DeleteNovel(int) error                   { return nil }
 func (m *mockNovelService) SuspendNovel(context.Context, int) error { return nil }
 func (m *mockNovelService) UnbanNovel(context.Context, int) error   { return nil }
@@ -51,6 +61,7 @@ type mockSceneService struct {
 	endings          []models.EndingScene
 	choice           *models.Choice
 	publicationCheck service.PublishValidationResult
+	createChoiceErr  error
 }
 
 func (m *mockSceneService) GetScene(id int) (models.SceneResponse, error) {
@@ -74,7 +85,7 @@ func (m *mockSceneService) SyncSceneChoices(int, []interface{}) (*models.ChoiceD
 	return nil, nil
 }
 func (m *mockSceneService) GetChoiceByID(int) (*models.Choice, error) { return m.choice, nil }
-func (m *mockSceneService) CreateChoice(models.Choice) (int, error)   { return 0, nil }
+func (m *mockSceneService) CreateChoice(models.Choice) (int, error)   { return 0, m.createChoiceErr }
 func (m *mockSceneService) UpdateChoice(models.Choice) error          { return nil }
 func (m *mockSceneService) DeleteChoice(int) error                    { return nil }
 func (m *mockSceneService) GetStoryTree(int, int) (models.StoryTreeResponse, error) {

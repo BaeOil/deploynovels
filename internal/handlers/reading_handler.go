@@ -118,7 +118,7 @@ func GetProgressHandler(readingService service.ReadingService) http.HandlerFunc 
 
 		progress, err := readingService.GetProgress(userID, novelID)
 		if err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -146,7 +146,7 @@ func GetReadingHistoryHandler(readingService service.ReadingService) http.Handle
 
 		novels, err := readingService.GetReadingHistory(int(userID))
 		if err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -179,7 +179,7 @@ func DeleteReadingHistoryByNovelHandler(readingService service.ReadingService) h
 				WriteError(w, http.StatusForbidden, "forbidden: this history does not belong to the current user")
 				return
 			}
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 		if !deleted {
@@ -216,7 +216,7 @@ func DeleteReadingHistoryBulkHandler(readingService service.ReadingService) http
 
 		count, err := readingService.DeleteReadingHistoryByUser(int(userID), payload.NovelIDs)
 		if err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -260,7 +260,7 @@ func ResetProgressHandler(readingService service.ReadingService) http.HandlerFun
 		}
 
 		if err := readingService.ResetProgress(userID, novelID); err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -325,7 +325,7 @@ func RestartStoryHandler(sceneService service.SceneService, readingService servi
 		}
 
 		if err := readingService.ResetProgress(int(userID), novelID); err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -334,7 +334,7 @@ func RestartStoryHandler(sceneService service.SceneService, readingService servi
 			NovelID:        novelID,
 			CurrentSceneID: startScene.SceneID,
 		}); err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -415,7 +415,7 @@ func SaveProgressHandler(readingService service.ReadingService, novelService ser
 				WriteError(w, http.StatusForbidden, "scene must be reached through a valid choice")
 				return
 			}
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -505,7 +505,7 @@ func RecordChoiceHistoryHandler(readingService service.ReadingService, sceneServ
 
 		progress, err := readingService.GetProgress(int(ctxUserID), toScene.NovelID)
 		if err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 		if progress != nil {
@@ -522,7 +522,7 @@ func RecordChoiceHistoryHandler(readingService service.ReadingService, sceneServ
 		}
 
 		if err := readingService.RecordChoiceHistory(models.ChoiceHistory{UserID: int(ctxUserID), ChoiceID: req.ChoiceID}); err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -580,7 +580,7 @@ func RecordUserEndingHandler(readingService service.ReadingService, sceneService
 
 		progress, err := readingService.GetProgress(int(ctxUserID), req.NovelID)
 		if err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 		if progress == nil || progress.CurrentSceneID != req.SceneID {
@@ -590,7 +590,7 @@ func RecordUserEndingHandler(readingService service.ReadingService, sceneService
 
 		endings, err := sceneService.GetEndingsByNovelID(req.NovelID, int(ctxUserID))
 		if err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 		isUnlocked := false

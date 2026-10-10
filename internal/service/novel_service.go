@@ -11,13 +11,29 @@ import (
 type novelService struct {
 	repo         repository.NovelRepository
 	mediaService MediaService
+	categoryRepo repository.CategoryRepository
 }
 
-func NewNovelService(repo repository.NovelRepository, mediaService MediaService) NovelService {
+func NewNovelService(repo repository.NovelRepository, mediaService MediaService, categoryRepo repository.CategoryRepository) NovelService {
 	return &novelService{
 		repo:         repo,
 		mediaService: mediaService,
+		categoryRepo: categoryRepo,
 	}
+}
+
+// validateCategoryIDs ตรวจว่า category ID ที่ส่งมา มีอยู่จริงในระบบ (VAL-06)
+// ถ้าไม่มี repository.ErrCategoryNotFound จะถูกส่งขึ้นไปให้ handler map เป็น 400
+func (s *novelService) validateCategoryIDs(categoryIDs []int) error {
+	if len(categoryIDs) == 0 || s.categoryRepo == nil {
+		return nil
+	}
+	for _, id := range categoryIDs {
+		if _, err := s.categoryRepo.GetCategoryByID(context.Background(), id); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // 🟢 ปรับเพื่อให้หน้า Home ดึงรูปไปโชว์ได้
@@ -48,10 +64,16 @@ func (s *novelService) GetNovelsByAuthorID(authorID int) ([]models.Novel, error)
 }
 
 func (s *novelService) CreateNovel(novel models.Novel) (int, error) {
+	if err := s.validateCategoryIDs(novel.CategoryIDs); err != nil {
+		return 0, err
+	}
 	return s.repo.CreateNovel(novel)
 }
 
 func (s *novelService) UpdateNovel(novel models.Novel) error {
+	if err := s.validateCategoryIDs(novel.CategoryIDs); err != nil {
+		return err
+	}
 	return s.repo.UpdateNovel(novel)
 }
 

@@ -66,7 +66,7 @@ func GetStoryTreeHandler(sceneService service.SceneService, novelService service
 
 		tree, err := sceneService.GetStoryTree(novelID, userID)
 		if err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 

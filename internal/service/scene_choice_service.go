@@ -7,7 +7,35 @@ import (
 	"novel-be/internal/repository"
 	"strconv"
 	"strings"
+	"unicode/utf8"
 )
+
+// Choice business errors — ค่า message คงไว้ตามเดิมเพื่อไม่เปลี่ยนข้อความที่ส่งกลับให้ client
+// และใช้ errors.Is เพื่อ map กับ HTTP status ที่เหมาะสม (400/404/409) ใน handler
+var (
+	// ErrInvalidChoiceLabel ตาม VAL-04: label ไม่เกิน 80 อักขระ
+	ErrInvalidChoiceLabel     = errors.New("choice label must not exceed 80 characters")
+	ErrChoiceFromSceneMissing = errors.New("ต้นทาง (from_scene_id) ไม่มีอยู่ในระบบ")
+	ErrChoiceToSceneMissing   = errors.New("ปลายทาง (to_scene_id) ไม่มีอยู่ในระบบ")
+	ErrChoiceCrossNovel       = errors.New("ไม่สามารถเชื่อมโยงฉากข้ามเรื่องนิยายกันได้")
+	ErrChoiceSelfLoop         = errors.New("ฉากต้นทางและปลายทางห้ามเป็นฉากเดียวกัน")
+	ErrChoiceFromEnding       = errors.New("ฉากต้นทางเป็นฉากจบ ไม่สามารถสร้างทางเลือกต่อไปได้")
+	ErrChoiceToStart          = errors.New("ไม่สามารถสร้างทางเลือกย้อนกลับไปที่จุดเริ่มต้นของเรื่องได้")
+	ErrChoiceReverse          = errors.New("ไม่สามารถสร้างทางเลือกย้อนกลับไปยังฉากต้นทางได้")
+	ErrChoiceDuplicate        = errors.New("ทางเลือกนี้มีอยู่แล้ว")
+	ErrChoiceCycle            = errors.New("การเชื่อมต่อนี้จะสร้างวงวนในกราฟเรื่องได้")
+	ErrChoiceNotFound         = errors.New("ไม่พบทางเลือกที่ต้องการอัปเดต")
+	ErrChoiceWrongOrigin      = errors.New("ทางเลือกนี้ไม่ได้อยู่ในฉากต้นทางที่ระบุ")
+	ErrChoiceForeignToScene   = errors.New("ทางเลือกนี้ไม่ได้อยู่ในฉากต้นทางที่กำลังซิงก์")
+)
+
+// validateChoiceLabelLength ตาม VAL-04: ตรวจความยาว label ทุกเส้นทางที่สร้าง/แก้ choice
+func validateChoiceLabelLength(label string) error {
+	if utf8.RuneCountInString(label) > 80 {
+		return ErrInvalidChoiceLabel
+	}
+	return nil
+}
 
 func (s *sceneService) wouldCreateCycle(fromSceneID, toSceneID int, edges []models.SceneEdge) bool {
 	if fromSceneID == 0 || toSceneID == 0 || fromSceneID == toSceneID {
@@ -46,9 +74,12 @@ func (s *sceneService) wouldCreateCycle(fromSceneID, toSceneID int, edges []mode
 
 func (s *sceneService) CreateChoice(choice models.Choice) (int, error) {
 	choice.Label = strings.TrimSpace(choice.Label)
+	if err := validateChoiceLabelLength(choice.Label); err != nil {
+		return 0, err
+	}
 	fromScene, err := s.repo.GetSceneByID(choice.FromSceneID)
 	if err != nil {
-		return 0, errors.New("ต้นทาง (from_scene_id) ไม่มีอยู่ในระบบ")
+		return 0, ErrChoiceFromSceneMissing
 	}
 
 	choiceID := 0
@@ -61,6 +92,9 @@ func (s *sceneService) CreateChoice(choice models.Choice) (int, error) {
 }
 
 func (s *sceneService) createChoiceInMutation(repo repository.ChoiceMutationRepository, choice models.Choice) (int, error) {
+	if err := validateChoiceLabelLength(choice.Label); err != nil {
+		return 0, err
+	}
 	fromScene, _, err := s.validateChoiceEndpoints(repo, choice.FromSceneID, choice.ToSceneID)
 	if err != nil {
 		return 0, err
@@ -72,7 +106,7 @@ func (s *sceneService) createChoiceInMutation(repo repository.ChoiceMutationRepo
 		return 0, fmt.Errorf("check reverse choice: %w", err)
 	}
 	if reverseExists {
-		return 0, errors.New("ไม่สามารถสร้างทางเลือกย้อนกลับไปยังฉากต้นทางได้")
+		return 0, ErrChoiceReverse
 	}
 
 	// 3. เช็คข้อมูลซ้ำ (Label ซ้ำในเส้นทางเดิม)
@@ -81,7 +115,7 @@ func (s *sceneService) createChoiceInMutation(repo repository.ChoiceMutationRepo
 		return 0, fmt.Errorf("check duplicate choice: %w", err)
 	}
 	if exists {
-		return 0, errors.New("ทางเลือกนี้มีอยู่แล้ว")
+		return 0, ErrChoiceDuplicate
 	}
 
 	edges, err := repo.GetEdgesByNovelID(fromScene.NovelID)
@@ -89,7 +123,7 @@ func (s *sceneService) createChoiceInMutation(repo repository.ChoiceMutationRepo
 		return 0, fmt.Errorf("get edges for cycle validation: %w", err)
 	}
 	if s.wouldCreateCycle(choice.FromSceneID, choice.ToSceneID, edges) {
-		return 0, errors.New("การเชื่อมต่อนี้จะสร้างวงวนในกราฟเรื่องได้")
+		return 0, ErrChoiceCycle
 	}
 
 	return repo.CreateChoice(choice)
@@ -98,23 +132,23 @@ func (s *sceneService) createChoiceInMutation(repo repository.ChoiceMutationRepo
 func (s *sceneService) validateChoiceEndpoints(repo repository.ChoiceMutationRepository, fromSceneID, toSceneID int) (*models.Scene, *models.Scene, error) {
 	fromScene, err := repo.GetSceneByID(fromSceneID)
 	if err != nil {
-		return nil, nil, errors.New("ต้นทาง (from_scene_id) ไม่มีอยู่ในระบบ")
+		return nil, nil, ErrChoiceFromSceneMissing
 	}
 	toScene, err := repo.GetSceneByID(toSceneID)
 	if err != nil {
-		return nil, nil, errors.New("ปลายทาง (to_scene_id) ไม่มีอยู่ในระบบ")
+		return nil, nil, ErrChoiceToSceneMissing
 	}
 	if fromScene.NovelID != toScene.NovelID {
-		return nil, nil, errors.New("ไม่สามารถเชื่อมโยงฉากข้ามเรื่องนิยายกันได้")
+		return nil, nil, ErrChoiceCrossNovel
 	}
 	if fromSceneID == toSceneID {
-		return nil, nil, errors.New("ฉากต้นทางและปลายทางห้ามเป็นฉากเดียวกัน")
+		return nil, nil, ErrChoiceSelfLoop
 	}
 	if fromScene.Type == "ending" {
-		return nil, nil, errors.New("ฉากต้นทางเป็นฉากจบ ไม่สามารถสร้างทางเลือกต่อไปได้")
+		return nil, nil, ErrChoiceFromEnding
 	}
 	if toScene.Type == "start" {
-		return nil, nil, errors.New("ไม่สามารถสร้างทางเลือกย้อนกลับไปที่จุดเริ่มต้นของเรื่องได้")
+		return nil, nil, ErrChoiceToStart
 	}
 	return fromScene, toScene, nil
 }
@@ -125,14 +159,17 @@ func (s *sceneService) GetChoiceByID(choiceID int) (*models.Choice, error) {
 
 func (s *sceneService) UpdateChoice(choice models.Choice) error {
 	choice.Label = strings.TrimSpace(choice.Label)
+	if err := validateChoiceLabelLength(choice.Label); err != nil {
+		return err
+	}
 
 	existingChoice, err := s.repo.GetChoiceByID(choice.ChoiceID)
 	if err != nil {
-		return errors.New("ไม่พบทางเลือกที่ต้องการอัปเดต")
+		return ErrChoiceNotFound
 	}
 	fromScene, err := s.repo.GetSceneByID(existingChoice.FromSceneID)
 	if err != nil {
-		return errors.New("ไม่พบทางเลือกที่ต้องการอัปเดต")
+		return ErrChoiceNotFound
 	}
 	return s.repo.WithNovelGraphMutation(fromScene.NovelID, func(repo repository.ChoiceMutationRepository) error {
 		return s.updateChoiceInMutation(repo, choice)
@@ -141,15 +178,18 @@ func (s *sceneService) UpdateChoice(choice models.Choice) error {
 
 func (s *sceneService) updateChoiceInMutation(repo repository.ChoiceMutationRepository, choice models.Choice) error {
 	choice.Label = strings.TrimSpace(choice.Label)
+	if err := validateChoiceLabelLength(choice.Label); err != nil {
+		return err
+	}
 	existingChoice, err := repo.GetChoiceByID(choice.ChoiceID)
 	if err != nil {
-		return errors.New("ไม่พบทางเลือกที่ต้องการอัปเดต")
+		return ErrChoiceNotFound
 	}
 
 	if choice.FromSceneID == 0 {
 		choice.FromSceneID = existingChoice.FromSceneID
 	} else if choice.FromSceneID != existingChoice.FromSceneID {
-		return errors.New("ทางเลือกนี้ไม่ได้อยู่ในฉากต้นทางที่ระบุ")
+		return ErrChoiceWrongOrigin
 	}
 	if choice.ToSceneID == 0 {
 		choice.ToSceneID = existingChoice.ToSceneID
@@ -169,7 +209,7 @@ func (s *sceneService) updateChoiceInMutation(repo repository.ChoiceMutationRepo
 			edge.FromID == choice.FromSceneID &&
 			edge.ToID == choice.ToSceneID &&
 			edge.Label == choice.Label {
-			return errors.New("ทางเลือกนี้มีอยู่แล้ว")
+			return ErrChoiceDuplicate
 		}
 	}
 
@@ -178,7 +218,7 @@ func (s *sceneService) updateChoiceInMutation(repo repository.ChoiceMutationRepo
 		return fmt.Errorf("check reverse choice: %w", err)
 	}
 	if reverseExists {
-		return errors.New("ไม่สามารถสร้างทางเลือกย้อนกลับไปยังฉากต้นทางได้")
+		return ErrChoiceReverse
 	}
 
 	// ตรวจ DAG เฉพาะกรณีที่มีการเปลี่ยนต้นทางหรือปลายทาง
@@ -196,7 +236,7 @@ func (s *sceneService) updateChoiceInMutation(repo repository.ChoiceMutationRepo
 		}
 
 		if s.wouldCreateCycle(choice.FromSceneID, choice.ToSceneID, filteredEdges) {
-			return errors.New("การเชื่อมต่อนี้จะสร้างวงวนในกราฟเรื่องได้")
+			return ErrChoiceCycle
 		}
 	}
 
@@ -310,7 +350,7 @@ func (s *sceneService) syncSceneChoicesInMutation(repo repository.ChoiceMutation
 		if choice.ChoiceID > 0 {
 			oldChoice, exists := existingMap[choice.ChoiceID]
 			if !exists || oldChoice.FromSceneID != fromSceneID {
-				return nil, errors.New("ทางเลือกนี้ไม่ได้อยู่ในฉากต้นทางที่กำลังซิงก์")
+				return nil, ErrChoiceForeignToScene
 			}
 			incomingChoiceIDs[choice.ChoiceID] = struct{}{}
 			// ตรวจสอบว่ามีการเปลี่ยนแปลงข้อมูลจริงหรือไม่ (label หรือ to_scene_id)

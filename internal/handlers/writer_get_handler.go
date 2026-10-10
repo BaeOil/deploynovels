@@ -55,7 +55,7 @@ func GetWriterBookshelfCountsHandler(socialService service.SocialService) http.H
 
 		novels, err := socialService.GetBookshelfCountsByAuthorID(id)
 		if err != nil {
-			RespondWithError(w, http.StatusInternalServerError, "failed to fetch bookshelf counts", err.Error())
+			respondInternal(w, "failed to fetch bookshelf counts", err)
 			return
 		}
 
@@ -123,7 +123,7 @@ func GetMyNovelsHandler(novelService service.NovelService, writerService service
 
 		novels, err := novelService.GetNovelsByAuthorID(authorID)
 		if err != nil {
-			RespondWithError(w, http.StatusInternalServerError, "failed to fetch novels", err.Error())
+			respondInternal(w, "failed to fetch novels", err)
 			return
 		}
 

@@ -47,7 +47,7 @@ func UpdateScenePositionHandler(sceneService service.SceneService, novelService 
 
 		novelDetail, err := novelService.GetNovelDetail(existingScene.NovelID)
 		if err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -78,7 +78,7 @@ func UpdateScenePositionHandler(sceneService service.SceneService, novelService 
 				WriteError(w, http.StatusNotFound, "scene not found")
 				return
 			}
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -112,7 +112,7 @@ func CreateSceneHandler(sceneService service.SceneService, notificationService s
 			if writeOwnershipError(w, err) {
 				return
 			}
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -137,7 +137,7 @@ func CreateSceneHandler(sceneService service.SceneService, notificationService s
 
 		if req.Choices != nil {
 			if _, err := sceneService.SyncSceneChoices(sceneID, req.Choices); err != nil {
-				WriteError(w, http.StatusInternalServerError, err.Error())
+				writeChoiceServiceError(w, err)
 				return
 			}
 		}
@@ -182,7 +182,7 @@ func UpdateSceneHandler(sceneService service.SceneService, notificationService s
 			if writeOwnershipError(w, err) {
 				return
 			}
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -236,7 +236,7 @@ func UpdateSceneHandler(sceneService service.SceneService, notificationService s
 
 		if err := notificationService.NotifySceneUpdated(scene.NovelID, sceneID); err != nil {
 			log.Printf("NotifySceneUpdated failed: %v", err)
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -244,7 +244,7 @@ func UpdateSceneHandler(sceneService service.SceneService, notificationService s
 		if req.Choices != nil {
 			diff, err := sceneService.SyncSceneChoices(sceneID, req.Choices)
 			if err != nil {
-				WriteError(w, http.StatusInternalServerError, err.Error())
+				writeChoiceServiceError(w, err)
 				return
 			}
 			choicesDiff = diff
@@ -320,12 +320,19 @@ func DeleteSceneHandler(sceneService service.SceneService, chapterService servic
 			if writeOwnershipError(w, err) {
 				return
 			}
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
 		if err := sceneService.DeleteScene(sceneID); err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			// FR-STRUCT-08: ไม่อนุญาตให้ลบ Start Scene โดยตรง → ตอบ 409 Conflict
+			// (สอดคล้องกับ DeleteChapter ที่ตอบ 409 สำหรับ repository.ErrChapterHasStartScene)
+			// หมายเหตุ: scene service ใช้ errors.New แบบ inline ยังไม่มี sentinel จึงตรวจจับด้วยข้อความที่ตรงกัน
+			if err.Error() == "Start scene cannot be deleted" {
+				RespondWithError3(w, http.StatusConflict, err.Error())
+				return
+			}
+			writeInternalError(w, err)
 			return
 		}
 		delMeta := map[string]interface{}{"novel_id": existingScene.NovelID, "chapter_id": existingScene.ChapterID}

@@ -1,6 +1,9 @@
 package dto
 
-import "time"
+import (
+	"errors"
+	"time"
+)
 
 // WriterApplyRequest รับข้อมูลตอนยื่นคำขอสมัครเป็นนักเขียน
 type WriterApplyRequest struct {
@@ -13,6 +16,27 @@ type WriterApplyRequest struct {
 	ContactRequired string   `json:"contact_required"` // 👈 ช่องทางติดต่อที่ 1 (บังคับ)
 	ContactOptional string   `json:"contact_optional"` // 👈 ช่องทางติดต่อที่ 2 (ไม่บังคับ)
 	AvatarURL       string   `json:"avatar_url,omitempty"`
+}
+
+// ErrInvalidWriterInterests ใช้เมื่อจำนวนหมวดหมู่ความสนใจไม่ตรงตาม VAL-07 (ต้องเลือก 3-5 รายการ)
+var ErrInvalidWriterInterests = errors.New("กรุณาเลือกความสนใจอย่างน้อย 3 และไม่เกิน 5 หมวดหมู่")
+
+// InterestCount นับจำนวนหมวดหมู่ความสนใจที่ผู้สมัครเลือก
+// ถ้าส่ง category_ids มาใช้ค่านั้นเป็นหลัก ไม่งั้นใช้ genres (ตาม contract ปัจจุบัน)
+func (r *WriterApplyRequest) InterestCount() int {
+	if len(r.CategoryIDs) > 0 {
+		return len(r.CategoryIDs)
+	}
+	return len(r.Genres)
+}
+
+// ValidateInterests ตรวจสอบตาม VAL-07: ต้องเลือก 3-5 หมวดหมู่
+func (r *WriterApplyRequest) ValidateInterests() error {
+	count := r.InterestCount()
+	if count < 3 || count > 5 {
+		return ErrInvalidWriterInterests
+	}
+	return nil
 }
 
 // WriterRequestResponse สำหรับส่งกลับไปให้หน้าแอดมินดูคำขอ

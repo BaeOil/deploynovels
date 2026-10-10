@@ -11,25 +11,36 @@ import (
 
 func openTestDB(t *testing.T) *sql.DB {
 	t.Helper()
-	host := os.Getenv("POSTGRES_HOST")
+	host := os.Getenv("TEST_POSTGRES_HOST")
+	port := os.Getenv("TEST_POSTGRES_PORT")
+	user := os.Getenv("TEST_POSTGRES_USER")
+	password := os.Getenv("TEST_POSTGRES_PASSWORD")
+	dbname := os.Getenv("TEST_POSTGRES_DB")
+	if host == "" {
+		host = os.Getenv("POSTGRES_HOST")
+	}
 	if host == "" {
 		host = "localhost"
 	}
-	port := os.Getenv("POSTGRES_PORT")
+	if port == "" {
+		port = os.Getenv("POSTGRES_PORT")
+	}
 	if port == "" {
 		port = "5435"
 	}
-	user := os.Getenv("POSTGRES_USER")
 	if user == "" {
-		user = "novel_user"
+		t.Fatal("test database misconfigured: set TEST_POSTGRES_USER (no app fallback for credentials). " +
+			"Example (PowerShell, values without secrets): $env:TEST_POSTGRES_HOST='localhost'; $env:TEST_POSTGRES_PORT='5435'; $env:TEST_POSTGRES_USER='<test_user>'; $env:TEST_POSTGRES_DB='database_test'")
 	}
-	password := os.Getenv("POSTGRES_PASSWORD")
 	if password == "" {
-		password = "your_strong_password"
+		t.Fatal("test database misconfigured: set TEST_POSTGRES_PASSWORD (no app fallback for credentials).")
 	}
-	dbname := os.Getenv("POSTGRES_DB")
 	if dbname == "" {
-		dbname = "database"
+		t.Fatal("test database misconfigured: set TEST_POSTGRES_DB to the isolated test database " +
+			"(e.g. 'database_test'). Refusing to fall back to the application database 'database'.")
+	}
+	if dbname == "database" {
+		t.Fatalf("refusing to run integration tests against the application database %q; set TEST_POSTGRES_DB to the isolated test database", dbname)
 	}
 
 	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable TimeZone=UTC", host, port, user, password, dbname)
@@ -38,9 +49,46 @@ func openTestDB(t *testing.T) *sql.DB {
 		t.Fatalf("open test db: %v", err)
 	}
 	if err := db.Ping(); err != nil {
+		_ = db.Close()
 		t.Fatalf("ping test db: %v", err)
 	}
+	var connectedName string
+	if err := db.QueryRow(`SELECT current_database()`).Scan(&connectedName); err != nil {
+		_ = db.Close()
+		t.Fatalf("verify test database name: %v", err)
+	}
+	if connectedName != dbname || connectedName == "database" {
+		_ = db.Close()
+		t.Fatalf("refusing to run integration tests: connected database %q does not match isolated test database %q", connectedName, dbname)
+	}
+	// Close only after all t.Cleanup callbacks registered later (e.g. row
+	// cleanup) have run: t.Cleanup runs LIFO, so the close registered here
+	// executes last.
+	t.Cleanup(func() {
+		_ = db.Close()
+	})
 	return db
+}
+
+// cleanupTestUserRows removes only the rows created for one test, scoped by the
+// user primary key returned at insert time. It must run against the isolated
+// test database connection (verified by openTestDB above) — never against the
+// application database.
+func cleanupTestUserRows(t *testing.T, db *sql.DB, userID int64) {
+	t.Helper()
+	t.Cleanup(func() {
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		if _, err := db.ExecContext(ctx, `DELETE FROM novels WHERE author_id IN (SELECT writer_id FROM writers WHERE user_id = $1)`, userID); err != nil {
+			t.Logf("cleanup novels for test user %d: %v", userID, err)
+		}
+		if _, err := db.ExecContext(ctx, `DELETE FROM writers WHERE user_id = $1`, userID); err != nil {
+			t.Logf("cleanup writers for test user %d: %v", userID, err)
+		}
+		if _, err := db.ExecContext(ctx, `DELETE FROM users WHERE user_id = $1`, userID); err != nil {
+			t.Logf("cleanup user %d: %v", userID, err)
+		}
+	})
 }
 
 func insertTestUserWithRevokedWriters(t *testing.T, db *sql.DB, suffix string, revokedCount int) (int64, []int64) {
@@ -71,10 +119,10 @@ func insertTestUserWithRevokedWriters(t *testing.T, db *sql.DB, suffix string, r
 
 func TestRestoreUserWriterAccessSingleRevokedRow(t *testing.T) {
 	db := openTestDB(t)
-	defer db.Close()
 
 	ctx := context.Background()
 	userID, _ := insertTestUserWithRevokedWriters(t, db, "single", 1)
+	cleanupTestUserRows(t, db, userID)
 	adminID := uint(1)
 
 	repo := NewAuthRepository(db)
@@ -101,10 +149,10 @@ func TestRestoreUserWriterAccessSingleRevokedRow(t *testing.T) {
 
 func TestRestoreUserWriterAccessMultipleRevokedRows(t *testing.T) {
 	db := openTestDB(t)
-	defer db.Close()
 
 	ctx := context.Background()
 	userID, _ := insertTestUserWithRevokedWriters(t, db, "multi", 3)
+	cleanupTestUserRows(t, db, userID)
 	adminID := uint(1)
 
 	repo := NewAuthRepository(db)
@@ -131,7 +179,6 @@ func TestRestoreUserWriterAccessMultipleRevokedRows(t *testing.T) {
 
 func TestRestoreUserWriterAccessRejectsNoHistory(t *testing.T) {
 	db := openTestDB(t)
-	defer db.Close()
 
 	ctx := context.Background()
 	username := fmt.Sprintf("restore_no_history_%d", time.Now().UnixNano())
@@ -143,6 +190,7 @@ func TestRestoreUserWriterAccessRejectsNoHistory(t *testing.T) {
 		RETURNING user_id`, username, email).Scan(&userID); err != nil {
 		t.Fatalf("insert user: %v", err)
 	}
+	cleanupTestUserRows(t, db, userID)
 
 	repo := NewAuthRepository(db)
 	err := repo.RestoreUserWriterAccess(ctx, uint(userID), 1)
@@ -156,10 +204,10 @@ func TestRestoreUserWriterAccessRejectsNoHistory(t *testing.T) {
 
 func TestRestoreUserWriterAccessRestoresPublishedNovelScope(t *testing.T) {
 	db := openTestDB(t)
-	defer db.Close()
 
 	ctx := context.Background()
 	userID, writerIDs := insertTestUserWithRevokedWriters(t, db, "published", 2)
+	cleanupTestUserRows(t, db, userID)
 	for i, writerID := range writerIDs {
 		_, err := db.ExecContext(ctx, `
 			INSERT INTO novels (title, status, is_published, author_id, created_at, updated_at)

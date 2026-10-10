@@ -38,7 +38,7 @@ func (h *ReportHandler) CreateReport(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := h.service.CreateReport(r.Context(), userID, req); err != nil {
-		WriteError(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 
@@ -153,7 +153,7 @@ func (h *ReportHandler) UpdateReportStatus(w http.ResponseWriter, r *http.Reques
 
 	previousStatus, reportType, novelID, novelTitle, authorID, novelStatus, novelIsPublished, err := h.service.GetReportDetail(r.Context(), reportID)
 	if err != nil {
-		WriteError(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 	if err := h.service.UpdateReportStatus(r.Context(), reportID, req); err != nil {
@@ -161,7 +161,7 @@ func (h *ReportHandler) UpdateReportStatus(w http.ResponseWriter, r *http.Reques
 			WriteError(w, http.StatusConflict, err.Error())
 			return
 		}
-		WriteError(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 	reportMetadata := map[string]interface{}{"old_status": previousStatus, "new_status": req.Status, "report_type": reportType, "reason": req.Reason}
@@ -214,7 +214,7 @@ func (h *ReportHandler) CreateAppeal(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := h.service.CreateAppeal(r.Context(), int(userIDUint), req); err != nil {
-		WriteError(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 

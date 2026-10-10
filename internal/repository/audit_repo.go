@@ -402,9 +402,9 @@ func (r *sqlAuditRepository) GetMetadata(ctx context.Context) (dto.AuditLogMetad
 		"CREATE_CHOICE", "UPDATE_CHOICE", "DELETE_CHOICE",
 		"CREATE_CATEGORY", "UPDATE_CATEGORY", "DELETE_CATEGORY",
 		"UPDATE_REPORT_STATUS",
-		"DEMOTE_USER",          // เพิ่ม: บันทึกจริงจาก admin_user_handler.go แต่ขาดจาก default list เดิม
+		"DEMOTE_USER",           // เพิ่ม: บันทึกจริงจาก admin_user_handler.go แต่ขาดจาก default list เดิม
 		"RESTORE_WRITER_ACCESS", // เพิ่ม: คืนสิทธิ์นักเขียน (RestoreUserWriterAccess)
-		"UNAUTHORIZED_ACCESS", // เพิ่ม: wire จริงจาก middleware แล้ว แต่ขาดจาก default list เดิม
+		"UNAUTHORIZED_ACCESS",   // เพิ่ม: wire จริงจาก middleware แล้ว แต่ขาดจาก default list เดิม
 		"UNSUSPEND_NOVEL",
 		"SUSPEND_NOVEL",
 		"ADMIN_UPDATE_USERNAME",

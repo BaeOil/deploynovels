@@ -15,7 +15,7 @@ func GetAllCategoriesHandler(s service.CategoryService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		categories, err := s.GetCategories()
 		if err != nil {
-			RespondWithError(w, http.StatusInternalServerError, "failed to fetch categories", err.Error())
+			respondInternal(w, "failed to fetch categories", err)
 			return
 		}
 
@@ -50,7 +50,7 @@ func AdminCreateCategoryHandler(s service.CategoryService, audit service.AuditSe
 				RespondWithError(w, http.StatusConflict, "Category name already exists", err.Error())
 				return
 			}
-			RespondWithError(w, http.StatusInternalServerError, "Failed to create category", err.Error())
+			respondInternal(w, "Failed to create category", err)
 			return
 		}
 
@@ -86,7 +86,7 @@ func AdminUpdateCategoryHandler(s service.CategoryService, audit service.AuditSe
 				RespondWithError(w, http.StatusNotFound, "Category not found", err.Error())
 				return
 			}
-			RespondWithError(w, http.StatusInternalServerError, "Failed to read category snapshot", err.Error())
+			respondInternal(w, "Failed to read category snapshot", err)
 			return
 		}
 		if old == nil {
@@ -107,7 +107,7 @@ func AdminUpdateCategoryHandler(s service.CategoryService, audit service.AuditSe
 				RespondWithError(w, http.StatusConflict, "Category name already exists", err.Error())
 				return
 			}
-			RespondWithError(w, http.StatusInternalServerError, "Failed to update category", err.Error())
+			respondInternal(w, "Failed to update category", err)
 			return
 		}
 
@@ -139,7 +139,7 @@ func AdminDeleteCategoryHandler(s service.CategoryService, audit service.AuditSe
 				RespondWithError(w, http.StatusNotFound, "Category not found", err.Error())
 				return
 			}
-			RespondWithError(w, http.StatusInternalServerError, "Failed to read category snapshot", err.Error())
+			respondInternal(w, "Failed to read category snapshot", err)
 			return
 		}
 		if old == nil {
@@ -156,7 +156,7 @@ func AdminDeleteCategoryHandler(s service.CategoryService, audit service.AuditSe
 				RespondWithError(w, http.StatusConflict, "Category is still in use", err.Error())
 				return
 			}
-			RespondWithError(w, http.StatusInternalServerError, "Failed to delete category", err.Error())
+			respondInternal(w, "Failed to delete category", err)
 			return
 		}
 

@@ -34,7 +34,7 @@ func CreateChapterHandler(chapterService service.ChapterService, notificationSer
 			if writeOwnershipError(w, err) {
 				return
 			}
-			RespondWithError3(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -45,7 +45,7 @@ func CreateChapterHandler(chapterService service.ChapterService, notificationSer
 			Status:  req.Status,
 		})
 		if err != nil {
-			RespondWithError3(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -96,7 +96,7 @@ func UpdateChapterHandler(chapterService service.ChapterService, sceneService se
 
 		chapter, err := chapterService.GetChapterByID(chapterID)
 		if err != nil {
-			RespondWithError3(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 		if chapter == nil {
@@ -107,7 +107,7 @@ func UpdateChapterHandler(chapterService service.ChapterService, sceneService se
 			if writeOwnershipError(w, err) {
 				return
 			}
-			RespondWithError3(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -137,7 +137,7 @@ func UpdateChapterHandler(chapterService service.ChapterService, sceneService se
 		}
 
 		if err := chapterService.UpdateChapter(*chapter); err != nil {
-			RespondWithError3(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 		updChMeta := map[string]interface{}{"novel_id": chapter.NovelID, "chapter_title": chapter.Title}
@@ -188,7 +188,7 @@ func DeleteChapterHandler(chapterService service.ChapterService, novelService se
 		}
 		chapter, err := chapterService.GetChapterByID(chapterID)
 		if err != nil {
-			RespondWithError3(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 		if chapter == nil {
@@ -199,7 +199,7 @@ func DeleteChapterHandler(chapterService service.ChapterService, novelService se
 			if writeOwnershipError(w, err) {
 				return
 			}
-			RespondWithError3(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -208,7 +208,7 @@ func DeleteChapterHandler(chapterService service.ChapterService, novelService se
 				RespondWithError3(w, http.StatusConflict, err.Error())
 				return
 			}
-			RespondWithError3(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 		delChMeta := map[string]interface{}{"novel_id": chapter.NovelID, "chapter_title": chapter.Title}
@@ -276,7 +276,7 @@ func ReorderChaptersHandler(chapterService service.ChapterService, novelService 
 		}
 
 		if err := chapterService.ReorderChapters(payload.Order); err != nil {
-			RespondWithError3(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 

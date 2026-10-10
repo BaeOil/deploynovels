@@ -97,7 +97,7 @@ type WriterService interface {
 }
 
 type MediaService interface {
-	UploadImage(ctx context.Context, file *multipart.FileHeader) (string, error)
+	UploadImage(ctx context.Context, file *multipart.FileHeader, maxBytes int64) (string, error)
 	DeleteImage(ctx context.Context, filename string) error
 	GetPresignedURL(ctx context.Context, filename string) (string, error)
 }

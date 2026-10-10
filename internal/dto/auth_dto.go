@@ -15,11 +15,28 @@ type RegisterRequest struct {
 	Avatar   *multipart.FileHeader `form:"avatar"` // รองรับการอัปโหลดไฟล์รูปเข้า MinIO
 }
 
+var usernameRegex = regexp.MustCompile(`^[a-zA-Z0-9_]+$`)
+
+// ValidateUsername ตรวจสอบชื่อผู้ใช้ตาม VAL-03: 3-50 อักขระ และ charset เดิมของระบบ (letters, numbers, underscores)
+func ValidateUsername(username string) error {
+	username = strings.TrimSpace(username)
+	if username == "" {
+		return errors.New("username is required")
+	}
+	if len(username) < 3 || len(username) > 50 {
+		return errors.New("username length must be between 3 and 50 characters")
+	}
+	if !usernameRegex.MatchString(username) {
+		return errors.New("username must contain only letters, numbers, and underscores")
+	}
+	return nil
+}
+
 func (r *RegisterRequest) Validate() error {
 	r.Username = strings.TrimSpace(r.Username)
 	r.Email = strings.TrimSpace(r.Email)
-	if r.Username == "" {
-		return errors.New("username is required")
+	if err := ValidateUsername(r.Username); err != nil {
+		return err
 	}
 	if r.Email == "" {
 		return errors.New("email is required")

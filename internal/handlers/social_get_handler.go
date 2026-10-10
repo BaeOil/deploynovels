@@ -31,7 +31,7 @@ func GetCommentCountByNovelHandler(socialService service.SocialService) http.Han
 
 		count, err := socialService.GetCommentCountByNovelID(novelID)
 		if err != nil {
-			RespondWithError(w, http.StatusInternalServerError, "failed to fetch comment count", err.Error())
+			respondInternal(w, "failed to fetch comment count", err)
 			return
 		}
 
@@ -65,7 +65,7 @@ func GetCommentsByNovelHandler(socialService service.SocialService) http.Handler
 
 		comments, err := socialService.GetCommentsByNovelID(novelID)
 		if err != nil {
-			RespondWithError(w, http.StatusInternalServerError, "failed to fetch comments", err.Error())
+			respondInternal(w, "failed to fetch comments", err)
 			return
 		}
 
@@ -99,7 +99,7 @@ func GetCommentsBySceneHandler(socialService service.SocialService) http.Handler
 
 		comments, err := socialService.GetCommentsBySceneID(sceneID)
 		if err != nil {
-			RespondWithError(w, http.StatusInternalServerError, "failed to fetch comments", err.Error())
+			respondInternal(w, "failed to fetch comments", err)
 			return
 		}
 

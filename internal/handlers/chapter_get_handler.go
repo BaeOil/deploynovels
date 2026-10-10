@@ -63,7 +63,7 @@ func GetChaptersByNovelHandler(chapterService service.ChapterService, novelServi
 
 		chapters, err := chapterService.GetChaptersByNovelID(novelID)
 		if err != nil {
-			RespondWithError(w, http.StatusInternalServerError, "failed to fetch chapters", err.Error())
+			respondInternal(w, "failed to fetch chapters", err)
 			return
 		}
 
@@ -146,7 +146,7 @@ func GetScenesByChapterHandler(sceneService service.SceneService, chapterService
 
 		scenes, err := sceneService.GetScenesByChapterID(chapterID)
 		if err != nil {
-			RespondWithError(w, http.StatusInternalServerError, "failed to fetch scenes", err.Error())
+			respondInternal(w, "failed to fetch scenes", err)
 			return
 		}
 

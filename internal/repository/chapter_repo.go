@@ -107,6 +107,10 @@ func DeleteChapter(db *sql.DB, chapterID int) error {
 	}
 
 	// 1. ตรวจสอบว่า Chapter นี้มี Scene ที่เป็น Start Scene ของ Novel หรือไม่
+	//    Chapter 1 (episode = 1) ที่มี Start Scene ยังลบได้ เพราะเป็นการลบทั้ง Chapter
+	//    ไม่ใช่การลบ Start Scene โดยตรง (ข้อยกเว้น FR-STRUCT-08) โดยฉากแรกของ Chapter
+	//    ถัดไปจะถูกเลื่อนเป็น Start Scene อัตโนมัติ (FR-STRUCT-09)
+	//    Chapter อื่น (episode != 1) ที่มี Start Scene ยังห้ามลบ ตาม FR-STRUCT-08
 	var hasStartScene bool
 	if err = tx.QueryRow(`
 		SELECT EXISTS (
@@ -116,7 +120,7 @@ func DeleteChapter(db *sql.DB, chapterID int) error {
 	`, chapterID).Scan(&hasStartScene); err != nil {
 		return err
 	}
-	if hasStartScene {
+	if hasStartScene && deletedEpisode != 1 {
 		return ErrChapterHasStartScene
 	}
 
@@ -156,23 +160,29 @@ func DeleteChapter(db *sql.DB, chapterID int) error {
 		return err
 	}
 
-	if _, err = tx.Exec(`
-		UPDATE scenes
-		SET type = 'start', updated_at = NOW()
-		WHERE scene_id = (
-			SELECT s.scene_id
-			FROM scenes s
-			JOIN chapters c ON c.chapter_id = s.chapter_id
-			WHERE c.novel_id = $1
-			  AND NOT EXISTS (
-				  SELECT 1 FROM scenes existing_start
-				  WHERE existing_start.novel_id = $1 AND existing_start.type = 'start'
-			  )
-			ORDER BY c.episode ASC, s.scene_id ASC
-			LIMIT 1
-		)
-	`, novelID); err != nil {
-		return err
+	// 4. หากลบ Chapter 1 ให้เลื่อนฉากแรกของ Chapter ถัดไป (ที่กลายเป็น Chapter 1 ใหม่)
+	//    ขึ้นมาเป็น Start Scene อัตโนมัติ เฉพาะเมื่อนิยายไม่มี Start Scene หลงเหลือ
+	//    หาก Chapter ที่เลื่อนขึ้นมาไม่มีฉาก จะไม่มีแถวถูกอัปเดต (ไม่สร้างฉากหรือ Start Scene ปลอม)
+	//    การลบ Chapter ที่ไม่ใช่ Chapter 1 ไม่สร้าง Start Scene ใหม่ (business rule)
+	if deletedEpisode == 1 {
+		if _, err = tx.Exec(`
+			UPDATE scenes
+			SET type = 'start', updated_at = NOW()
+			WHERE scene_id = (
+				SELECT s.scene_id
+				FROM scenes s
+				JOIN chapters c ON c.chapter_id = s.chapter_id
+				WHERE c.novel_id = $1
+				  AND NOT EXISTS (
+					  SELECT 1 FROM scenes existing_start
+					  WHERE existing_start.novel_id = $1 AND existing_start.type = 'start'
+				  )
+				ORDER BY c.episode ASC, s.scene_id ASC
+				LIMIT 1
+			)
+		`, novelID); err != nil {
+			return err
+		}
 	}
 
 	if err = tx.Commit(); err != nil {

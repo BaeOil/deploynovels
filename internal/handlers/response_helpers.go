@@ -2,8 +2,11 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
+	"log"
 	"net/http"
 	"novel-be/internal/dto"
+	"novel-be/internal/service"
 )
 
 // --- 1. ฟังก์ชันมาตรฐาน (New Standard) ---
@@ -72,6 +75,33 @@ func RespondWithCreated(w http.ResponseWriter, message string, data interface{})
 		Message: message,
 	}
 	json.NewEncoder(w).Encode(response)
+}
+
+// --- 3. ตัวช่วยสำหรับการจัดการ Error ภายในระบบ (Internal Error Handling) ---
+
+// writeInternalError บันทึก error จริงลง server log เพื่อการ debug
+// และตอบกลับเป็นข้อความ generic ไปยัง client เพื่อไม่ให้เปิดเผย
+// รายละเอียดภายใน (SQL error, path, endpoint ฯลฯ)
+func writeInternalError(w http.ResponseWriter, err error) {
+	log.Printf("[ERROR] internal error: %v", err)
+	WriteError(w, http.StatusInternalServerError, "internal server error")
+}
+
+// respondInternal ใช้กับจุดที่ RespondWithError (4 พารามิเตอร์) รูปแบบเดิม
+// โดยยังคง message ที่ handler กำหนดไว้ และซ่อนรายละเอียด error จริงไว้ใน log
+func respondInternal(w http.ResponseWriter, message string, err error) {
+	log.Printf("[ERROR] internal error: %v", err)
+	RespondWithError(w, http.StatusInternalServerError, message, "")
+}
+
+// writeUploadError แยก validation error ของไฟล์ (ตอบ 400 ได้เพราะไม่ใช่ข้อมูลภายใน)
+// ออกจาก error ภายในระบบ storage (ตอบ 500 แบบ generic + log ฝั่ง server)
+func writeUploadError(w http.ResponseWriter, err error) {
+	if errors.Is(err, service.ErrImageTooLarge) || errors.Is(err, service.ErrInvalidImageType) {
+		WriteError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	writeInternalError(w, err)
 }
 
 // WriteJSON เชื่อมโยงโค้ดเก่าที่เรียกใช้ WriteJSON ให้มาใช้มาตรฐานใหม่

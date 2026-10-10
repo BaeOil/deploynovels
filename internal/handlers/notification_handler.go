@@ -39,7 +39,7 @@ func (h *NotificationHandler) List(w http.ResponseWriter, r *http.Request) {
 	limit, _ := strconv.Atoi(r.URL.Query().Get("limit"))
 	items, err := h.service.ListNotifications(int(userID), page, limit)
 	if err != nil {
-		RespondWithError3(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 
@@ -110,7 +110,7 @@ func (h *NotificationHandler) UnreadCount(w http.ResponseWriter, r *http.Request
 	}
 	count, err := h.service.GetUnreadCount(int(userID))
 	if err != nil {
-		RespondWithError3(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 	RespondWithJSON(w, http.StatusOK, map[string]any{"unread_count": count})
@@ -136,7 +136,7 @@ func (h *NotificationHandler) MarkRead(w http.ResponseWriter, r *http.Request) {
 			RespondWithError3(w, http.StatusNotFound, "notification not found")
 			return
 		}
-		RespondWithError3(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 	RespondWithJSON(w, http.StatusOK, map[string]any{"message": "notification marked as read"})
@@ -153,7 +153,7 @@ func (h *NotificationHandler) MarkAllRead(w http.ResponseWriter, r *http.Request
 		return
 	}
 	if err := h.service.MarkAllRead(int(userID)); err != nil {
-		RespondWithError3(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 	RespondWithJSON(w, http.StatusOK, map[string]any{"message": "all notifications marked as read"})
@@ -179,7 +179,7 @@ func (h *NotificationHandler) Delete(w http.ResponseWriter, r *http.Request) {
 			RespondWithError3(w, http.StatusNotFound, "notification not found")
 			return
 		}
-		RespondWithError3(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 	RespondWithJSON(w, http.StatusOK, map[string]any{"message": "notification deleted"})
@@ -196,7 +196,7 @@ func (h *NotificationHandler) DeleteAll(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 	if err := h.service.DeleteAll(int(userID)); err != nil {
-		RespondWithError3(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 	RespondWithJSON(w, http.StatusOK, map[string]any{"message": "all notifications deleted"})
@@ -283,7 +283,7 @@ func (h *NotificationHandler) CreateFromPayload(w http.ResponseWriter, r *http.R
 	}
 	_, err := h.service.CreateNotification(payload.UserID, 0, payload.Type, payload.Title, payload.Message, cover, referenceID, referenceType)
 	if err != nil {
-		RespondWithError3(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 	RespondWithJSON(w, http.StatusCreated, map[string]any{"message": "notification created"})
@@ -301,7 +301,7 @@ func (h *NotificationHandler) GetSettings(w http.ResponseWriter, r *http.Request
 	}
 	settings, err := h.service.GetNotificationSettings(int(userID))
 	if err != nil {
-		RespondWithError3(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 	RespondWithJSON(w, http.StatusOK, settings)
@@ -323,7 +323,7 @@ func (h *NotificationHandler) UpdateSettings(w http.ResponseWriter, r *http.Requ
 		return
 	}
 	if err := h.service.UpdateNotificationSettings(int(userID), req); err != nil {
-		RespondWithError3(w, http.StatusInternalServerError, err.Error())
+		writeInternalError(w, err)
 		return
 	}
 	RespondWithJSON(w, http.StatusOK, map[string]string{

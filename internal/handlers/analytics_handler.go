@@ -48,7 +48,7 @@ func NovelAnalyticsHandler(
 				RespondWithError(w, http.StatusNotFound, "novel not found", err.Error())
 				return
 			}
-			RespondWithError(w, http.StatusInternalServerError, "เกิดข้อผิดพลาดในการดึงข้อมูลสถิติ", err.Error())
+			respondInternal(w, "เกิดข้อผิดพลาดในการดึงข้อมูลสถิติ", err)
 			return
 		}
 
@@ -95,7 +95,7 @@ func SceneAnalyticsHandler(
 				RespondWithError(w, http.StatusNotFound, "scene not found in novel", err.Error())
 				return
 			}
-			RespondWithError(w, http.StatusInternalServerError, "เกิดข้อผิดพลาดในการดึงข้อมูลสถิติฉาก", err.Error())
+			respondInternal(w, "เกิดข้อผิดพลาดในการดึงข้อมูลสถิติฉาก", err)
 			return
 		}
 
@@ -142,7 +142,7 @@ func SceneChoiceAnalyticsHandler(
 				RespondWithError(w, http.StatusNotFound, "scene not found in novel", err.Error())
 				return
 			}
-			RespondWithError(w, http.StatusInternalServerError, "เกิดข้อผิดพลาดในการดึงข้อมูลสถิติทางเลือก", err.Error())
+			respondInternal(w, "เกิดข้อผิดพลาดในการดึงข้อมูลสถิติทางเลือก", err)
 			return
 		}
 
@@ -168,7 +168,7 @@ func AllScenesAnalyticsHandler(analyticsSvc service.AnalyticsService, novelSvc s
 		}
 		stats, err := analyticsSvc.GetAllScenesAnalytics(novelID)
 		if err != nil {
-			RespondWithError(w, http.StatusInternalServerError, "เกิดข้อผิดพลาดในการดึงข้อมูลสถิติทุกฉาก", err.Error())
+			respondInternal(w, "เกิดข้อผิดพลาดในการดึงข้อมูลสถิติทุกฉาก", err)
 			return
 		}
 		RespondWithJSON(w, http.StatusOK, stats)
@@ -192,7 +192,7 @@ func EdgeAnalyticsHandler(analyticsSvc service.AnalyticsService, novelSvc servic
 		}
 		stats, err := analyticsSvc.GetEdgeAnalytics(novelID)
 		if err != nil {
-			RespondWithError(w, http.StatusInternalServerError, "เกิดข้อผิดพลาดในการดึงข้อมูลสถิติของเส้นทางเลือก", err.Error())
+			respondInternal(w, "เกิดข้อผิดพลาดในการดึงข้อมูลสถิติของเส้นทางเลือก", err)
 			return
 		}
 		RespondWithJSON(w, http.StatusOK, stats)

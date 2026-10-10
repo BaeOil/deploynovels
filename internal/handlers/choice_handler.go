@@ -2,11 +2,37 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 
 	"novel-be/internal/models"
 	"novel-be/internal/service"
 )
+
+// writeChoiceServiceError map business error ของ choice เป็น HTTP status ที่เหมาะสม
+// error ที่ไม่ใช่ business error (internal/DB) จะถูกตอบเป็นข้อความ generic แทน
+func writeChoiceServiceError(w http.ResponseWriter, err error) {
+	switch {
+	case errors.Is(err, service.ErrInvalidChoiceLabel),
+		errors.Is(err, service.ErrChoiceFromSceneMissing),
+		errors.Is(err, service.ErrChoiceToSceneMissing),
+		errors.Is(err, service.ErrChoiceCrossNovel),
+		errors.Is(err, service.ErrChoiceSelfLoop),
+		errors.Is(err, service.ErrChoiceFromEnding),
+		errors.Is(err, service.ErrChoiceToStart),
+		errors.Is(err, service.ErrChoiceReverse),
+		errors.Is(err, service.ErrChoiceCycle),
+		errors.Is(err, service.ErrChoiceWrongOrigin),
+		errors.Is(err, service.ErrChoiceForeignToScene):
+		WriteError(w, http.StatusBadRequest, err.Error())
+	case errors.Is(err, service.ErrChoiceNotFound):
+		WriteError(w, http.StatusNotFound, err.Error())
+	case errors.Is(err, service.ErrChoiceDuplicate):
+		WriteError(w, http.StatusConflict, err.Error())
+	default:
+		writeInternalError(w, err)
+	}
+}
 
 func CreateChoiceHandler(sceneService service.SceneService, chapterService service.ChapterService, novelService service.NovelService, writerService service.WriterService, auditService service.AuditService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -39,7 +65,7 @@ func CreateChoiceHandler(sceneService service.SceneService, chapterService servi
 			if writeOwnershipError(w, err) {
 				return
 			}
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -49,7 +75,7 @@ func CreateChoiceHandler(sceneService service.SceneService, chapterService servi
 			Label:       req.Label,
 		})
 		if err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeChoiceServiceError(w, err)
 			return
 		}
 		recordAudit(r, auditService, service.AuditEvent{Action: "CREATE_CHOICE", TargetType: "choice", TargetID: int64Pointer(choiceID), Status: "SUCCESS", Metadata: map[string]interface{}{"from_scene_id": req.FromSceneID, "to_scene_id": req.ToSceneID}})
@@ -89,7 +115,7 @@ func UpdateChoiceHandler(sceneService service.SceneService, chapterService servi
 			if writeOwnershipError(w, err) {
 				return
 			}
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
@@ -111,7 +137,7 @@ func UpdateChoiceHandler(sceneService service.SceneService, chapterService servi
 		}
 
 		if err := sceneService.UpdateChoice(choice); err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeChoiceServiceError(w, err)
 			return
 		}
 		choiceUpdMeta := map[string]interface{}{"from_scene_id": existingChoice.FromSceneID}
@@ -161,12 +187,12 @@ func DeleteChoiceHandler(sceneService service.SceneService, chapterService servi
 			if writeOwnershipError(w, err) {
 				return
 			}
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeInternalError(w, err)
 			return
 		}
 
 		if err := sceneService.DeleteChoice(choiceID); err != nil {
-			WriteError(w, http.StatusInternalServerError, err.Error())
+			writeChoiceServiceError(w, err)
 			return
 		}
 		recordAudit(r, auditService, service.AuditEvent{Action: "DELETE_CHOICE", TargetType: "choice", TargetID: int64Pointer(choiceID), Status: "SUCCESS", Metadata: map[string]interface{}{"from_scene_id": existingChoice.FromSceneID, "to_scene_id": existingChoice.ToSceneID}})

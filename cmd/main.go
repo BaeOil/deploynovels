@@ -95,7 +95,7 @@ func main() {
 	mediaService := service.NewMediaService(mediaRepo)
 
 	// 🟢 ตอนนี้ส่ง mediaService เข้าไปได้แล้ว
-	novelService := service.NewNovelService(novelRepo, mediaService)
+	novelService := service.NewNovelService(novelRepo, mediaService, categoryRepo)
 
 	sceneService := service.NewSceneService(sceneRepo, dbConn)
 	chapterService := service.NewChapterService(chapterRepo)
