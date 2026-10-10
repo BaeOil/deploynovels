@@ -7,6 +7,10 @@
 import React, { useState, useEffect } from "react";
 import "./Authpage.css";
 
+// Backend API base URL — ต้องชี้ไปที่ Railway (ไม่ได้ใช้ relative path เพราะ Vercel ไม่มี backend)
+// ถ้าไม่ได้ตั้ง VITE_API_BASE_URL ตอน build จะ fallback เป็น localhost:8080 (dev บนเครื่อง)
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+
 // ══════════════════════════════════════════════════════════
 //  Icons (inline SVG components)
 // ══════════════════════════════════════════════════════════
@@ -172,7 +176,7 @@ const LoginForm = ({ onSwitchToRegister }) => {
     setErrors({});
     try {
       console.log("🛰️ Fetching Login API...", { email, passwordLength: password.length });
-      const res = await fetch('/api/login', {
+      const res = await fetch(`${API_BASE_URL}/api/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -575,7 +579,7 @@ const RegisterForm = ({ onSwitchToLogin }) => {
         }
       }
 
-      const apiEndpoint = '/api/register'; 
+      const apiEndpoint = `${API_BASE_URL}/api/register`;
       console.log(`🛰️ Sending HTTP POST to endpoint: "${apiEndpoint}"`);
 
       const res = await fetch(apiEndpoint, {
