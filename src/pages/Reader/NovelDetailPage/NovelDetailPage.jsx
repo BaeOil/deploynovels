@@ -14,6 +14,7 @@ import LoadingScreen from "../../../components/LoadingScreen/LoadingScreen";
 import { ShieldAlert, ChevronDown, Pencil, Map, Bookmark, Heart, MoreVertical, RotateCcw, Flag, Play, CheckCircle2, MapPin, Trophy } from "lucide-react";
 import { getBannedRegistry, cleanBanReason, extractBanDetails } from "../../../utils/novelStatus";
 import { showToast } from "../../../utils/toast";
+import { resolveMediaUrl } from "../../../utils/mediaUrl";
 // Removed authUtils import per user request
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";

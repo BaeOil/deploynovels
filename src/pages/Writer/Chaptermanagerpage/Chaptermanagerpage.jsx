@@ -10,6 +10,7 @@ import LoadingScreen from "../../../components/LoadingScreen/LoadingScreen";
 import UnsavedChangesModal from "../../../components/UnsavedChangesModal/UnsavedChangesModal";
 import { getChoiceConnectionBlockReason, getChoiceConnectionMessage } from "../../../utils/choiceValidation";
 import { ShieldAlert, X, AlertCircle, Send, ChevronDown, ChevronRight, Check, Eye, GitFork, Layers, FileText, Clock, Search, AlertTriangle } from "lucide-react";
+import { resolveMediaUrl } from "../../../utils/mediaUrl";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 const getToken = () => localStorage.getItem("token");

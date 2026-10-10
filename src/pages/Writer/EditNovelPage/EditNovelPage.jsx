@@ -12,6 +12,7 @@ import { useNavigate, useParams, useBlocker } from "react-router-dom";
 import UnsavedChangesModal from "../../../components/UnsavedChangesModal/UnsavedChangesModal";
 import { getNovelStatusInfo, registerBannedNovel, isNovelBannedInRegistry } from "../../../utils/novelStatus";
 import { showTopToast } from "../../../utils/toast";
+import { resolveMediaUrl } from "../../../utils/mediaUrl";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 
