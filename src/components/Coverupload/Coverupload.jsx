@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import Cropper from "react-easy-crop";
 import getCroppedImg from "../../utils/cropImage.js";
-import "./CoverUpload.css";
+import "./Coverupload.css";
 
 const CoverUpload = ({ value, onChange }) => {
   const [preview, setPreview] = useState(value || null);

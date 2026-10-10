@@ -1,7 +1,7 @@
 // src/components/ChoiceButtons/ChoiceButtons.jsx
 import React, { useState } from "react";
 import { ChevronRight, Check } from "lucide-react";
-import "./ChoiceButtons.css";
+import "./Choicebuttons.css";
 
 const stripLeadingEmoji = (str) => {
   if (!str) return "";

@@ -1,7 +1,7 @@
 // src/components/ReadingBreadcrumb/ReadingBreadcrumb.jsx
 import React from "react";
 import { GitFork, ArrowLeft, ChevronRight } from "lucide-react";
-import "./ReadingBreadcrumb.css";
+import "./Readingbreadcrumb.css";
 
 /**
  * ReadingBreadcrumb — แถบ breadcrumb + Story Map button + Theme Settings บนหน้าอ่านนิยาย

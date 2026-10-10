@@ -9,9 +9,9 @@
 import React, { useState, useEffect } from "react";
 import ReactQuill from "react-quill-new";
 import "quill/dist/quill.snow.css";
-import "./CreateNovelPage.css";
-import MultiSelect from "../../../components/MultiSelect/MultiSelect";
-import CoverUpload from "../../../components/CoverUpload/CoverUpload";
+import "./Createnovelpage.css";
+import MultiSelect from "../../../components/Multiselect/Multiselect";
+import CoverUpload from "../../../components/Coverupload/Coverupload";
 import Toggle from "../../../components/Toggle/Toggle";
 import { useNavigate } from "react-router-dom";
 import { getNovelStatusInfo } from "../../../utils/novelStatus";

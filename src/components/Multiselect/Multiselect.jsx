@@ -1,6 +1,6 @@
 // src/components/MultiSelect/MultiSelect.jsx
 import React, { useState, useRef, useEffect } from "react";
-import "./MultiSelect.css";
+import "./Multiselect.css";
 
 /**
  * MultiSelect — เลือกหมวดหมู่หลายอย่างพร้อมกัน
