@@ -44,6 +44,17 @@ function getProcessedReportsRegistry() {
   }
 }
 
+// ตรวจสอบว่า report เป็น "คำขอปลดระงับ/ปลดแบน" (appeal) จากนักเขียนหรือไม่
+// ใช้ field ที่ backend / localStorage registry ส่งมาโดยตรง ไม่ตัดสินจากข้อความ reason
+// เพื่อไม่ให้รายงานแจ้งลบธรรมดาที่มีคำว่า "ปลดระงับ" ในเหตุผลโดนจัดเป็น appeal ผิด ๆ
+function isAppealReport(item) {
+  if (!item) return false;
+  if (item.isAppeal === true || item.isAppeal === 1) return true;
+  if (item.report_type === "appeal") return true;
+  if (item.status === "appeal_pending") return true;
+  return false;
+}
+
 // =========================================================================
 // Thai Date Formatting Helpers
 // =========================================================================
