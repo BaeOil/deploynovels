@@ -1,0 +1,282 @@
+.ending-page {
+  background: transparent;
+  padding: 16px;
+  display: block;
+  font-family: "Sarabun", sans-serif;
+  box-sizing: border-box;
+}
+
+.ending-card {
+  width: 100%;
+  max-width: 100%;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 18px 60px rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+  max-height: calc(100vh - 160px);
+  overflow-y: auto;
+}
+
+.ending-header {
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.ending-header-text h3 {
+  margin: 0;
+  color: #1a1a2e;
+}
+
+.ending-header-text p {
+  margin-top: 6px;
+  color: #9ca3af;
+  font-size: 13px;
+  margin-bottom: 0;
+}
+
+.header-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-toggle-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #374151;
+}
+
+.section {
+  padding: 16px 24px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.section.no-border-top {
+  border-top: none;
+  padding-top: 0;
+}
+
+.section label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #374151;
+}
+
+.optional {
+  margin-left: 8px;
+  color: #9ca3af;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.type-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.type-card {
+  border: 2px solid #e5e7eb;
+  background: white;
+  border-radius: 14px;
+  padding: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.type-card.active {
+  border-color: #e91e8c;
+  background: #fff5f9;
+}
+
+.icon {
+  font-size: 24px;
+  margin-bottom: 6px;
+}
+
+.type-hint {
+  margin-top: 10px;
+  background: #f9fafb;
+  padding: 10px;
+  border-radius: 10px;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  font-size: 14px;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.toggle-row-text label {
+  margin-bottom: 4px;
+}
+
+.toggle-row-text p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+/* 🃏 Preview Card - ถอดแบบเป๊ะๆ จากหน้าคลังฉากจบจริง */
+.preview-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 24px 20px;
+  border-radius: 16px;
+  border-width: 2px;
+  border-style: solid;
+  transition: all 0.3s ease;
+  width: 280px; /* ล็อกขนาดความกว้างคงที่เหมือนฝั่งนักอ่าน */
+  min-height: 360px; /* ล็อกความสูงขั้นต่ำให้เป็นแนวตั้งที่ได้สัดส่วน */
+  box-sizing: border-box;
+  margin: 0 auto; /* จัดกึ่งกลางฝั่งซ้าย */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.preview-icon {
+  font-size: 40px; /* ลดขนาดไอคอนลงให้ไม่แย่งซีน */
+  line-height: 1;
+  margin-bottom: 8px; /* ลดช่องว่าง */
+}
+
+.badge {
+  display: inline-block;
+  width: auto;
+  min-width: auto; /* 🌟 เอาความกว้างที่ล็อกไว้ออก ให้หดพอดีคำ */
+  padding: 4px 12px; /* ลดความหนาของ Badge */
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  background: #f8fafc;
+  color: #1e293b;
+  margin-bottom: 12px; /* ลดช่องว่าง */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+.preview-card h4 {
+  margin: 0 0 6px 0; /* ลดช่องว่างใต้ชื่อตอนจบ */
+  color: #0f172a;
+  font-size: 18px; /* ปรับฟอนต์ให้พอดี ไม่ตะโกนเกินไป */
+  font-weight: 700;
+}
+
+.preview-description {
+  margin: 0 0 16px 0; /* ลดช่องว่างใต้คำอธิบาย */
+  color: #475569;
+  font-size: 13px; /* ปรับเล็กลงนิดนึงให้อ่านง่ายแต่ไม่เปลืองที่ */
+  line-height: 1.5;
+  white-space: pre-wrap;
+  max-width: 100%;
+  width: 100%;
+  word-break: break-word; /* ป้องกันคำยาวล้นการ์ด */
+}
+
+.preview-card small {
+  color: #94a3b8;
+  font-size: 11px;
+}
+
+/* 🎨 Themes (อิงตามสีกรอบหน้าคลังจริง) */
+.preview-card.good {
+  border-color: #38bdf8;
+  background: #ffffff;
+}
+
+.preview-card.bad {
+  border-color: #fca5a5;
+  background: #ffffff;
+}
+
+.preview-card.true {
+  border-color: #facc15;
+  background: #ffffff;
+}
+
+.preview-card.secret {
+  border-color: #c084fc;
+  background: #ffffff;
+}
+/* 💾 Save Button */
+.save-wrapper {
+  padding: 20px 24px 32px 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.save-btn {
+  width: 280px;
+  padding: 14px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #e91e8c, #ff6eb4);
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(233, 30, 140, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.save-btn:active {
+  transform: scale(0.98);
+}
+
+/* 🎚️ Toggle Switch */
+.switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+}
+
+.switch input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  inset: 0;
+  background: #e5e7eb;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  top: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: 0.3s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.switch input:checked + .slider {
+  background: #e91e8c;
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(20px);
+}

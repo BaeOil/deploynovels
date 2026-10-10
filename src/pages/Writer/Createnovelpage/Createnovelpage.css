@@ -1,0 +1,498 @@
+/* src/pages/Writer/CreateNovel/CreateNovelPage.css */
+
+/* หน้า */
+.cnp {
+  width: 100%;
+  padding-bottom: 60px;
+}
+
+
+/* จัดเฉพาะฟอร์มให้อยู่กลาง */
+.cnp__form-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+/* ขนาดฟอร์ม */
+.cnp__card {
+  width: 100%;
+  max-width: 980px;
+}
+/* ── Page heading ── */
+
+
+/* หัวข้อด้านบน */
+.cnp__header {
+  max-width: 980px;
+  margin: 30px auto;
+  width: 100%;
+}
+
+/* Page heading */
+.cnp__heading {
+  margin-bottom: 28px;
+}
+
+/* Title */
+.cnp__title {
+  font-family: 'Open Sans', serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.3px;
+  margin-bottom: 5px;
+  text-align: left;
+}
+ 
+.cnp__sub {
+  font-size: 14px;
+  color: var(--gray-600);
+}
+ 
+/* ── Main card ── */
+.cnp__card {
+  background: var(--white);
+  border: 1.5px solid var(--gray-100);
+  border-radius: 18px;
+  box-shadow: var(--shadow-sm);
+  overflow: visible;
+}
+
+/* ── Section header (inside card) ── */
+.cnp__section-header {
+  padding: 28px 32px 24px;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.cnp__section-title {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.cnp__section-sub {
+  font-size: 13px;
+  color: var(--gray-600);
+}
+
+/* ── Two-column layout ── */
+.cnp__columns {
+  display: grid;
+  grid-template-columns: 1fr 240px;
+  gap: 32px;
+  padding: 28px 32px 0;
+  align-items: start;
+}
+
+/* ════ LEFT: form fields ════ */
+.cnp__left {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* ── Form field wrapper ── */
+.cnp__field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+/* ── Label ── */
+.cnp__label {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.cnp__required {
+  color: var(--pink-500);
+  font-size: 15px;
+  line-height: 1;
+}
+
+/* ── Input base ── */
+.cnp__input,
+.cnp__textarea {
+  width: 100%;
+  background: var(--gray-50);
+  border: 1.5px solid var(--gray-100);
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+  resize: none;
+}
+
+.cnp__input::placeholder,
+.cnp__textarea::placeholder {
+  color: var(--gray-300);
+}
+
+.cnp__input:focus,
+.cnp__textarea:focus {
+  border-color: var(--pink-500);
+  background: var(--white);
+  box-shadow: 0 0 0 3px rgba(233, 30, 140, 0.08);
+}
+
+/* Error state */
+.cnp__input--error {
+  border-color: #EF4444;
+  background: #FFF8F8;
+}
+
+.cnp__input--error:focus {
+  border-color: #EF4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.08);
+}
+
+/* ── Textarea sizes ── */
+.cnp__textarea--sm {
+  min-height: 90px;
+  max-height: 140px;
+}
+
+.cnp__textarea--lg {
+  min-height: 110px;
+  max-height: 180px;
+}
+
+/* ── Char count row ── */
+.cnp__char-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.cnp__char-count {
+  font-size: 12px;
+  color: var(--gray-300);
+  font-family: 'Sarabun', sans-serif;
+}
+
+.cnp__char-count--warn {
+  color: #F59E0B;
+  font-weight: 600;
+}
+
+/* ── Error message ── */
+.cnp__error {
+  font-size: 12px;
+  color: #EF4444;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cnp__error::before {
+  content: '⚠';
+  font-size: 11px;
+}
+
+/* ════ RIGHT: cover + settings ════ */
+.cnp__right {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: sticky;
+  top: 24px;
+}
+
+/* Cover upload wrapper */
+.cnp__cover-wrap {
+  width: 100%;
+}
+
+/* ── Settings box ── */
+.cnp__settings {
+  background: var(--gray-50);
+  border: 1px solid var(--gray-100);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+
+.cnp__settings-title {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+
+/* Setting row */
+.cnp__setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.cnp__setting-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.cnp__setting-label {
+  font-size: 13px;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.cnp__setting-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cnp__setting-status {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 12px;
+  color: var(--gray-300);
+  min-width: 52px;
+  font-weight: 500;
+}
+
+.cnp__setting-status--on {
+  color: var(--pink-500);
+  font-weight: 600;
+}
+
+/* ════ Footer ════ */
+.cnp__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 24px 32px;
+  border-top: 1px solid var(--gray-100);
+  margin-top: 28px;
+}
+
+/* ── Buttons base ── */
+.cnp__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 11px 22px;
+  border-radius: 10px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  border: none;
+}
+
+.cnp__btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ยกเลิก */
+.cnp__btn--cancel {
+  background: transparent;
+  color: var(--gray-600);
+  border: 1.5px solid var(--gray-100);
+}
+
+.cnp__btn--cancel:hover:not(:disabled) {
+  background: var(--gray-50);
+  border-color: var(--gray-300);
+  color: var(--ink);
+}
+
+/* ย้อนกลับ */
+.cnp__btn--back {
+  background: var(--white);
+  color: var(--pink-500);
+  border: 1.5px solid var(--pink-300);
+}
+
+.cnp__btn--back:hover:not(:disabled) {
+  background: var(--pink-50);
+  border-color: var(--pink-500);
+  transform: translateY(-1px);
+}
+
+/* สร้างนิยายและเพิ่มตอนแรก */
+.cnp__btn--submit {
+  background: var(--pink-500);
+  color: white;
+  box-shadow: 0 4px 14px rgba(233, 30, 140, 0.30);
+  padding: 11px 24px;
+}
+
+.cnp__btn--submit:hover:not(:disabled) {
+  background: var(--pink-700);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(233, 30, 140, 0.40);
+}
+
+/* Loading spinner in button */
+.cnp__spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: white;
+  animation: rp-spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+/* ── Responsive ── */
+@media (max-width: 820px) {
+  .cnp {
+    padding: 20px 16px 40px;
+  }
+
+  .cnp__columns {
+    grid-template-columns: 1fr;
+    padding: 20px 20px 0;
+  }
+
+  .cnp__right {
+    position: static;
+  }
+
+  .cnp__section-header {
+    padding: 20px 20px 16px;
+  }
+
+  .cnp__footer {
+    padding: 20px;
+    flex-wrap: wrap;
+  }
+
+  .cnp__btn--submit {
+    width: 100%;
+    order: -1;
+  }
+}
+
+/* ─────────────────────────────
+   React Quill
+───────────────────────────── */
+
+.cnp__quill-wrap {
+  border: 1.5px solid var(--gray-100);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--white);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.cnp__quill-wrap:focus-within {
+  border-color: var(--pink-500);
+  box-shadow: 0 0 0 3px rgba(233, 30, 140, 0.08);
+}
+
+.cnp__quill-wrap--error {
+  border-color: #EF4444;
+}
+
+.cnp__quill .ql-toolbar {
+  border: none;
+  border-bottom: 1px solid var(--gray-100);
+  background: var(--gray-50);
+}
+
+.cnp__quill .ql-container {
+  border: none;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  min-height: 220px;
+}
+
+.cnp__quill .ql-editor {
+  min-height: 220px;
+  color: var(--ink);
+}
+
+.cnp__quill .ql-editor.ql-blank::before {
+  color: var(--gray-300);
+  font-style: normal;
+}
+
+/* ── Modal ── */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-width: 400px;
+  width: 90%;
+}
+
+.modal-content h2 {
+  margin: 0 0 12px 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.modal-content p {
+  margin: 8px 0;
+  color: #333;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.modal-buttons .btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.btn--outline {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.btn--outline:hover {
+  background: #e0e0e0;
+}
+
+.btn--danger {
+  background: #e61c4f;
+  color: white;
+}
+
+.btn--danger:hover {
+  background: #e61c4f;
+}

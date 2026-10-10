@@ -1,0 +1,1103 @@
+/* src/pages/Auth/WriterRegister/WriterRegisterPage.css */
+
+/* ══════════════════════════════════════════
+   Page
+══════════════════════════════════════════ */
+
+.wr-page {
+    width: 100%;
+    max-width: 950px;
+
+    min-height: 100vh;
+
+    margin: 0 auto;
+    padding: 40px 80px;
+
+    background: var(--white);
+
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+/* ── Hide browser native password reveal button ── */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear,
+input::-ms-reveal,
+input::-ms-clear,
+input::-webkit-contacts-auto-fill-button,
+input::-webkit-credentials-auto-fill-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .wr-page {
+    max-width: 100%;
+    padding: 40px 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  .wr-page {
+    padding: 40px 32px;
+  }
+
+  .wr-step-content--split {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .wr-step-content {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .wr-page {
+    padding: 40px 20px;
+  }
+
+  .wr-header__title {
+    font-size: 28px;
+  }
+
+  .wr-cancel-btn {
+    padding: 8px 14px;
+    font-size: 12px;
+  }
+}
+
+/* ══════════════════════════════════════════
+   Header
+══════════════════════════════════════════ */
+
+.wr-header {
+  margin-bottom: 36px;
+}
+
+.wr-header__title {
+  font-family: 'Open Sans', serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--pink-500);
+  letter-spacing: -0.4px;
+  margin-bottom: 6px;
+}
+
+.wr-header__sub {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 15px;
+  color: var(--gray-600);
+}
+
+/* ══════════════════════════════════════════
+   Header Wrapper (with Cancel Button at Top Right)
+══════════════════════════════════════════ */
+
+.wr-header-wrapper {
+  position: relative;
+  margin-bottom: 36px;
+}
+
+.wr-header-wrapper .wr-header {
+  margin-bottom: 0;
+  padding-right: 140px;
+}
+
+/* ══════════════════════════════════════════
+   Cancel Button (Top Right of Header)
+══════════════════════════════════════════ */
+
+.wr-cancel-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border: 1.5px solid #ddd;
+  background: white;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #999;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.wr-cancel-btn:hover {
+  border-color: #e91e63;
+  color: #e91e63;
+  box-shadow: 0 4px 12px rgba(233, 30, 99, 0.15);
+}
+
+.wr-cancel-btn:active {
+  transform: scale(0.98);
+}
+
+/* ── Remove old cancel zone styles ── */
+.wr-cancel-zone {
+  display: none;
+}
+
+/* ══════════════════════════════════════════
+   Step Indicator
+══════════════════════════════════════════ */
+
+.wr-steps {
+  display: flex;
+  align-items: center;
+  margin-bottom: 52px;
+  padding: 0 20px;
+}
+
+/* Each step item */
+.wr-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.wr-step__circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  transition: all 0.25s ease;
+  background: var(--gray-100);
+  color: var(--gray-300);
+  border: none;
+  flex-shrink: 0;
+}
+
+.wr-step__label {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gray-300);
+  white-space: nowrap;
+  transition: color 0.2s ease;
+  position: absolute;
+  top: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Active step */
+.wr-step--active .wr-step__circle {
+  background: var(--pink-500);
+  color: white;
+  box-shadow: 0 4px 16px rgba(233, 30, 140, 0.35);
+}
+
+.wr-step--active .wr-step__label {
+  color: var(--pink-500);
+  font-weight: 700;
+}
+
+/* Done step */
+.wr-step--done .wr-step__circle {
+  background: var(--pink-500);
+  color: white;
+}
+
+.wr-step--done .wr-step__label {
+  color: var(--pink-500);
+  font-weight: 600;
+}
+
+/* Connector line between steps */
+.wr-step__line {
+  flex: 1;
+  height: 2px;
+  background: var(--gray-100);
+  transition: background 0.3s ease;
+  margin-bottom: 0;
+  align-self: center;
+  position: relative;
+  top: 0;
+  z-index: 0;
+}
+
+.wr-step__line--done {
+  background: var(--pink-500);
+}
+
+/* ══════════════════════════════════════════
+   Step Content Wrapper
+══════════════════════════════════════════ */
+
+.wr-step-content {
+    width: 100%;
+
+    animation: wr-fade-in 0.22s ease;
+
+    flex: 1;
+
+    min-height: 650px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    box-sizing: border-box;
+}
+
+.wr-step-content--split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+
+    align-items: stretch;
+}
+
+.wr-step-left {
+  display: flex;
+  justify-content: center;
+  padding-top: 24px;
+}
+
+/* ══════════════════════════════════════════
+   Avatar Upload
+══════════════════════════════════════════ */
+
+.wr-avatar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.wr-avatar__circle {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 3px solid var(--pink-100);
+  background: var(--gray-50);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.wr-avatar__circle:hover {
+  border-color: var(--pink-300);
+  box-shadow: 0 0 0 4px rgba(233, 30, 140, 0.1);
+}
+
+.wr-avatar__circle:focus-visible {
+  outline: 2px solid var(--pink-500);
+  outline-offset: 3px;
+}
+
+.wr-avatar__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Placeholder (no image) */
+.wr-avatar__placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: var(--gray-50);
+}
+
+/* Camera overlay on hover */
+.wr-avatar__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(233, 30, 140, 0.55);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.wr-avatar__circle:hover .wr-avatar__overlay {
+  opacity: 1;
+}
+
+/* Edit badge — bottom right */
+.wr-avatar__badge {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--pink-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(233, 30, 140, 0.35);
+}
+
+/* Hidden file input */
+.wr-avatar__input {
+  display: none;
+}
+
+/* Label below avatar */
+.wr-avatar__label {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gray-600);
+  text-align: center;
+}
+
+/* ══════════════════════════════════════════
+   Form Card (Step 1)
+══════════════════════════════════════════ */
+
+.wr-card {
+    background: var(--white);
+    border: 1.5px solid var(--pink-100);
+    border-radius: 18px;
+
+    padding: 28px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    min-height: 520px;
+
+    box-shadow: 0 4px 24px rgba(233, 30, 140, 0.06);
+
+    box-sizing: border-box;
+}
+
+.wr-card__title {
+  font-family: 'Open Sans', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--pink-500);
+  margin-bottom: 24px;
+  letter-spacing: -0.2px;
+}
+
+.wr-card__footer {
+  padding-top: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.wr-card__footer--right {
+  justify-content: flex-end;
+}
+
+/* ══════════════════════════════════════════
+   Section title (Steps 2, 3, 4)
+══════════════════════════════════════════ */
+
+.wr-section-title {
+  font-family: 'Open Sans', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--pink-500);
+  margin-bottom: 12px;
+  letter-spacing: -0.3px;
+}
+
+/* ══════════════════════════════════════════
+   Form Fields
+══════════════════════════════════════════ */
+
+.wr-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 20px;
+}
+
+.wr-field:last-of-type {
+  margin-bottom: 0;
+}
+
+.wr-label {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+/* Input wrap */
+.wr-input-wrap {
+  position: relative;
+}
+
+.wr-input {
+  width: 100%;
+  padding: 13px 16px;
+  border-radius: 12px;
+  border: 1.5px solid var(--pink-300);
+  background: var(--pink-50);
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+}
+
+.wr-input::placeholder { color: var(--pink-300); }
+
+.wr-input:focus {
+  border-color: var(--pink-500);
+  background: var(--white);
+  box-shadow: 0 0 0 3px rgba(233, 30, 140, 0.10);
+}
+
+/* Textarea */
+.wr-textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1.5px solid var(--pink-300);
+  background: var(--pink-50);
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  color: var(--ink);
+  outline: none;
+  resize: vertical;
+  min-height: 130px;
+  transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+  line-height: 1.7;
+}
+
+.wr-textarea::placeholder { color: var(--pink-300); }
+
+.wr-textarea:focus {
+  border-color: var(--pink-500);
+  background: var(--white);
+  box-shadow: 0 0 0 3px rgba(233, 30, 140, 0.10);
+}
+
+.wr-textarea--sm {
+  min-height: 90px;
+}
+
+/* Error state */
+.wr-input-wrap--error .wr-input,
+.wr-input-wrap--error .wr-textarea {
+  border-color: #EF4444;
+  background: #FFF8F8;
+}
+
+/* Error message */
+.wr-field__error {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 12px;
+  color: #EF4444;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.wr-field__error::before {
+  content: '⚠';
+  font-size: 11px;
+}
+
+/* ══════════════════════════════════════════
+   Genre Pills (Step 2)
+══════════════════════════════════════════ */
+
+.wr-genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.wr-genre-pill {
+  padding: 9px 20px;
+  border-radius: 24px;
+  border: 1.5px solid var(--gray-100);
+  background: var(--white);
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.wr-genre-pill:hover {
+  border-color: var(--pink-300);
+  color: var(--pink-500);
+  background: var(--pink-50);
+  transform: translateY(-1px);
+}
+
+.wr-genre-pill--active {
+  border-color: var(--pink-500);
+  background: var(--pink-500);
+  color: white;
+  box-shadow: 0 3px 12px rgba(233, 30, 140, 0.28);
+}
+
+.wr-genre-pill--active:hover {
+  background: var(--pink-700);
+  border-color: var(--pink-700);
+  color: white;
+}
+
+/* ══════════════════════════════════════════
+   Social Links (Step 3)
+══════════════════════════════════════════ */
+
+.wr-socials {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.wr-social-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.wr-social-icon {
+  flex-shrink: 0;
+}
+
+/* Circular icon badges */
+.wr-social-icon__circle {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+}
+
+.wr-social-icon__circle--fb {
+  background: linear-gradient(145deg, #1877F2, #166FE5);
+}
+
+.wr-social-icon__circle--ig {
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+}
+
+.wr-social-icon__circle--tw {
+  background: linear-gradient(145deg, #1DA1F2, #0C85D0);
+}
+
+.wr-social-row .wr-input-wrap {
+  flex: 1;
+}
+
+/* ══════════════════════════════════════════
+   Summary Card (Step 4)
+══════════════════════════════════════════ */
+
+.wr-confirm-header {
+  margin-bottom: 8px;
+}
+
+.wr-confirm-sub {
+  font-size: 14px;
+  color: var(--gray-600);
+  margin-bottom: 24px;
+  margin-top: -16px;
+}
+
+.wr-summary {
+  display: flex;
+  align-items: flex-start;
+  gap: 36px;
+  background: var(--white);
+  border: 1.5px solid var(--pink-300);
+  border-radius: 18px;
+  padding: 32px 36px;
+  box-shadow: 0 4px 24px rgba(233, 30, 140, 0.06);
+}
+
+/* Avatar in summary */
+.wr-summary__avatar {
+  flex-shrink: 0;
+}
+
+.wr-summary__avatar-img {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--pink-100);
+  box-shadow: 0 4px 16px rgba(233, 30, 140, 0.15);
+}
+
+.wr-summary__avatar-placeholder {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: var(--pink-50);
+  border: 3px solid var(--pink-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 56px;
+}
+
+/* Info rows */
+.wr-summary__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+.wr-summary__row {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.wr-summary__label {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  flex-shrink: 0;
+}
+
+.wr-summary__value {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  color: var(--gray-600);
+  word-break: break-word;
+  line-height: 1.5;
+}
+
+/* ══════════════════════════════════════════
+   Confirm Checkbox (Step 4)
+══════════════════════════════════════════ */
+
+.wr-confirm-check {
+  margin-top: 20px;
+}
+
+.wr-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.wr-checkbox__input {
+  display: none;
+}
+
+.wr-checkbox__box {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 1.5px solid var(--gray-300);
+  background: var(--white);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.18s ease;
+  position: relative;
+}
+
+.wr-checkbox__box--checked {
+  background: var(--pink-500);
+  border-color: var(--pink-500);
+  box-shadow: 0 2px 8px rgba(233, 30, 140, 0.3);
+}
+
+.wr-checkbox__box--checked::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 7px;
+  border-left: 2.5px solid white;
+  border-bottom: 2.5px solid white;
+  transform: rotate(-45deg) translateY(-1px);
+}
+
+.wr-checkbox__label {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* ══════════════════════════════════════════
+   Navigation Buttons
+══════════════════════════════════════════ */
+
+.wr-step-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+
+.wr-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 13px 36px;
+  border-radius: 12px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  min-width: 120px;
+  min-height: 52px;
+}
+
+/* Primary: filled pink */
+.wr-btn--primary {
+  background: var(--pink-500);
+  color: white;
+  box-shadow: 0 4px 18px rgba(233, 30, 140, 0.35);
+}
+
+.wr-btn--primary:hover:not(:disabled) {
+  background: var(--pink-700);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 22px rgba(233, 30, 140, 0.45);
+}
+
+.wr-btn--primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.wr-btn--primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Outline: pink border */
+.wr-btn--outline {
+  background: white;
+  color: var(--pink-500);
+  border: 2px solid var(--pink-500);
+  box-shadow: none;
+}
+
+.wr-btn--outline:hover {
+  background: var(--pink-50);
+}
+
+/* Spinner inside primary button */
+.wr-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2.5px solid rgba(255, 255, 255, 0.35);
+  border-top-color: white;
+  animation: wr-spin 0.75s linear infinite;
+}
+
+@keyframes wr-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ══════════════════════════════════════════
+   Cancel Button Zone
+   ════════════════════════════════════════ */
+
+.wr-cancel-zone {
+  position: absolute;
+  top: 40px;
+  right: 80px;
+  z-index: 50;
+}
+
+.wr-cancel-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border: 1.5px solid #ddd;
+  background: white;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #999;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.wr-cancel-btn:hover {
+  border-color: #e91e63;
+  color: #e91e63;
+  box-shadow: 0 4px 12px rgba(233, 30, 99, 0.15);
+}
+
+.wr-cancel-btn:active {
+  transform: scale(0.98);
+}
+
+/* ══════════════════════════════════════════
+   Confirm Header Wrapper (Remove from Step 4)
+══════════════════════════════════════════ */
+
+.wr-confirm-header-wrapper {
+  display: block;
+  margin-bottom: 28px;
+}
+
+.wr-confirm-header {
+  margin-bottom: 0;
+}
+
+.wr-confirm-header-wrapper .wr-cancel-btn {
+  display: none;
+}
+
+/* ══════════════════════════════════════════
+   Modal Styles
+   ════════════════════════════════════════ */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  max-width: 450px;
+  width: 90%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+  font-family: 'Open Sans', serif;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #999;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.modal-close:hover {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.modal-body p {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  color: #333;
+  line-height: 1.6;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 12px;
+  padding: 15px 20px;
+  border-top: 1px solid #e0e0e0;
+  justify-content: flex-end;
+}
+
+.modal-btn {
+  padding: 10px 20px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: white;
+  color: #333;
+  font-weight: 500;
+}
+
+.modal-btn:hover {
+  background: #f5f5f5;
+}
+
+.modal-btn--cancel {
+  color: #999;
+  border-color: #ddd;
+}
+
+.modal-btn--cancel:hover {
+  background: #fafafa;
+}
+
+.modal-btn--delete {
+  background: #f44336;
+  color: white;
+  border-color: #f44336;
+}
+
+.modal-btn--delete:hover {
+  background: #d32f2f;
+  border-color: #d32f2f;
+}
+
+.ql-editor {
+    min-height: 180px;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.ql-toolbar {
+    border-radius: 12px 12px 0 0;
+}
+
+.ql-container {
+    border-radius: 0 0 12px 12px;
+}
+
+.wr-input-wrap--error .ql-container {
+    border-color: #ef4444;
+}
+
+.wr-input-wrap--error .ql-toolbar {
+    border-color: #ef4444;
+}
+
+.wr-field .wr-label {
+    margin-bottom: 4px;
+}
+
+.wr-field .wr-input-wrap {
+    margin-top: 0;
+}
+
+.ql-toolbar.ql-snow {
+    margin: 0 !important;
+    padding: 6px 8px !important;
+}
+
+.ql-container.ql-snow {
+    margin: 0 !important;
+}
+
+
+/* ══════════════════════════════════════════
+   Writer Application Notice Banner
+   (เดิมไม่มี style ของ wr-form-notice เลย ทำให้ banner ที่ขึ้นตอน rejected ไม่มีสไตล์ใดๆ)
+══════════════════════════════════════════ */
+
+.wr-form-notice {
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.wr-form-notice--info {
+  background: #eef6ff;
+  border: 1px solid #bcdcff;
+  color: #1a4d8f;
+}
+
+.wr-form-notice--warning {
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  color: #9a3412;
+}
+
+.wr-form-notice__title {
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+
+.wr-form-notice__reason {
+  margin: 0 0 8px;
+}
+
+.wr-form-notice__reason--muted {
+  color: #b45309;
+  font-style: italic;
+}

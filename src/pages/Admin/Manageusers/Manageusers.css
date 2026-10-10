@@ -1,0 +1,1392 @@
+/* ══════════════════════════════════════════════════
+   Admin Manage Users Panel CSS (Manageusers.css)
+   ══════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@600;700&family=Prompt:wght@400;500;600;700;800&display=swap');
+
+.admin-manage-users-panel {
+  padding: 30px 24px;
+  background-color: #fdf9f8;
+  background-image: radial-gradient(circle at 100% 0%, rgba(219, 39, 119, 0.04), transparent 45%);
+  min-height: 100vh;
+  font-family: 'Prompt', 'Sarabun', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #1e293b;
+}
+
+/* โฟกัสที่มองเห็นได้ชัดเจนสำหรับทุก element ที่กดได้ (a11y) */
+.admin-manage-users-panel button:focus-visible,
+.admin-manage-users-panel input:focus-visible,
+.admin-manage-users-panel select:focus-visible,
+.admin-manage-users-panel a:focus-visible {
+  outline: 2px solid var(--pink-500, #ec4899);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-manage-users-panel * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+.admin-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ── ส่วนหัว ── */
+.admin-header-sec {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.admin-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.admin-subtitle {
+  font-size: 0.95rem;
+  color: #64748b;
+  margin: 8px 0 0 0;
+  font-weight: 400;
+}
+
+.header-branch-accent {
+  width: 200px;
+  max-width: 40vw;
+  height: 14px;
+  margin-top: 16px;
+  stroke: var(--pink-300, #f9a8d4);
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+}
+
+/* ── 📊 การ์ดสถิติ ── */
+.admin-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.admin-stat-card {
+  background: white;
+  border-radius: 18px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 1.5px solid #ffe3ec;
+  border-top: 4px solid transparent;
+  box-shadow: 0 4px 14px rgba(255, 105, 180, 0.05);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+}
+
+.admin-stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(219, 39, 119, 0.12);
+  border-color: #f472b6;
+}
+
+.admin-stat-card:active {
+  transform: translateY(-1px);
+}
+
+.admin-stat-card--selected,
+.admin-stat-card--active {
+  transform: translateY(-2px);
+}
+
+.card-active.admin-stat-card--selected,
+.card-active.admin-stat-card--active {
+  background-color: #f0fdf4;
+  border-color: #22c55e;
+  box-shadow: 0 8px 22px rgba(34, 197, 94, 0.18), 0 0 0 2px #22c55e;
+}
+
+.card-pending.admin-stat-card--selected,
+.card-pending.admin-stat-card--active {
+  background-color: #fff5f8;
+  border-color: #ff4d6d;
+  box-shadow: 0 8px 22px rgba(255, 77, 109, 0.18), 0 0 0 2px #ff4d6d;
+}
+
+.card-suspended.admin-stat-card--selected,
+.card-suspended.admin-stat-card--active {
+  background-color: #fef2f2;
+  border-color: #ef4444;
+  box-shadow: 0 8px 22px rgba(239, 68, 68, 0.18), 0 0 0 2px #ef4444;
+}
+
+.stat-card-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stat-card-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.stat-card-number {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #0f172a;
+  font-family: 'Open Sans', sans-serif;
+  line-height: 1;
+}
+
+.stat-card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* สีของการ์ดสถิติ: กำหนดสีไอคอนที่ CSS จุดเดียว แทนการยัด hex สีตรงๆ ใน JSX */
+.bg-green-light { background-color: #f0fdf4; color: #22c55e; }
+.bg-yellow-light { background-color: #fef9c3; color: #eab308; }
+.bg-red-light { background-color: #fef2f2; color: #ef4444; }
+
+.card-active { border-top-color: #22c55e; }
+.card-pending { border-top-color: #eab308; }
+.card-suspended { border-top-color: #ef4444; }
+
+/* ── 📋 ตารางและ Container รวม ── */
+.admin-table-container {
+  background: #ffffff;
+  border: 1.5px solid #f1f5f9;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04), 0 2px 8px rgba(15, 23, 42, 0.02);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 🔍 Search Bar & Filters ด้านบนภายใน Container เดียวกัน */
+.admin-table-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 22px;
+  background: #ffffff;
+  border-bottom: 1px solid #f8fafc;
+  flex-wrap: wrap;
+}
+
+.search-box-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 260px;
+  max-width: 540px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.admin-search-input {
+  width: 100%;
+  height: 42px;
+  padding: 0 18px 0 42px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 0.88rem;
+  outline: none;
+  background-color: #ffffff;
+  color: #1e293b;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  box-sizing: border-box;
+}
+
+.admin-search-input:hover {
+  border-color: #cbd5e1;
+}
+
+.admin-search-input:focus {
+  border-color: #f472b6;
+  box-shadow: 0 0 0 3px rgba(244, 114, 182, 0.15);
+}
+
+.filter-controls-group {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.select-filter-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-label-text {
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.select-filter-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.admin-filter-select {
+  height: 42px;
+  padding: 0 32px 0 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #1e293b;
+  outline: none;
+  background-color: #ffffff;
+  cursor: pointer;
+  font-family: inherit;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 14px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.admin-filter-select:hover {
+  border-color: #cbd5e1;
+  background-color: #fafafa;
+}
+
+.admin-filter-select:focus {
+  border-color: #f472b6;
+  box-shadow: 0 0 0 3px rgba(244, 114, 182, 0.15);
+}
+
+.clear-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background-color: #fef2f2;
+  color: #ef4444;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.clear-filter-btn:hover {
+  background-color: #fee2e2;
+  color: #dc2626;
+  border-color: #fca5a5;
+}
+
+.admin-table-scroll-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* 📊 Table Layout & Colors (ตรงตาม Reference Image) */
+.users-admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+/* Header สีตาม Reference: พื้นหลังชมพูอ่อน ตัวหนังสือสีชมพูเข้ม */
+.users-admin-table thead {
+  background-color: #fff0f6 !important;
+  border-bottom: 1.5px solid #fce7f3;
+}
+
+.users-admin-table th {
+  padding: 14px 16px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #db2777 !important;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+/* Zebra Rows สลับสีตาม Reference: แถวคู่อ่อน / แถวคี่ขาว */
+.users-admin-table tbody tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+.users-admin-table tbody tr:nth-child(even) {
+  background-color: #fdfcfd;
+}
+
+.users-admin-table tbody tr {
+  border-bottom: 1px solid #f9eff4;
+  transition: background-color 0.15s ease;
+}
+
+/* Hover Row Highlight สีชมพูอ่อนมากทั้งแถวตาม Reference */
+.users-admin-table tbody tr:hover {
+  background-color: #fff5f9 !important;
+}
+
+.users-admin-table td {
+  padding: 14px 16px;
+  font-size: 0.88rem;
+  color: #334155;
+  vertical-align: middle;
+}
+
+.row-num-col {
+  font-weight: 600;
+  color: #64748b;
+  text-align: center;
+}
+
+.row-username-col {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+/* รูปโปรไฟล์: Border สีเทาบาง 1px ตามข้อกำหนดข้อ 5 */
+.user-avatar-img,
+.user-initial-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: none !important;
+}
+
+.user-initial-avatar {
+  background: #fce7f3;
+  color: #db2777;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.username-strong {
+  font-weight: 700;
+  color: #1e293b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row-email-col {
+  color: #64748b;
+  font-size: 0.85rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.self-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #db2777;
+  background: #fce7f3;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-left: 6px;
+  flex-shrink: 0;
+}
+
+/* Badges สไตล์ Reference (Pill style เดิม) */
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 14px;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.role-admin {
+  background-color: #e6f4ea;
+  color: #059669;
+}
+
+.role-reader {
+  background-color: #e8f0fe;
+  color: #2563eb;
+}
+
+.role-writer {
+  background-color: #f3e8ff;
+  color: #7c3aed;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.status-active {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.status-active .status-dot {
+  background-color: #16a34a;
+}
+
+.status-pending {
+  background-color: #fef3c7;
+  color: #b45309;
+}
+
+.status-pending .status-dot {
+  background-color: #d97706;
+}
+
+.status-suspended {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.status-suspended .status-dot {
+  background-color: #dc2626;
+}
+
+.cell-muted {
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.date-col {
+  color: #64748b;
+  font-size: 0.84rem;
+  white-space: nowrap;
+}
+
+/* 📅 ปุ่มเลือก/เรียงตามวันที่ หัวข้อตาราง "สมัครเมื่อ" */
+.th-date-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-date-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 7px;
+  background: #ffffff;
+  border: 1px solid #fbcfe8;
+  border-radius: 6px;
+  color: #db2777;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+  line-height: 1;
+}
+
+.btn-date-sort:hover {
+  background: #fce7f3;
+  color: #be185d;
+  border-color: #f472b6;
+}
+
+/* ปุ่ม Action ด้านขวา (แบบกรอบสี่เหลี่ยมมน 8px มีสี hover ชัดเจนสอดคล้องกับไอคอน) */
+.actions-cell {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+.action-cell-content {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 8px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.btn-icon-action {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  padding: 0;
+}
+
+.btn-detail:hover:not(:disabled) {
+  background: #e0f2fe;
+  color: #0284c7;
+  border-color: #bae6fd;
+}
+
+.btn-edit-user:hover:not(:disabled) {
+  background: #fef3c7;
+  color: #d97706;
+  border-color: #fde68a;
+}
+
+.btn-delete-user:hover:not(:disabled) {
+  background: #fee2e2;
+  color: #dc2626;
+  border-color: #fca5a5;
+}
+
+.btn-icon-action:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  background: #f8fafc;
+  border-color: #e2e8f0;
+  color: #cbd5e1;
+}
+
+.text-center { text-align: center !important; }
+
+/* ── สถานะกำลังโหลด / ผิดพลาด / ว่างเปล่า ── */
+.admin-loading,
+.admin-error,
+.admin-empty-state-panel {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: white;
+  border-radius: 20px;
+  border: 1px dashed #cbd5e1;
+  padding: 32px;
+  color: #64748b;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 16px 20px;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+}
+
+.admin-error {
+  border-color: #fecaca;
+  color: #be123c;
+}
+
+.admin-error strong {
+  display: block;
+  color: #0f172a;
+  font-size: 0.95rem;
+  margin-bottom: 2px;
+}
+
+.admin-error p {
+  margin: 0 0 10px 0;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.retry-btn {
+  background: white;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #475569;
+  cursor: pointer;
+}
+
+.retry-btn:hover {
+  background: var(--pink-50, #fdf2f8);
+  color: var(--pink-600, #db2777);
+  border-color: var(--pink-100, #fce7f3);
+}
+
+.loading-spin {
+  animation: spin 1s linear infinite;
+  flex-shrink: 0;
+  color: var(--pink-500, #ec4899);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Table Footer & Pagination (ตรงตาม Reference Image) ── */
+.admin-table-footer {
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #f8fafc;
+  background: #ffffff;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.admin-table-footer-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.admin-table-info-text {
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.admin-table-info-text strong {
+  color: #1e293b;
+  font-weight: 700;
+}
+
+.admin-table-per-page {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.admin-per-page-select {
+  padding: 4px 12px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #334155;
+  background: #ffffff;
+  cursor: pointer;
+  outline: none;
+}
+
+.admin-per-page-select:focus {
+  border-color: #ec4899;
+}
+
+/* 🎯 Pagination Style สไตล์ Reference Image 2 */
+.admin-pagination-img2 {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.page-btn-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.page-btn-box:hover:not(:disabled) {
+  background: #fdf2f8;
+  color: #db2777;
+  border-color: #fbcfe8;
+}
+
+.page-btn-box:disabled {
+  background: #f8fafc;
+  color: #cbd5e1;
+  border-color: #e2e8f0;
+  cursor: not-allowed;
+}
+
+.page-indicator-text {
+  font-size: 0.86rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.page-indicator-text strong {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.admin-pagination {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.page-nav-arrow {
+  background: transparent;
+  border: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: color 0.15s ease;
+  font-family: inherit;
+}
+
+.page-nav-arrow:hover:not(:disabled) {
+  color: #db2777;
+}
+
+.page-nav-arrow:disabled {
+  color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.page-nums-list {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.page-num-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.page-num-btn:hover:not(.active) {
+  background: #fdf2f8;
+  color: #db2777;
+}
+
+.page-num-btn.active {
+  background: #db2777 !important;
+  color: #ffffff !important;
+  font-weight: 700;
+  box-shadow: 0 3px 10px rgba(219, 39, 119, 0.3);
+}
+
+.page-ellipsis {
+  color: #94a3b8;
+  font-weight: 700;
+  padding: 0 4px;
+}
+
+/* ── Modals Overlay ── */
+.admin-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(15, 23, 42, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 16px;
+}
+
+.admin-modal-content {
+  background: white;
+  border-radius: 24px;
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-modal-content.modal-content-lg {
+  max-width: 700px;
+}
+
+.modal-header-sec {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.modal-header-sec h2 {
+  margin: 0;
+  font-family: 'Prompt', 'Sarabun', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0f172a;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 420px;
+}
+
+.close-modal-x {
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.close-modal-x:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.modal-body-content {
+  padding: 24px;
+}
+
+/* รายละเอียดผู้ใช้ */
+.modal-profile-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.profile-head-info {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.profile-large-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #fbcfe8;
+  color: #be185d;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.profile-large-avatar-img {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.profile-head-info h3 {
+  margin: 0 0 4px 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 340px;
+}
+
+.modal-info-table {
+  display: flex;
+  flex-direction: column;
+  background-color: #f8fafc;
+  padding: 16px;
+  border-radius: 16px;
+  gap: 12px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.info-lbl {
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.info-val {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #0f172a;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+  text-align: right;
+  max-width: 300px;
+}
+
+.info-val.status-active { color: #16a34a; }
+.info-val.status-pending { color: #ca8a04; }
+.info-val.status-suspended { color: #dc2626; }
+
+/* โซนใบสมัครนักเขียน */
+.writer-application-section-trigger {
+  margin-top: 20px;
+  padding: 16px;
+  border: 1.5px dashed #fbcfe8;
+  background-color: #fff1f2;
+  border-radius: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.trigger-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #db2777;
+}
+
+.view-app-btn-trigger {
+  background: var(--pink-600);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 6px 14px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.view-app-btn-trigger:hover {
+  background-color: #be185d;
+}
+
+/* กล่องแสดงใบสมัครละเอียด */
+.application-details-box {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.details-group-box h4 {
+  margin: 0 0 8px 0;
+  font-size: 0.85rem;
+  color: #db2777;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.detail-field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid #f1f5f9;
+  gap: 12px;
+}
+
+.field-lbl {
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.field-val {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #0f172a;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+  text-align: right;
+  max-width: 420px;
+}
+
+.details-bio-content {
+  background-color: #f8fafc;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: #334155;
+}
+
+.genres-chips-list {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.genre-chip {
+  background-color: #f1f5f9;
+  color: #475569;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.highlight-link a {
+  color: #db2777;
+  text-decoration: none;
+}
+
+.highlight-link a:hover {
+  text-decoration: underline;
+}
+
+/* ฟอร์มแก้ไข */
+.edit-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-lbl {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+.admin-form-select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+  background-color: white;
+}
+
+.admin-form-select:focus {
+  border-color: var(--pink-500);
+}
+
+.admin-form-select--readonly {
+  cursor: default;
+  color: #64748b;
+}
+
+.admin-form-textarea {
+  min-height: 80px;
+  resize: vertical;
+  cursor: text;
+}
+
+.edit-form-group + .edit-form-group {
+  margin-top: 16px;
+}
+
+.cell-muted {
+  color: #94a3b8;
+}
+
+.view-app-btn-trigger--link {
+  text-decoration: none;
+  display: inline-block;
+}
+
+/* 🗑️ Style สำหรับ Modal ยืนยันการลบบัญชีแบบกระชับ (ลดความสูง 20-30%) */
+.modal-delete-compact {
+  max-width: 440px !important;
+  border-radius: 20px !important;
+}
+
+.modal-delete-compact .modal-header-sec {
+  padding: 16px 20px;
+}
+
+.modal-body-delete {
+  padding: 20px 20px 16px 20px !important;
+}
+
+.delete-confirm-question {
+  margin: 0 0 10px 0;
+  font-size: 0.96rem;
+  font-weight: 500;
+  color: #1e293b;
+  line-height: 1.5;
+}
+
+.delete-warning-username {
+  font-weight: 700;
+  color: #db2777;
+}
+
+.delete-critical-warning {
+  margin: 0 0 12px 0;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #ef4444;
+}
+
+/* กล่องหมายเหตุเฉพาะนักเขียน */
+.writer-delete-note-box {
+  background-color: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-top: 6px;
+}
+
+.writer-note-title {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #64748b;
+  margin-bottom: 2px;
+}
+
+.writer-note-text {
+  margin: 0;
+  font-size: 0.83rem;
+  color: #475569;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+/* ปุ่ม Modal Footer */
+.modal-footer-sec {
+  display: flex;
+  gap: 12px;
+  padding: 16px 24px;
+  border-top: 1px solid #f1f5f9;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.admin-modal-btn {
+  padding: 8px 20px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  box-sizing: border-box;
+}
+
+.cancel-btn {
+  background: white;
+  color: #64748b;
+  min-width: 90px;
+  width: auto;
+}
+
+.cancel-btn:hover {
+  background-color: #f8fafc;
+  color: #334155;
+  border-color: #cbd5e1;
+}
+
+.view-writer-profile-btn {
+  background: #fdf2f8;
+  color: #db2777;
+  border-color: #fbcfe8;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
+.view-writer-profile-btn:hover {
+  background: #fce7f3;
+  color: #be185d;
+  border-color: #f472b6;
+}
+
+.save-btn {
+  background: #db2777;
+  color: white;
+  border-color: #db2777;
+  min-width: 110px;
+  padding: 8px 24px;
+  width: auto;
+}
+
+.save-btn:hover {
+  background: #be185d;
+  border-color: #be185d;
+  box-shadow: 0 4px 12px rgba(219, 39, 119, 0.25);
+}
+
+.danger-btn {
+  background: #ef4444;
+  color: white;
+  border-color: #ef4444;
+}
+
+.danger-btn:hover {
+  background: #dc2626;
+}
+
+/* Empty panel */
+.admin-empty-state-panel {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 24px;
+  border: 1px dashed #cbd5e1;
+}
+
+.empty-panel-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
+}
+
+.admin-empty-state-panel h3 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin: 0 0 6px 0;
+}
+
+.admin-empty-state-panel p {
+  color: #64748b;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* ══════════════════════════════════════════
+   📱 Responsive Media Queries
+   ══════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .admin-manage-users-panel {
+    padding: 20px 14px;
+  }
+
+  .admin-table-top-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .search-box-wrapper {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .filter-controls-group {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .select-filter-wrapper,
+  .admin-filter-select {
+    flex: 1;
+    width: 100%;
+  }
+
+  .admin-table-footer {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 560px) {
+  .admin-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .admin-title {
+    font-size: 1.5rem;
+  }
+
+  .info-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .info-val {
+    text-align: left;
+    max-width: 100%;
+  }
+}

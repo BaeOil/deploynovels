@@ -1,0 +1,238 @@
+.novel-detail__comments-section {
+  margin-top: 32px;
+  background: var(--reader-surface, var(--white));
+  border: 1.5px solid var(--reader-border, var(--gray-100));
+  border-radius: 20px;
+  padding: 28px 32px;
+}
+
+.novel-detail__comments-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.novel-detail__comments-count {
+  font-size: 14px;
+  color: var(--reader-muted, var(--gray-500));
+  font-family: 'Sarabun', sans-serif;
+}
+
+.novel-detail__comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 28px;
+  position: relative;
+  z-index: 1;
+}
+
+.novel-detail__comment-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 6px;
+}
+
+.novel-detail__comment-input {
+  width: 100%;
+  border: 1.5px solid var(--reader-border, var(--gray-100));
+  border-radius: 16px;
+  padding: 16px;
+  resize: vertical;
+  min-height: 110px;
+
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  line-height: 1.7;
+
+  background: var(--reader-surface-soft, var(--gray-50));
+  color: var(--reader-text, var(--ink));
+  transition: all 0.18s ease;
+}
+
+.novel-detail__comment-input:focus {
+  outline: none;
+  border-color: var(--reader-accent, var(--pink-300));
+  background: var(--reader-surface, var(--white));
+  box-shadow: 0 0 0 4px rgba(255, 182, 193, 0.15);
+}
+
+.novel-detail__comment-button {
+  align-self: flex-end;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 28px;
+  background: var(--reader-accent, linear-gradient(135deg, #ec4899 0%, #db2777 100%));
+  color: #ffffff !important;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(236, 72, 153, 0.3);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.novel-detail__comment-button:hover {
+  background: linear-gradient(135deg, #db2777 0%, #be185d 100%);
+  color: #ffffff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(219, 39, 119, 0.4);
+  opacity: 1 !important;
+}
+
+.novel-detail__comment-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(219, 39, 119, 0.25);
+}
+
+.novel-detail__comment-button:disabled {
+  cursor: wait;
+  opacity: 0.7 !important;
+  transform: none;
+}
+
+.novel-detail__comment-button:focus-visible {
+  outline: 3px solid rgba(233, 30, 140, 0.5);
+  outline-offset: 3px;
+}
+
+.novel-detail__comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.novel-detail__comment-card {
+  display: flex;
+  gap: 14px;
+
+  padding: 18px;
+  border-radius: 18px;
+
+  background: var(--reader-surface-soft, var(--gray-50));
+  border: 1px solid transparent;
+
+  transition: all 0.18s ease;
+}
+
+.novel-detail__comment-card:hover {
+  border-color: var(--reader-accent, var(--pink-100));
+  background: var(--reader-accent-soft, rgb(249, 198, 219));
+}
+
+.novel-detail__comment-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  font-family: 'Sarabun', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.novel-detail__comment-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.novel-detail__comment-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.novel-detail__comment-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 8px;
+}
+
+.novel-detail__comment-user {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--reader-text, var(--ink));
+}
+
+.novel-detail__comment-date {
+  font-size: 12px;
+  color: var(--reader-muted, var(--gray-400));
+}
+
+.novel-detail__comment-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.novel-detail__comment-delete {
+  border: none;
+  background: transparent;
+  color: var(--pink-500);
+  font-family: 'Sarabun', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 999px;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.novel-detail__comment-delete:hover {
+  background: rgba(233, 30, 140, 0.08);
+}
+
+.novel-detail__comment-content {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--reader-text, var(--gray-700));
+
+  white-space: pre-wrap;
+}
+
+.novel-detail__comments-empty {
+  text-align: center;
+  padding: 32px 16px;
+  color: var(--reader-muted, var(--gray-400));
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .novel-detail__comments-section {
+    padding: 20px;
+  }
+
+  .novel-detail__comment-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .novel-detail__comments-header {
+    align-items: flex-start;
+    gap: 12px;
+    flex-direction: column;
+  }
+
+  .novel-detail__comment-button {
+    width: 100%;
+  }
+}

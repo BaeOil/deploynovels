@@ -1,0 +1,89 @@
+/* ─────────────────────────────────────────────
+   AdminModeBanner — แบนเนอร์โหมดผู้ดูแลระบบ
+   ─────────────────────────────────────────────*/
+
+.admin-mode-banner {
+  width: 100%;
+  background: linear-gradient(90deg, #1e1b4b 0%, #312e81 40%, #4c1d95 100%);
+  border-bottom: 2px solid #7c3aed;
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  box-shadow: 0 2px 12px rgba(109, 40, 217, 0.35);
+}
+
+.admin-mode-banner__inner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  flex-wrap: wrap;
+}
+
+.admin-mode-banner__icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 6px rgba(167, 139, 250, 0.8));
+  animation: admin-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes admin-pulse {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(167, 139, 250, 0.6)); }
+  50%       { filter: drop-shadow(0 0 10px rgba(167, 139, 250, 1)); }
+}
+
+.admin-mode-banner__text {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  flex: 1;
+  font-family: "Sarabun", "Prompt", sans-serif;
+  font-size: 13.5px;
+  color: #e0e7ff;
+  line-height: 1.4;
+}
+
+.admin-mode-banner__text strong {
+  color: #c4b5fd;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.admin-mode-banner__page {
+  color: #a5b4fc;
+  font-weight: 600;
+}
+
+.admin-mode-banner__desc {
+  color: #a0aec0;
+  font-size: 12.5px;
+}
+
+.admin-mode-banner__badge {
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #7c3aed, #9333ea);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  padding: 3px 9px;
+  border-radius: 20px;
+  box-shadow: 0 0 8px rgba(147, 51, 234, 0.6);
+  border: 1px solid rgba(196, 181, 253, 0.4);
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .admin-mode-banner__desc {
+    display: none;
+  }
+
+  .admin-mode-banner__inner {
+    padding: 8px 14px;
+    gap: 8px;
+  }
+}

@@ -1,0 +1,523 @@
+.novel-timeline-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  font-family: 'Sarabun', sans-serif;
+  width: 100%;
+}
+
+.novel-timeline-card.loading {
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background: #f8fafc;
+  border-radius: 16px;
+  color: #64748b;
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #e91e8c;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 12px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ── Empty State (ยังไม่เคยอ่านนิยายเรื่องนี้) ── */
+.novel-timeline-card.empty-state {
+  align-items: center;
+  text-align: center;
+  background: linear-gradient(135deg, #fff9fb 0%, #fff0f6 100%);
+  border: 1.5px dashed #fbcfe8;
+  border-radius: 16px;
+  padding: 36px 24px;
+}
+
+.empty-state-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.empty-icon {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  background: #ffffff;
+  border: 1px solid #fbcfe8;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(233, 30, 140, 0.08);
+}
+
+.empty-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+.empty-subtitle {
+  font-size: 13.5px;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.6;
+  max-width: 360px;
+}
+
+.empty-state .timeline-actions-row {
+  width: 100%;
+  max-width: 380px;
+}
+
+.btn-continue-read.primary {
+  background: #e91e8c;
+  color: #fff;
+  border: 1px solid #e91e8c;
+  box-shadow: 0 4px 12px rgba(233, 30, 140, 0.25);
+}
+
+.btn-continue-read.primary:hover {
+  background: #db2777;
+  border-color: #db2777;
+  color: #fff;
+}
+
+/* ── Preview mode (นักเขียนทดลองอ่าน): banner + สถานะเผยแพร่/ฉบับร่าง ── */
+.preview-toc-banner {
+  background: #fef3c7;
+  color: #92400e;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 12.5px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.preview-toc-item {
+  align-items: flex-start;
+}
+
+.toc-status-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.toc-status-badge--published {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.toc-status-badge--draft {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+/* ── Latest Read Box ── */
+.timeline-latest-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #fbcfe8;
+  border-radius: 16px;
+  padding: 18px 24px;
+  box-shadow: 0 4px 12px rgba(233, 30, 140, 0.05);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.timeline-latest-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.timeline-label {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.timeline-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.timeline-chapter {
+  color: #8b5cf6;
+  font-weight: 600;
+}
+
+.ending-badge {
+  font-size: 11px;
+  background: #fef08a;
+  color: #854d0e;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.timeline-latest-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.timeline-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #e91e8c;
+  line-height: 1.2;
+}
+
+.timeline-stats strong {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.timeline-stats span {
+  font-size: 11px;
+}
+
+.btn-continue-read {
+  background: #fff0f6;
+  color: #e91e8c;
+  border: 1px solid #fbcfe8;
+  padding: 10px 22px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-family: 'Sarabun', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-continue-read:hover {
+  background: #e91e8c;
+  color: #fff;
+}
+
+.btn-continue-read:disabled,
+.btn-continue-read.primary:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  background: #fff0f6;
+  color: #e91e8c;
+  transform: none;
+}
+
+/* ── Discovered List Section ── */
+.timeline-list-section {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 20px 24px;
+}
+
+.timeline-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.timeline-section-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 2px 0;
+  color: #1e293b;
+}
+
+.timeline-section-subtitle {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+
+.timeline-count-badge {
+  font-size: 12px;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.timeline-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.timeline-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+/* ── Clickable-row affordance ──
+   แถวพวกนี้เป็น <li onClick> ไม่ใช่ <button> จริงๆ ถ้าไม่มีอะไรบอกเลยผู้ใช้จะไม่รู้ว่ากดได้
+   จึงเพิ่ม hover/focus ที่ชัดเจน + ลูกศรโผล่ตอน hover เป็นตัวช่วยบอกใบ้ */
+.timeline-item--clickable {
+  cursor: pointer;
+  position: relative;
+  padding-right: 30px;
+  transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.timeline-item--clickable::after {
+  content: "→";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translate(-4px, -50%);
+  color: #e91e8c;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.timeline-item--clickable:hover,
+.timeline-item--clickable:focus-visible {
+  background: #fdf2f8;
+  box-shadow: 0 2px 8px rgba(233, 30, 140, 0.1);
+}
+
+.timeline-item--clickable:hover::after,
+.timeline-item--clickable:focus-visible::after {
+  opacity: 1;
+  transform: translate(0, -50%);
+}
+
+.timeline-item--clickable.active:hover,
+.timeline-item--clickable.active:focus-visible {
+  background: #fce7f3;
+}
+
+.timeline-item--clickable:focus-visible {
+  outline: 2px solid #e91e8c;
+  outline-offset: 2px;
+}
+
+.timeline-item.active {
+  background: #fff0f6;
+  border: 1px solid #fbcfe8;
+}
+
+.timeline-item-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.timeline-item.active .timeline-item-icon {
+  background: transparent;
+}
+
+.pulse-dot {
+  width: 10px;
+  height: 10px;
+  background: #e91e8c;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(233, 30, 140, 0.2);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(233, 30, 140, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(233, 30, 140, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(233, 30, 140, 0); }
+}
+
+.timeline-item-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.timeline-item-chapter {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.timeline-item-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.ending-inline-tag {
+  font-size: 10px;
+  color: #854d0e;
+  background: #fef08a;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.timeline-item.active .timeline-item-chapter {
+  color: #db2777;
+}
+
+.timeline-item.active .timeline-item-title {
+  color: #9d174d;
+}
+
+.timeline-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin: 4px 0 20px;
+}
+
+.timeline-page-btn {
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #475569;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.timeline-page-btn:hover:not(:disabled) {
+  border-color: #e91e8c;
+  color: #e91e8c;
+  background: #fff0f6;
+}
+
+.timeline-page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.timeline-page-indicator {
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+/* ── Actions Row (2 Buttons) ── */
+.timeline-actions-row {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-view-map,
+.btn-ending-collection,
+.timeline-actions-row .btn-continue-read {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 14px;
+  font-family: 'Sarabun', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.btn-view-map {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+}
+
+.btn-view-map:hover {
+  border-color: #e91e8c;
+  color: #e91e8c;
+  background: #fff0f6;
+}
+
+.btn-ending-collection {
+  background: #fff;
+  border: 1px solid #fbcfe8;
+  color: #db2777;
+}
+
+.btn-ending-collection:hover {
+  background: #fdf2f8;
+  border-color: #e91e8c;
+}
+
+@media (max-width: 640px) {
+  .timeline-latest-box {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .timeline-latest-actions {
+    width: 100%;
+    justify-content: space-between;
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .timeline-actions-row {
+    flex-direction: column;
+  }
+
+  .timeline-stats {
+    align-items: flex-start;
+    flex-direction: row;
+    gap: 6px;
+  }
+
+  .timeline-list-section {
+    padding: 16px;
+  }
+
+  .timeline-header-flex {
+    gap: 10px;
+  }
+
+  .timeline-item {
+    align-items: flex-start;
+  }
+
+  .timeline-item-title {
+    overflow-wrap: anywhere;
+  }
+}

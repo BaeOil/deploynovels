@@ -1,0 +1,280 @@
+/* src/components/ChoiceButtons/ChoiceButtons.css */
+.choices {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 48px;
+  padding-top: 36px;
+  border-top: 1px solid var(--reader-border, rgba(0, 0, 0, 0.08));
+}
+
+.choices__ornament {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.choices__dot {
+  color: var(--reader-accent, var(--pink-300));
+  font-size: 11px;
+}
+
+.choices__prompt {
+  margin: 0 0 8px;
+  font-family: var(--reader-font-family, 'Open Sans', serif);
+  font-size: 17.5px;
+  font-weight: 700;
+  color: var(--reader-text, var(--ink));
+  text-align: center;
+}
+
+.choices__list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 640px;
+}
+
+.choices__btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 56px;
+  padding: 12px 46px;
+  border-radius: 999px;
+  border: 1.5px solid var(--reader-border, #fbcfe8);
+  background: var(--reader-surface, #ffffff);
+  color: var(--reader-text, #111827);
+  font-family: var(--reader-font-family, 'Sarabun', sans-serif);
+  font-size: 15.5px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: center;
+}
+
+.choices__btn-circle {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid var(--reader-border, #fbcfe8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--reader-accent, #ec4899);
+  background: transparent;
+  transition: all 0.2s ease;
+}
+
+.choices__btn:hover {
+  border-color: var(--reader-accent, #ec4899);
+  background: var(--reader-accent-soft, #fff0f6);
+  box-shadow: 0 8px 24px rgba(236, 72, 153, 0.14);
+  transform: translateY(-1.5px);
+}
+
+.choices__btn:hover .choices__btn-circle {
+  border-color: var(--reader-accent, #ec4899);
+  background: var(--reader-surface, #ffffff);
+  transform: translateY(-50%) translateX(2px);
+}
+
+.choices__btn:focus-visible {
+  outline: 3px solid var(--reader-accent, rgba(236, 72, 153, 0.3));
+  outline-offset: 3px;
+}
+
+.choices__btn:disabled {
+  cursor: not-allowed;
+}
+
+.choices__btn-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+  text-align: center;
+}
+
+.choices__btn-text {
+  line-height: 1.45;
+  word-break: break-word;
+  text-align: center;
+}
+
+.choices__btn--selected {
+  opacity: 0.78;
+  transform: scale(0.985);
+}
+
+.choices__btn-check {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  color: var(--reader-accent, #ec4899);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Draft destination: ยังคลิกได้เพื่อรับ feedback แต่แยกสถานะจาก Published อย่างชัดเจน */
+.choices__btn--unavailable {
+  border-color: #fed7aa;
+  background: linear-gradient(135deg, #fffaf5 0%, #fff7ed 100%);
+  color: #9a3412;
+  box-shadow: 0 4px 16px rgba(234, 88, 12, 0.07);
+}
+
+.choices__btn--unavailable:hover {
+  border-color: #fb923c;
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+  color: #9a3412;
+  box-shadow: 0 9px 24px rgba(234, 88, 12, 0.12);
+}
+
+.choices__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  border: 1px solid #fdba74;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #c2410c;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  box-shadow: 0 1px 4px rgba(154, 52, 18, 0.08);
+}
+
+.choices__status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #f97316;
+  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.12);
+  animation: choices-status-pulse 1.8s ease-in-out infinite;
+}
+
+.choices__hint {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 7px;
+  max-width: 640px;
+  margin: 2px 0 0;
+  padding: 9px 14px;
+  border-radius: 12px;
+  background: var(--reader-surface-soft, #fffaf5);
+  color: var(--reader-muted, #9a6a55);
+  font-family: var(--reader-font-family, 'Sarabun', sans-serif);
+  font-size: 13px;
+  line-height: 1.55;
+  text-align: center;
+}
+
+@keyframes choices-status-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(0.78); opacity: 0.65; }
+}
+
+/* ธีมครีม Cream Theme adaptation */
+.rp--theme-cream .choices__btn {
+  background: #fffaf3;
+  border-color: #fde68a;
+  color: #3f3025;
+}
+
+.rp--theme-cream .choices__btn-circle {
+  border-color: #fde68a;
+  color: #b45309;
+}
+
+.rp--theme-cream .choices__btn:hover {
+  background: #fff1df;
+  border-color: #b45309;
+  box-shadow: 0 8px 24px rgba(180, 83, 9, 0.15);
+}
+
+.rp--theme-cream .choices__btn:hover .choices__btn-circle {
+  border-color: #b45309;
+  background: #fffaf3;
+}
+
+/* ธีมเทา Slate Theme & ธีมมืด Dark Theme adaptation */
+.rp--theme-slate .choices__btn,
+.rp--theme-dark .choices__btn {
+  background: rgba(248, 250, 252, 0.05);
+  border-color: rgba(248, 250, 252, 0.18);
+  color: #f8fafc;
+}
+
+.rp--theme-slate .choices__btn-circle,
+.rp--theme-dark .choices__btn-circle {
+  border-color: rgba(248, 250, 252, 0.2);
+  color: #f9a8d4;
+}
+
+.rp--theme-slate .choices__btn:hover,
+.rp--theme-dark .choices__btn:hover {
+  background: rgba(236, 72, 153, 0.14);
+  border-color: #ec4899;
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgba(236, 72, 153, 0.25);
+}
+
+.rp--theme-slate .choices__btn:hover .choices__btn-circle,
+.rp--theme-dark .choices__btn:hover .choices__btn-circle {
+  border-color: #ec4899;
+  background: rgba(236, 72, 153, 0.25);
+  color: #ffffff;
+}
+
+@media (max-width: 600px) {
+  .choices {
+    margin-top: 36px;
+    padding-top: 24px;
+  }
+
+  .choices__btn {
+    min-height: 52px;
+    padding: 10px 40px;
+    font-size: 14.5px;
+  }
+
+  .choices__btn-circle {
+    left: 10px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .choices__hint {
+    text-align: left;
+    font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .choices__btn,
+  .choices__btn-circle,
+  .choices__status-dot {
+    animation: none;
+    transition: none;
+  }
+}

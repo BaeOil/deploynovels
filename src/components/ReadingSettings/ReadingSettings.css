@@ -1,0 +1,190 @@
+.reading-settings-wrapper {
+  position: relative;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+}
+
+.reading-settings__icon-aa {
+  font-family: 'Open Sans', serif;
+  font-size: 14.5px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+
+.reading-settings__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 7px 18px;
+  height: 38px;
+  border-radius: 999px;
+  border: 1.5px solid var(--reader-accent-border, #f472b6);
+  background: var(--reader-surface, #ffffff);
+  color: var(--reader-accent, #db2777);
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.reading-settings__toggle:hover {
+  background: var(--reader-accent-soft, #fff0f6);
+  border-color: var(--reader-accent, #db2777);
+  transform: translateY(-1px);
+}
+
+.reading-settings__panel {
+  position: absolute;
+  top: 52px;
+  right: 0;
+  width: min(320px, calc(100vw - 32px));
+  padding: 18px;
+  border-radius: 24px;
+  background: var(--reader-surface, var(--white));
+  border: 1px solid var(--reader-border, var(--gray-200));
+  box-shadow: 0 24px 50px rgba(15, 23, 42, 0.16);
+}
+
+.reading-settings__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.reading-settings__label {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--reader-muted, var(--gray-600));
+  min-width: 90px;
+}
+
+.reading-settings__control {
+  flex: 1;
+}
+
+.reading-settings__select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1.5px solid var(--reader-border, var(--gray-200));
+  background: var(--reader-surface-soft, #f8fafc);
+  font-family: 'Sarabun', sans-serif;
+  font-size: 15px;
+  color: var(--reader-text, var(--ink));
+}
+
+.reading-settings__font-size-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.reading-settings__font-size-btn {
+  min-width: 54px;
+  padding: 12px 0;
+  border-radius: 14px;
+  border: 1px solid var(--reader-border, var(--gray-200));
+  background: var(--reader-surface, #ffffff);
+  color: var(--reader-text, var(--ink));
+  font-family: 'Sarabun', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.reading-settings__font-size-btn:hover {
+  border-color: var(--reader-accent, var(--pink-300));
+}
+
+.reading-settings__font-size-value {
+  min-width: 42px;
+  text-align: center;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--reader-muted, var(--gray-700));
+}
+
+.reading-settings__theme-row {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.reading-settings__theme-list {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.reading-settings__theme-item {
+  min-width: 78px;
+  height: 44px;
+  padding: 0 10px;
+  border-radius: 14px;
+  border: 2px solid transparent;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reading-settings__theme-item-content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.reading-settings__theme-item-swatch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.22);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.reading-settings__theme-item-label {
+  line-height: 1;
+}
+
+.reading-settings__theme-item:hover,
+.reading-settings__theme-item--active {
+  border-color: var(--reader-accent, var(--pink-500));
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+}
+
+@media (max-width: 640px) {
+  .reading-settings__panel {
+    right: 0;
+    width: calc(100vw - 24px);
+  }
+
+  .reading-settings__row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .reading-settings__label {
+    min-width: auto;
+  }
+}

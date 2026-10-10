@@ -1,0 +1,1246 @@
+/* =========================================================================
+   Admin Audit Log Styles (StoryVerse Admin Design System)
+   ========================================================================= */
+
+.admin-audit-container {
+  padding: 32px 24px;
+  background-color: #fdf9f8;
+  background-image: radial-gradient(circle at 100% 0%, rgba(219, 39, 119, 0.04), transparent 45%);
+  min-height: 100vh;
+  font-family: 'Prompt', 'Sarabun', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #1e293b;
+  box-sizing: border-box;
+}
+
+.admin-audit-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* -------------------------------------------------------------------------
+   1. Header Section
+   ------------------------------------------------------------------------- */
+.admin-audit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.admin-audit-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.admin-audit-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.admin-audit-subtitle {
+  font-size: 0.95rem;
+  color: #64748b;
+  margin: 8px 0 0 0;
+  font-weight: 400;
+}
+
+.header-branch-accent {
+  width: 200px;
+  height: 14px;
+  margin-top: 16px;
+  stroke: var(--pink-300, #f9a8d4);
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  display: block;
+}
+
+.admin-audit-badge-total {
+  display: inline-flex;
+  align-items: center;
+  background-color: #fce7f3;
+  color: #be185d;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  border: 1px solid #fbcfe8;
+}
+
+.admin-audit-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.admin-audit-export-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* เมนู dropdown ของปุ่ม "ส่งออก" ที่รวม CSV + Excel ไว้ในปุ่มเดียว */
+.admin-audit-export-menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  background: transparent;
+}
+
+.admin-audit-export-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 31;
+  min-width: 190px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.admin-audit-export-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 9px 10px;
+  border-radius: 7px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #334155;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.15s ease;
+}
+
+.admin-audit-export-menu-item:hover:not(:disabled) {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+.admin-audit-export-menu-item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Base button */
+.admin-audit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 10px;
+  padding: 8px 16px;
+  height: 38px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.admin-audit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* 1 & 2. Export Buttons (Equal Visual Weight - Neutral Outline Style) */
+.admin-audit-btn--export {
+  background: #ffffff;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.admin-audit-btn--export:hover:not(:disabled) {
+  background-color: #f9fafb;
+  border-color: #9ca3af;
+  color: #111827;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.admin-audit-btn--export:active:not(:disabled) {
+  transform: translateY(0);
+  background-color: #f3f4f6;
+}
+
+/* 3. Refresh Button (Soft Neutral Filled - Visible Utility Action) */
+.admin-audit-btn--refresh {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  margin-left: 6px;
+}
+
+.admin-audit-btn--refresh:hover:not(:disabled) {
+  background-color: #e5e7eb;
+  border-color: #9ca3af;
+  color: #111827;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.admin-audit-btn--refresh:active:not(:disabled) {
+  transform: translateY(0);
+  background-color: #d1d5db;
+}
+
+/* -------------------------------------------------------------------------
+   2. Filter Section
+   ------------------------------------------------------------------------- */
+.admin-audit-filter-card {
+  background: #ffffff;
+  border: 1px solid #f1f5f9;
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+}
+
+.admin-audit-mobile-filter-trigger {
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.btn-open-mobile-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+}
+
+.btn-clear-filter-text {
+  background: none;
+  border: none;
+  color: #e11d48;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.admin-audit-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  align-items: flex-end;
+}
+
+.admin-audit-filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin-audit-filter-item--date {
+  grid-column: span 2;
+}
+
+/* ปุ่ม "ตัวกรองเพิ่มเติม" — เปิด/ปิดกลุ่มฟิลเตอร์ที่ใช้ไม่บ่อย */
+.admin-audit-filter-item--toggle {
+  justify-content: flex-end;
+}
+
+.admin-audit-advanced-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 8px;
+  border: 1px dashed #cbd5e1;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.admin-audit-advanced-toggle:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+  color: #1e293b;
+}
+
+.admin-audit-advanced-toggle.is-open {
+  border-style: solid;
+  border-color: #ec4899;
+  background: #fdf2f8;
+  color: #be185d;
+}
+
+.admin-audit-advanced-toggle-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: #ec4899;
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.admin-audit-advanced-toggle-chevron {
+  transition: transform 0.2s ease;
+}
+
+.admin-audit-advanced-toggle.is-open .admin-audit-advanced-toggle-chevron {
+  transform: rotate(180deg);
+}
+
+/* Panel ตัวกรองขั้นสูง — คั่นด้วยเส้นบางๆ ให้รู้สึกว่าเป็นกลุ่มแยกจากฟิลเตอร์หลัก */
+.admin-audit-filter-grid--advanced {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed #e2e8f0;
+}
+
+.admin-audit-filter-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.admin-audit-select,
+.admin-audit-input {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background-color: #ffffff;
+  color: #1e293b;
+  font-size: 0.85rem;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.admin-audit-select:focus,
+.admin-audit-input:focus {
+  outline: none;
+  border-color: #ec4899;
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.15);
+}
+
+.admin-audit-date-range-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-audit-input--date {
+  flex: 1;
+}
+
+.admin-audit-date-sep {
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.admin-audit-filter-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed #f1f5f9;
+}
+
+.btn-clear-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff1f2;
+  color: #be123c;
+  border: 1px solid #fecdd3;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-clear-filter:hover {
+  background: #ffe4e6;
+  border-color: #fda4af;
+}
+
+/* -------------------------------------------------------------------------
+   Banners & Alerts
+   ------------------------------------------------------------------------- */
+.admin-audit-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.admin-audit-banner--warning {
+  background-color: #fffbeb;
+  border: 1px solid #fef3c7;
+  color: #b45309;
+}
+
+.admin-audit-banner--error {
+  background-color: #fef2f2;
+  border: 1px solid #fee2e2;
+  color: #b91c1c;
+}
+
+.admin-audit-banner__content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  gap: 12px;
+}
+
+.btn-retry-banner {
+  background: #dc2626;
+  color: #ffffff;
+  border: none;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-retry-banner:hover {
+  background: #b91c1c;
+}
+
+/* -------------------------------------------------------------------------
+   3. Table Card & Styling
+   ------------------------------------------------------------------------- */
+.admin-audit-table-card {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+  overflow: hidden;
+}
+
+.admin-audit-table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+}
+
+.admin-audit-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  text-align: left;
+  font-size: 0.86rem;
+  min-width: 820px;
+}
+
+.admin-audit-table th {
+  background-color: #f8fafc;
+  color: #475569;
+  font-weight: 700;
+  padding: 14px 16px;
+  border-bottom: 1.5px solid #e2e8f0;
+  white-space: nowrap;
+  font-size: 0.84rem;
+  letter-spacing: 0.01em;
+}
+
+.admin-audit-table td {
+  padding: 13px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+  vertical-align: middle;
+  line-height: 1.45;
+}
+
+.admin-audit-row {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.admin-audit-row:hover {
+  background-color: #fdf2f8;
+}
+
+.admin-audit-row:nth-child(even) {
+  background-color: #fafbfc;
+}
+
+.admin-audit-row:nth-child(even):hover {
+  background-color: #fdf2f8;
+}
+
+/* Cell Elements */
+.admin-audit-time {
+  font-size: 0.82rem;
+  color: #64748b;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.admin-audit-actor {
+  font-weight: 600;
+  color: #1e293b;
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+.admin-audit-action-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  border: 1px solid;
+  white-space: nowrap;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-audit-target {
+  font-weight: 600;
+  color: #334155;
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+.admin-audit-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 9px;
+  border-radius: 9999px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.admin-audit-status-badge--success {
+  background-color: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+
+.admin-audit-status-badge--failure {
+  background-color: #ffe4e6;
+  color: #e11d48;
+  border: 1px solid #fecdd3;
+}
+
+.admin-audit-status-badge--other {
+  background-color: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+.admin-audit-ip {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.font-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.btn-view-detail {
+  background-color: #fdf2f8;
+  color: #db2777;
+  border: 1px solid #fbcfe8;
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-view-detail:hover {
+  background-color: #db2777;
+  color: #ffffff;
+  border-color: #db2777;
+}
+
+.text-center {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+.action-cell-content {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 8px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Empty State */
+.admin-audit-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 56px 20px;
+  text-align: center;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.admin-audit-empty-state .empty-icon,
+.admin-audit-empty-state svg {
+  color: #cbd5e1 !important;
+  width: 48px !important;
+  height: 48px !important;
+  margin-bottom: 12px !important;
+  background: none !important;
+  background-color: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.admin-audit-empty-state .empty-icon::before,
+.admin-audit-empty-state .empty-icon::after,
+.admin-audit-empty-state::before,
+.admin-audit-empty-state::after {
+  display: none !important;
+  content: none !important;
+}
+
+.admin-audit-empty-state h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #334155;
+  margin: 0 0 6px 0;
+}
+
+.admin-audit-empty-state p {
+  font-size: 0.86rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+/* Skeleton Loading Bars */
+.skeleton-bar {
+  height: 14px;
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* -------------------------------------------------------------------------
+   4. Mobile Card List (Responsive)
+   ------------------------------------------------------------------------- */
+.admin-audit-mobile-card-list {
+  display: none;
+  padding: 12px;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-audit-mobile-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.admin-audit-mobile-card:hover {
+  border-color: #f472b6;
+}
+
+.mobile-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.mobile-card-time {
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.mobile-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.mobile-card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 0.84rem;
+}
+
+.mobile-card-label {
+  color: #64748b;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.mobile-card-value {
+  color: #0f172a;
+  font-weight: 600;
+  word-break: break-word;
+  text-align: right;
+  max-width: 70%;
+}
+
+.mobile-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  border-top: 1px dashed #f1f5f9;
+  font-size: 0.75rem;
+}
+
+.mobile-card-ip {
+  font-family: monospace;
+  color: #94a3b8;
+}
+
+.mobile-card-btn-text {
+  color: #db2777;
+  font-weight: 600;
+}
+
+/* -------------------------------------------------------------------------
+   5. Pagination Controls
+   ------------------------------------------------------------------------- */
+.admin-audit-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  border-top: 1px solid #f1f5f9;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.admin-audit-pagination__left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 0.86rem;
+  color: #64748b;
+}
+
+.admin-audit-page-info strong {
+  color: #1e293b;
+}
+
+.admin-audit-limit-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.limit-label {
+  font-size: 0.82rem;
+  color: #64748b;
+}
+
+.admin-audit-select--limit {
+  width: auto;
+  height: 32px;
+  padding: 0 8px;
+  font-size: 0.8rem;
+  border-radius: 6px;
+}
+
+.admin-audit-pagination__right {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-page-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #ffffff;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-page-nav:hover:not(:disabled) {
+  background-color: #f8fafc;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+.btn-page-nav:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* -------------------------------------------------------------------------
+   6. Detail Modal / Drawer
+   ------------------------------------------------------------------------- */
+.admin-audit-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.admin-audit-modal-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  border-radius: 20px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalPop {
+  0% { opacity: 0; transform: scale(0.96) translateY(8px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.admin-audit-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 24px;
+  border-bottom: 1px solid #f1f5f9;
+  background: #fdf2f8;
+}
+
+.modal-header-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-header-icon {
+  color: #db2777;
+}
+
+.admin-audit-modal-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #831843;
+  margin: 0;
+}
+
+.btn-close-modal {
+  background: none;
+  border: none;
+  color: #9d174d;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-close-modal:hover {
+  background: #fce7f3;
+  color: #831843;
+}
+
+.admin-audit-modal-body {
+  padding: 20px 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.admin-audit-modal-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 0;
+  color: #64748b;
+  gap: 12px;
+}
+
+.admin-audit-modal-loading .loading-icon {
+  color: #db2777;
+}
+
+.admin-audit-modal-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+  text-align: center;
+  gap: 12px;
+}
+
+.admin-audit-modal-error .error-icon {
+  color: #ef4444;
+}
+
+.admin-audit-modal-error h4 {
+  margin: 0;
+  color: #991b1b;
+  font-size: 1rem;
+}
+
+.btn-retry-modal {
+  background: #db2777;
+  color: #ffffff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-audit-detail-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.detail-section-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.admin-audit-detail-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+  border: 1px solid #f1f5f9;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.admin-audit-detail-table td,
+.admin-audit-detail-table th {
+  padding: 10px 14px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.admin-audit-detail-table--metadata th {
+  background: #f8fafc;
+  font-weight: 700;
+  color: #475569;
+  text-align: left;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: #64748b;
+  width: 35%;
+  background-color: #fafbfc;
+}
+
+.detail-value {
+  color: #1e293b;
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.admin-audit-metadata-empty {
+  padding: 16px;
+  text-align: center;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  color: #94a3b8;
+  font-size: 0.84rem;
+  border: 1px dashed #e2e8f0;
+}
+
+.admin-audit-modal-footer {
+  padding: 14px 24px;
+  border-top: 1px solid #f1f5f9;
+  background: #f8fafc;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-modal-dismiss {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-modal-dismiss:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+/* -------------------------------------------------------------------------
+   7. Access Denied Screen
+   ------------------------------------------------------------------------- */
+.admin-audit-access-denied {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+  max-width: 480px;
+  margin: 60px auto;
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid #ffe4e6;
+  box-shadow: 0 10px 25px rgba(225, 29, 72, 0.05);
+}
+
+.access-denied-icon {
+  color: #e11d48;
+  margin-bottom: 16px;
+}
+
+.admin-audit-access-denied h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #881337;
+  margin: 0 0 8px 0;
+}
+
+.admin-audit-access-denied p {
+  color: #64748b;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* Utility Animations */
+.spin {
+  animation: spinAnim 1s linear infinite;
+}
+
+@keyframes spinAnim {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* -------------------------------------------------------------------------
+   8. Responsive Media Queries
+   ------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .admin-audit-filter-item--date {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-audit-container {
+    padding: 20px 14px;
+  }
+
+  .admin-audit-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .admin-audit-header__actions {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .admin-audit-export-group {
+    flex: 1;
+    display: flex;
+    gap: 8px;
+  }
+
+  .admin-audit-export-group .admin-audit-btn {
+    flex: 1;
+  }
+
+  .admin-audit-btn--refresh {
+    margin-left: 0;
+  }
+
+  .admin-audit-mobile-filter-trigger {
+    display: flex;
+  }
+
+  .admin-audit-filter-grid {
+    display: none;
+    grid-template-columns: 1fr;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #f1f5f9;
+  }
+
+  .admin-audit-filter-grid.open {
+    display: grid;
+  }
+
+  .admin-audit-filter-item--toggle {
+    justify-content: flex-start;
+  }
+
+  .admin-audit-advanced-toggle {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .admin-audit-filter-grid--advanced {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-audit-export-menu {
+    left: 0;
+    right: 0;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .admin-audit-table-wrapper {
+    display: none;
+  }
+
+  .admin-audit-mobile-card-list {
+    display: flex;
+  }
+
+  .admin-audit-pagination {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .admin-audit-pagination__left {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+}
+
+/* =======================================================
+   Quick View Toggle (ทั้งหมด / เนื้อหา / security)
+   ======================================================= */
+.admin-audit-view-toggle {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  margin-bottom: 12px;
+  background-color: #f1f5f9;
+  border-radius: 10px;
+  width: fit-content;
+}
+
+.admin-audit-view-btn {
+  border: none;
+  background: transparent;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.admin-audit-view-btn:hover {
+  color: #334155;
+}
+
+.admin-audit-view-btn.active {
+  background-color: #ffffff;
+  color: #db2777;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}

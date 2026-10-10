@@ -1,0 +1,86 @@
+/* src/components/NovelCoverCard/NovelCoverCard.css */
+
+.novel-cover-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 240px;
+  flex-shrink: 0;
+}
+
+/* Cover */
+.novel-cover-card__cover {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(45, 27, 61, 0.15);
+}
+
+/* "จบแล้ว" ribbon — วางทับมุมขวาบนของปก ใช้พื้นหลังทึบ+shadow */
+.novel-cover-card__ribbon {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: #16a34a;
+  color: #ffffff;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  white-space: nowrap;
+}
+
+.novel-cover-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.novel-cover-card__cover:hover .novel-cover-card__img {
+  transform: scale(1.03);
+}
+
+/* Placeholder (no image yet) */
+.novel-cover-card__placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(150deg, var(--pink-50) 0%, var(--pink-100) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--pink-100);
+}
+
+.novel-cover-card__emoji {
+  font-size: 72px;
+  filter: drop-shadow(0 4px 8px rgba(233, 30, 140, 0.2));
+}
+
+/* Stats 2x2 grid — transparent container, individual white boxes with light borders */
+.novel-cover-card__stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+.novel-cover-card__stats [role="listitem"] {
+  cursor: default;
+}
+
+.novel-cover-card__stats [role="listitem"] *:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}

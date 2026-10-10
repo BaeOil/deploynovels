@@ -1,0 +1,1465 @@
+/* src/pages/NovelDetail/NovelDetailPage.css */
+
+.novel-detail {
+  min-height: 100vh;
+  background: var(--gray-50);
+  padding-bottom: 80px;
+}
+
+.novel-detail__container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px clamp(16px, 4vw, 24px) 0;
+}
+
+/* ── Back button ── */
+.novel-detail__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  border-radius: 888px;
+  border: 1.5px solid var(--gray-100);
+  background: var(--white);
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gray-600);
+  cursor: pointer;
+  margin-bottom: 28px;
+  transition: all 0.18s ease;
+}
+
+.novel-detail__back:hover {
+  border-color: var(--pink-300);
+  color: var(--pink-500);
+  background: var(--pink-50);
+}
+
+/* ── Main layout: aside + info ── */
+.novel-detail__main {
+  display: flex;
+  gap: 48px;
+  align-items: stretch;
+  margin-bottom: 40px;
+}
+
+/* Aside: cover card — sticky so it travels with the scroll instead of
+   leaving a dead gap of empty space once the right column (progress
+   card, synopsis, comments) runs past the aside's own shorter height */
+.novel-detail__aside {
+  flex-shrink: 0;
+  position: sticky;
+  top: 24px;
+  align-self: flex-start;
+}
+
+/* Info: right side */
+.novel-detail__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header card — wraps tags/title/author/badge/synopsis so the top of
+   the right column reads as one contained panel, matching the boxed
+   cover+stats sidebar and progress card instead of floating loosely
+   on the page background (previous fix here was a barely-visible
+   radial glow — replaced with this, which is much more effective). */
+.novel-detail__header-card {
+  background: var(--white);
+  border: 1.5px solid var(--gray-100);
+  border-radius: 16px;
+  padding: 28px 32px;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+
+.novel-detail__header-card > *:last-child {
+  margin-bottom: 0;
+}
+
+/* Genre tags */
+.novel-detail__tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+/* .genre-tag has its own margin-right/margin-bottom for pages that don't
+   use a flex gap; here the parent already applies gap:8px, so cancel the
+   tag's own margins to avoid double spacing (was rendering ~14px gaps
+   with a dangling margin on the last tag in each row). */
+.novel-detail__tags .genre-tag {
+  margin: 0;
+}
+
+/* Title */
+.novel-detail__title {
+  font-family: 'Open Sans', sans-serif;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+  margin-bottom: 14px;
+}
+
+/* Author row */
+.novel-detail__author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.novel-detail__author-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--pink-50, #fdf2f8);
+  border: 1.5px solid var(--pink-100, #fce7f3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  overflow: hidden;
+  flex-shrink: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.novel-detail__author-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.novel-detail__author-name {
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+  transition: color 0.15s ease;
+  text-align: left;
+}
+
+.novel-detail__author-avatar:disabled,
+.novel-detail__author-name:disabled {
+  cursor: default;
+}
+
+.novel-detail__author-name:hover {
+  color: var(--pink-500);
+  text-decoration: underline;
+}
+
+.novel-detail__author-avatar:hover {
+  border-color: var(--pink-300);
+}
+
+/* Synopsis */
+.novel-detail__synopsis {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 15px;
+  color: var(--gray-600);
+  line-height: 1.8;
+  margin-bottom: 24px;
+  max-width: 100%;
+}
+
+/* Progress card */
+.novel-detail__action-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.novel-detail__primary-actions,
+.novel-detail__secondary-actions {
+  display: flex;
+  align-items: center;
+}
+
+.novel-detail__progress {
+  margin-top: 0;
+  max-width: 100%;
+}
+
+.novel-detail__restart-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 20px;
+  height: 42px;
+  border-radius: 999px;
+  border: 1.5px solid #fbcfe8;
+  background: linear-gradient(135deg, #fff0f6 0%, #ffe4f1 100%);
+  color: #db2777;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(219, 39, 119, 0.08);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.novel-detail__restart-button:hover {
+  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+  color: #ffffff !important;
+  border-color: #db2777;
+  transform: translateY(-1.5px);
+  box-shadow: 0 4px 14px rgba(236, 72, 153, 0.25);
+}
+
+.novel-detail__restart-button:active {
+  transform: translateY(0);
+}
+
+/* ── Guest CTA (fills the gap where progress bar would be, for visitors) ── */
+.novel-detail__guest-cta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: linear-gradient(135deg, #fff0f6 0%, #ffe9f2 100%);
+  border: 1.5px dashed var(--pink-200, #fbcfe8);
+  border-radius: 16px;
+  padding: 18px 22px;
+  flex-wrap: wrap;
+}
+
+.novel-detail__guest-cta-icon {
+  font-size: 30px;
+  flex-shrink: 0;
+}
+
+.novel-detail__guest-cta-body {
+  flex: 1;
+  min-width: 200px;
+}
+
+.novel-detail__guest-cta-title {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 3px;
+}
+
+.novel-detail__guest-cta-text {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 13px;
+  color: var(--gray-600);
+  line-height: 1.6;
+}
+
+.novel-detail__guest-cta-btn {
+  flex-shrink: 0;
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, var(--pink-400), var(--pink-500));
+  color: white;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.novel-detail__guest-cta-btn:hover {
+  transform: translateY(-1px);
+  opacity: 0.92;
+}
+
+/* ── Synopsis section ── */
+.novel-detail__synopsis-section {
+  background: var(--white);
+  border: 1.5px solid var(--gray-100);
+  border-radius: 16px;
+  padding: 28px 32px;
+}
+
+.novel-detail__section-title {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.novel-detail__synopsis-detail {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  color: var(--gray-600);
+  line-height: 1.85;
+  margin-bottom: 20px;
+  overflow-wrap: anywhere;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .novel-detail__main {
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .novel-detail__aside {
+    position: static; /* ปิด sticky ตอน layout เรียงเป็นคอลัมน์เดียว */
+    width: 100%;
+    display: flex;
+    justify-content: center; /* จัดภาพปกให้อยู่กึ่งกลาง */
+  }
+
+  .novel-detail__aside > * {
+    width: 100%;
+    max-width: 220px; /* จำกัดขนาดปกไม่ให้ยืดเต็มจอ iPad */
+  }
+
+  .novel-detail__header-card,
+  .novel-detail__synopsis-section {
+    padding: 20px;
+  }
+
+  .novel-detail__action-group {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .novel-detail__primary-actions,
+  .novel-detail__secondary-actions,
+  .novel-detail__primary-actions .action-buttons {
+    width: 100%;
+  }
+
+  .novel-detail__primary-actions .action-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .novel-detail__primary-actions .action-buttons__read {
+    grid-column: 1 / -1;
+  }
+
+  .novel-detail__primary-actions .action-buttons__bookmark,
+  .novel-detail__primary-actions .action-buttons__like {
+    min-width: 0;
+    width: 100%;
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+
+  .novel-detail__secondary-actions {
+    padding-top: 4px;
+    border-top: 1px solid var(--gray-100);
+  }
+
+  .novel-detail__action-group > * {
+    width: 100%;
+  }
+
+  .novel-detail__restart-button {
+    width: 100%;
+  }
+
+  .novel-detail__preview-banner {
+    align-items: stretch;
+    flex-direction: column;
+    padding: 12px 16px;
+  }
+
+  .novel-detail__preview-banner-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .novel-detail__container {
+    padding: 16px 16px 0;
+  }
+
+  .novel-detail__title {
+    font-size: 26px;
+  }
+
+  .novel-detail__header-card,
+  .novel-detail__synopsis-section {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .novel-detail__back {
+    margin-bottom: 20px;
+  }
+
+  .novel-detail__guest-cta {
+    padding: 16px;
+  }
+
+  .novel-detail__modal-box {
+    padding: 24px 18px;
+  }
+
+  .novel-detail__guest-cta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .novel-detail__guest-cta-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 360px) {
+  .novel-detail__container {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .novel-detail__header-card,
+  .novel-detail__synopsis-section {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .novel-detail__title {
+    font-size: 24px;
+  }
+}
+
+/* ─────────────────────────────
+   Shared simple modal (no-content dialog / restart confirm)
+   ใช้ token เดียวกับที่เหลือของหน้านี้ (--pink-500, --gray-*)
+   แทนสี hex ลอยๆ ที่ไม่ตรงกับธีมของเว็บ
+───────────────────────────── */
+
+.novel-detail__modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 16px;
+}
+
+.novel-detail__modal-box {
+  background: var(--white);
+  width: 100%;
+  padding: 32px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.novel-detail__modal-emoji {
+  font-size: 54px;
+  margin-bottom: 16px;
+  animation: novel-detail-bounce 2s infinite;
+}
+
+@keyframes novel-detail-bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-10px); }
+  60% { transform: translateY(-5px); }
+}
+
+.novel-detail__modal-title {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+
+.novel-detail__modal-title--left {
+  text-align: left;
+}
+
+.novel-detail__modal-text {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  color: var(--gray-600);
+  line-height: 1.6;
+  margin-bottom: 26px;
+}
+
+.novel-detail__modal-text--left {
+  text-align: left;
+}
+
+.novel-detail__modal-error {
+  color: #b91c1c;
+  font-size: 14px;
+  margin-bottom: 14px;
+}
+
+.novel-detail__modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.novel-detail__modal-primary-btn {
+  flex: 1;
+  min-width: 140px;
+  padding: 13px;
+  border-radius: 12px;
+  border: none;
+  background: var(--pink-500);
+  color: var(--white);
+  font-family: 'Sarabun', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(219, 39, 119, 0.25);
+  transition: opacity 0.15s ease;
+}
+
+.novel-detail__modal-primary-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.novel-detail__modal-secondary-btn {
+  flex: 1;
+  min-width: 100px;
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: 1px solid var(--gray-100);
+  background: var(--white);
+  color: var(--gray-600);
+  font-family: 'Sarabun', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.novel-detail__modal-secondary-btn:hover {
+  border-color: var(--pink-300);
+  background: var(--pink-50);
+}
+
+/* ─────────────────────────────
+   Banners: preview mode / admin viewing a banned novel
+───────────────────────────── */
+
+.novel-detail__preview-banner {
+  width: 100%;
+  background: #eff6ff;
+  border-bottom: 1px solid #bfdbfe;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.novel-detail__preview-banner-label {
+  font-family: 'Sarabun', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: #1e40af;
+}
+
+.novel-detail__preview-banner-btn {
+  background: #1d4ed8;
+  color: #ffffff;
+  border: none;
+  border-radius: 999px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-family: 'Sarabun', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  transition: background 0.18s ease;
+}
+
+.novel-detail__preview-banner-btn:hover {
+  background: #1e40af;
+}
+
+.novel-detail__admin-banned-banner {
+  width: 100%;
+  background: #fef2f2;
+  border-bottom: 1px solid #fecaca;
+  padding: 12px 20px;
+  font-family: 'Sarabun', sans-serif;
+  font-weight: 600;
+  font-size: 13.5px;
+  color: #b91c1c;
+  text-align: center;
+}
+
+/* ─────────────────────────────
+   Banned screen (non-admin visitors)
+───────────────────────────── */
+
+.novel-detail__banned-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 20px;
+}
+
+.novel-detail__banned-card {
+  max-width: 600px;
+  width: 100%;
+  background: #ffffff;
+  border: 1.5px solid #fecaca;
+  border-radius: 20px;
+  padding: 36px 28px;
+  box-shadow: 0 10px 30px rgba(239, 68, 68, 0.08);
+  text-align: center;
+  font-family: 'Sarabun', sans-serif;
+}
+
+.novel-detail__banned-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.novel-detail__banned-shield-icon {
+  margin-bottom: 4px;
+}
+
+.novel-detail__banned-title {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.novel-detail__banned-badge {
+  display: inline-block;
+  padding: 4px 14px;
+  background: #fee2e2;
+  color: #991b1b;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 999px;
+  border: 1px solid #fca5a5;
+}
+
+.novel-detail__banned-reason-box {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  padding: 16px;
+  text-align: left;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #7f1d1d;
+  line-height: 1.6;
+}
+
+.novel-detail__banned-reason-box strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #991b1b;
+}
+
+.novel-detail__banned-reason-box p {
+  margin: 0;
+  color: #451a03;
+}
+
+.novel-detail__banned-steps-accordion {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 24px;
+  background: #f9fafb;
+}
+
+.novel-detail__banned-steps-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: #f3f4f6;
+  border: none;
+  cursor: pointer;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #374151;
+  transition: background 0.15s ease;
+}
+
+.novel-detail__banned-steps-toggle:hover {
+  background: #e5e7eb;
+}
+
+.novel-detail__banned-steps-list {
+  padding: 16px 20px;
+  margin: 0;
+  list-style: none;
+  text-align: left;
+  font-size: 14px;
+  color: #4b5563;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px solid #e5e7eb;
+  background: #ffffff;
+}
+
+.novel-detail__banned-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.novel-detail__banned-btn {
+  padding: 11px 22px;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: 'Sarabun', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.18s ease;
+}
+
+.novel-detail__banned-btn--primary {
+  background: #db2777;
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(219, 39, 119, 0.3);
+}
+
+.novel-detail__banned-btn--primary:hover {
+  background: #be185d;
+  transform: translateY(-1px);
+}
+
+.novel-detail__banned-btn--secondary {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.novel-detail__banned-btn--secondary:hover {
+  background: #d1d5db;
+}
+
+/* ─────────────────────────────
+   Loading / error state cards
+───────────────────────────── */
+
+.novel-detail__state-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background: var(--white);
+  border: 1.5px solid var(--gray-100);
+  border-radius: 20px;
+  padding: 70px 24px;
+  margin-top: 24px;
+  text-align: center;
+}
+
+.novel-detail__state-card--error {
+  border-color: #fecaca;
+  background: #fffbfb;
+}
+
+.novel-detail__state-spinner {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 3px solid var(--pink-100);
+  border-top-color: var(--pink-500);
+  animation: novel-detail-spin 0.8s linear infinite;
+}
+
+@keyframes novel-detail-spin {
+  to { transform: rotate(360deg); }
+}
+
+.novel-detail__state-icon {
+  font-size: 40px;
+}
+
+.novel-detail__state-text {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14.5px;
+  color: var(--gray-600);
+}
+
+/* ─────────────────────────────────────────────────────────
+   Action Bar & Reader Progress Cards (Matching Reference UI)
+───────────────────────────────────────────────────────── */
+
+.novel-detail__action-bar-container {
+  margin-top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+
+.novel-detail__action-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+/* Action Bar Buttons */
+.action-bar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 20px;
+  height: 42px;
+  border-radius: 999px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1.5px solid transparent;
+  box-sizing: border-box;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.action-bar-btn:active {
+  transform: translateY(0);
+}
+
+/* 1. Primary Read Button: อ่านต่อ / อ่านเลย (Solid Pink) */
+.action-bar-btn--primary {
+  background: #f526a2;
+  color: #ffffff;
+  border-color: #f526a2;
+  box-shadow: 0 4px 14px rgba(245, 38, 162, 0.25);
+  padding: 0 24px;
+}
+
+.action-bar-btn--primary:hover:not(:disabled) {
+  background: #db2777;
+  border-color: #db2777;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(245, 38, 162, 0.35);
+}
+
+.action-bar-btn--primary:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* 2. Map Button: ดูแผนผังการอ่าน */
+.action-bar-btn--map {
+  background: #ffffff;
+  color: #334155;
+  border-color: #fbcfe8;
+}
+
+.action-bar-btn--map:hover {
+  background: #fff0f6;
+  border-color: #db2777;
+  color: #db2777;
+  transform: translateY(-1.5px);
+  box-shadow: 0 4px 12px rgba(219, 39, 119, 0.12);
+}
+
+.action-bar-btn--map:active {
+  transform: translateY(0);
+}
+
+/* 3. Bookmark Button: เพิ่มเข้าชั้นหนังสือ */
+.action-bar-btn--bookmark {
+  background: #ffffff;
+  color: #334155;
+  border-color: #e2e8f0;
+}
+
+.action-bar-btn--bookmark:hover:not(:disabled) {
+  background: #fff0f6;
+  color: #db2777;
+  border-color: #f472b6;
+  transform: translateY(-1.5px);
+  box-shadow: 0 4px 12px rgba(219, 39, 119, 0.12);
+}
+
+.action-bar-btn--bookmark.is-active,
+.action-bar-btn--like.is-active,
+.action-bar-btn--more.is-active,
+.action-bar-btn--ending.is-active {
+  background: #fce7f3 !important;
+  color: #db2777 !important;
+  border-color: #db2777 !important;
+  box-shadow: 0 4px 12px rgba(219, 39, 119, 0.18) !important;
+}
+
+.action-bar-btn--bookmark.is-active svg,
+.action-bar-btn--like.is-active svg,
+.action-bar-btn--more.is-active svg,
+.action-bar-btn--ending.is-active svg {
+  color: #db2777 !important;
+  stroke: #db2777 !important;
+}
+
+/* 🟢 Ending Collection Button for Readers Who Have Read Before */
+.action-bar-btn--ending {
+  background: #ffffff;
+  color: #334155;
+  border-color: #fbcfe8;
+}
+
+.action-bar-btn--ending:hover {
+  background: #fff0f6;
+  border-color: #db2777;
+  color: #db2777;
+  transform: translateY(-1.5px);
+  box-shadow: 0 4px 12px rgba(219, 39, 119, 0.12);
+}
+
+/* 4 & 5. Icon Only Buttons: ♡ และ ⋮ */
+.action-bar-btn--icon-only {
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border-radius: 50%;
+  border-color: #e2e8f0;
+  color: #475569;
+  background: #ffffff;
+  flex-shrink: 0;
+}
+
+.action-bar-btn--icon-only:hover:not(:disabled) {
+  background: #fff0f6;
+  border-color: #f472b6;
+  color: #db2777;
+  transform: translateY(-1.5px);
+  box-shadow: 0 4px 12px rgba(219, 39, 119, 0.15);
+}
+
+.action-bar-btn--icon-only.is-active {
+  background: #fce7f3 !important;
+  color: #db2777 !important;
+  border-color: #db2777 !important;
+  box-shadow: 0 4px 12px rgba(219, 39, 119, 0.18) !important;
+}
+
+/* ── More Actions Dropdown Menu (⋮) ── */
+.action-bar-more-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.action-bar-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #ffe3ec;
+  border-radius: 14px;
+  padding: 6px;
+  box-shadow: 0 10px 25px rgba(219, 39, 119, 0.14), 0 4px 12px rgba(15, 23, 42, 0.06);
+  z-index: 1000;
+  min-width: 175px;
+  animation: actionBarDropdownFadeIn 0.15s ease-out;
+}
+
+@keyframes actionBarDropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.dropdown-menu-item:hover {
+  background: #fff0f6;
+  color: #db2777;
+}
+
+.dropdown-menu-item--report:hover {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+/* ── Card "อ่านล่าสุด" (Solid White & Progress Bar) ── */
+.novel-detail__latest-read-card {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 18px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+  flex: 1;
+  min-height: 120px;
+}
+
+.novel-detail__latest-read-card:hover {
+  border-color: #f472b6;
+  box-shadow: 0 4px 16px rgba(219, 39, 119, 0.12);
+  transform: translateY(-1px);
+}
+
+.latest-read-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+}
+
+.latest-read-card__left {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+  flex: 1;
+}
+
+.latest-read-card__header-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.latest-read-card__label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #db2777;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.latest-read-card__time {
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.latest-read-card__chapter-info {
+  display: flex;
+  align-items: center;
+  margin-top: 1px;
+}
+
+.latest-read-card__chapter-title {
+  font-size: 15.5px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+.latest-read-card__scene-info {
+  display: flex;
+  align-items: center;
+  margin-top: 2px;
+}
+
+.latest-read-card__scene-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 8px;
+  background: #fff0f7;
+  border: 1px solid #fbcfe8;
+  color: #db2777;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.latest-read-card__right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.latest-read-card__count {
+  font-size: 13px;
+  font-weight: 700;
+  color: #db2777;
+  background: #ffffff;
+  border: 1px solid #fbcfe8;
+  padding: 4px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(219, 39, 119, 0.06);
+}
+
+.latest-read-card__btn {
+  background: linear-gradient(135deg, #f526a2 0%, #db2777 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 999px;
+  padding: 8px 20px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+  box-shadow: 0 3px 10px rgba(245, 38, 162, 0.28);
+}
+
+.latest-read-card__btn:hover {
+  background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
+  box-shadow: 0 5px 14px rgba(219, 39, 119, 0.38);
+  transform: translateY(-1px);
+}
+
+/* Progress bar inside Latest Read Card */
+.latest-read-card__progress-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  padding-top: 10px;
+  border-top: 1px dashed #fbcfe8;
+  margin-top: auto;
+}
+
+.latest-read-card__progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12.5px;
+}
+
+.latest-read-card__progress-text {
+  color: #64748b;
+  font-weight: 600;
+}
+
+.latest-read-card__progress-percent {
+  color: #db2777;
+  font-weight: 700;
+}
+
+.latest-read-card__progress-track {
+  width: 100%;
+  height: 8px;
+  background: #fce7f3;
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.latest-read-card__progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f472b6 0%, #f526a2 50%, #db2777 100%);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+/* ── Card "จุดที่ค้นพบ" (Discovered Paths Section) ── */
+.novel-detail__discovered-section {
+  margin-top: 10px;
+  margin-bottom: 32px;
+}
+
+.discovered-card {
+  background: #ffffff;
+  border: 1.5px solid #f1f5f9;
+  border-radius: 20px;
+  padding: 24px 28px;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
+  box-sizing: border-box;
+}
+
+.discovered-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  border-bottom: 1px solid #f8fafc;
+  padding-bottom: 14px;
+}
+
+.discovered-card__title {
+  font-family: 'Open Sans', 'Sarabun', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.discovered-card__subtitle {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 13px;
+  color: #64748b;
+  margin: 4px 0 0 0;
+}
+
+.discovered-card__badge {
+  background: linear-gradient(135deg, #fff0f6 0%, #fce7f3 100%);
+  color: #db2777;
+  border: 1px solid #fbcfe8;
+  font-size: 13.5px;
+  font-weight: 700;
+  padding: 6px 18px;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(219, 39, 119, 0.1);
+  white-space: nowrap;
+}
+
+.discovered-card__list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.discovered-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: #f8fafc;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  box-sizing: border-box;
+}
+
+.discovered-item:hover {
+  background: #fff0f6;
+  border-color: #fbcfe8;
+  transform: translateX(3px);
+}
+
+.discovered-item--current {
+  background: #fff0f6;
+  border-color: #f472b6;
+  border-left: 4px solid #db2777;
+}
+
+.discovered-item__icon {
+  color: #16a34a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #dcfce7;
+  flex-shrink: 0;
+}
+
+.discovered-item--current .discovered-item__icon {
+  color: #db2777;
+  background: #fce7f3;
+}
+
+.discovered-item__content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.discovered-item__chapter {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.discovered-item__scene {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #0f172a;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.discovered-item__current-badge {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 700;
+  color: #db2777;
+  background: #fce7f3;
+  padding: 3px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.discovered-card__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid #f8fafc;
+}
+
+.discovered-page-btn {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.discovered-page-btn:hover:not(:disabled) {
+  border-color: #f472b6;
+  color: #db2777;
+  background: #fff0f6;
+}
+
+.discovered-page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.discovered-page-info {
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+/* ── Responsive Styling ── */
+@media (max-width: 768px) {
+  .novel-detail__action-bar {
+    gap: 8px;
+  }
+
+  .action-bar-btn {
+    padding: 0 14px;
+    height: 38px;
+    font-size: 13px;
+  }
+
+  .action-bar-btn--icon-only {
+    width: 38px;
+    height: 38px;
+  }
+
+  .latest-read-card__top {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .latest-read-card__left {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .novel-detail__latest-read-card {
+    flex: none;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 14px 16px;
+    width: 100%;
+  }
+
+  .latest-read-card__right {
+    width: 100%;
+    margin-left: 0;
+    justify-content: space-between;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1.5px dashed #fbcfe8;
+  }
+
+  .discovered-card {
+    padding: 18px 16px;
+  }
+}
+
+@media (max-width: 560px) {
+  .novel-detail__action-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .action-bar-btn {
+    flex: 1 1 calc(50% - 6px);
+    font-size: 13px;
+    padding: 0 12px;
+    height: 40px;
+    justify-content: center;
+  }
+
+  .action-bar-btn--primary {
+    flex: 1 0 100%;
+  }
+
+  .action-bar-btn--icon-only {
+    flex: 0 0 40px;
+  }
+}

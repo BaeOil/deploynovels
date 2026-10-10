@@ -1,0 +1,249 @@
+/* NovelCard.css
+   ─────────────────────────────────────────────────────
+   การ์ดนิยายมาตรฐาน — ใช้ aspect-ratio: 2/3 (สัดส่วนหนังสือ)
+   เพื่อให้ cover สูงเท่ากันทุกหน้าโดยไม่ขึ้นกับ column width
+   ─────────────────────────────────────────────────────
+   วิธีใช้ใน grid ทุกหน้าให้เหมือนกัน:
+
+   .page-grid {
+     display: grid;
+     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+     gap: 20px;
+   }
+   ───────────────────────────────────────────────────── */
+
+/* ── Wrapper ── */
+.novel-card {
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #F3F4F6;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+
+ height: fit-content;
+align-self: start;
+
+  min-width: 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.novel-card:hover {
+  transform: translateY(-3px);
+  border-color: #FCE4F0;
+  box-shadow: 0 8px 24px rgba(233,30,140,0.10);
+}
+
+.novel-card:focus-visible {
+  outline: 2px solid #E91E8C;
+  outline-offset: 2px;
+}
+
+/* ── Cover ──
+   แก้จาก 1/1 → 2/3 เป็นสัดส่วนหนังสือจริง
+   cover จะ scale ตาม column width แต่สัดส่วนคงที่ทุกหน้า */
+.novel-card__cover {
+  aspect-ratio: 4 / 5;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  background: #F8FAFC;
+  background-size: cover;
+  background-position: center;
+}
+
+.novel-card__cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.novel-card__cover-emoji {
+  font-size: 48px;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* gradient overlay ด้านล่าง cover */
+.novel-card__cover::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(to top, rgba(0,0,0,0.45), transparent);
+  pointer-events: none;
+}
+
+/* ── Status badge ── */
+.novel-card__status {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 3px 9px;
+  border-radius: 9999px;
+  font-size: 9px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  z-index: 2;
+}
+
+.novel-card__status--published {
+  background: linear-gradient(90deg, #E91E8C, #FF6EB4);
+}
+
+.novel-card__status--completed {
+  background: linear-gradient(90deg, #7C3AED, #A855F7);
+}
+
+.novel-card__status--draft {
+  background: #9CA3AF;
+}
+
+/* ── Body ── */
+.novel-card__body {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 10px 10px;
+  gap: 5px;
+}
+
+/* ── Categories ── */
+.novel-card__categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-height: 20px;       /* ← กันไม่ให้ body กระโดดเมื่อไม่มี tag */
+}
+
+.novel-card__tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 9999px;
+  background: #FEF0F6;
+  color: #E91E8C;
+  border: 1px solid #FCE4F0;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+/* ── Title ── */
+.novel-card__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.35;
+  margin: 0;
+  /* clamp 2 บรรทัดเสมอ → body height คงที่ */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 38px;       /* 14px × 1.35 × 2 lines ≈ 38px */
+}
+
+/* ── Synopsis ── */
+.novel-card__synopsis {
+  font-size: 12px;
+  color: #6B7280;
+  line-height: 1.5;
+  margin: 0;
+  /* clamp 2 บรรทัด */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 36px;
+}
+
+/* ── Stats bar ── */
+.novel-card__stats-bar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  padding: 3px 0;
+  margin-top: 8px;
+  border-top: 1px solid #F3F4F6;
+}
+
+.novel-card__stat {
+  text-align: center;
+}
+
+.novel-card__stat-value {
+  font-size: 12px;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.3;
+}
+
+.novel-card__stat-label {
+  margin-top: 1px;
+  font-size: 9px;
+  color: #9CA3AF;
+  font-weight: 500;
+}
+
+/* ── Footer ── */
+.novel-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+  padding-top: 6px;
+  border-top: 1px solid #F3F4F6;
+}
+
+.novel-card__author {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+.novel-card__author-avatar {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.novel-card__author-name {
+  font-size: 11px;
+  color: #6B7280;
+  font-weight: 500;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.novel-card__like-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #D1D5DB;
+  padding: 4px;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+  flex-shrink: 0;
+}
+
+.novel-card__like-btn:hover {
+  color: #E91E8C;
+  background: #FEF0F6;
+}
+
+.novel-card__like-btn--on {
+  color: #E91E8C;
+}

@@ -1,0 +1,37 @@
+.restart-reading-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  
+  /* ปรับความกว้างให้ยืดหยุ่นตามเนื้อหา ไม่บังคับกว้างเต็ม */
+  width: auto;
+  padding: 11px 22px;
+  
+  /* ปรับดีไซน์ให้โค้งมนรับกับปุ่ม "เพิ่มเข้าชั้นหนังสือ" และ "ถูกใจ" */
+  border-radius: 999px; 
+  border: 1.5px solid var(--gray-100);
+  background: var(--white);
+  color: var(--gray-600);
+  
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.restart-reading-button:hover {
+ border-color: var(--pink-300);
+  color: var(--pink-500);
+  background: var(--pink-50);
+  transform: translateY(-1px);
+}
+
+.restart-reading-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: #f8f3f7;
+  color: #c0266d;
+  transform: none;
+}

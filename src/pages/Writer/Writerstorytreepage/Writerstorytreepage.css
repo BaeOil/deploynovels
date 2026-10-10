@@ -1,0 +1,1204 @@
+@keyframes wst-pulse-border {
+  0% {
+    box-shadow: 0 0 0 0px rgba(37, 99, 235, 0.4), 0 8px 10px -6px rgba(37, 99, 235, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 0 8px rgba(37, 99, 235, 0.15), 0 10px 25px -5px rgba(37, 99, 235, 0.25);
+  }
+}
+
+.wst-page {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 83px);
+  max-height: calc(100vh - 83px);
+  width: 100%;
+  background-color: #faf9f6;
+  font-family: 'Outfit', 'Inter', 'Prompt', sans-serif;
+  color: #334155;
+  overflow: hidden; /* ล็อกความสูงหน้าหลักไม่ให้มี scrollbar แนวตั้งดันจอ */
+  box-sizing: border-box;
+}
+
+/* Loading & Error States */
+.wst-loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 1.1rem;
+  color: #64748b;
+  gap: 16px;
+}
+
+.wst-error-text {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.wst-error-button {
+  background: #db2777;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.wst-error-button:hover {
+  opacity: 0.9;
+}
+
+/* ─────────────────────────────────────────────
+   Topbar
+   ───────────────────────────────────────────── */
+.wst-topbar {
+  height: 60px; /* ลดความสูง Topbar ลงเล็กน้อย */
+  background: #ffffff;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  box-sizing: border-box;
+}
+
+.wst-topbar__left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.wst-topbar__back {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid #e2e8f0;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.wst-topbar__back:hover {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.wst-topbar__divider-v {
+  width: 1px;
+  height: 20px;
+  background-color: #e2e8f0;
+}
+
+.wst-topbar__actions {
+  display: flex;
+  align-items: center;
+}
+
+.wst-topbar__add {
+  background: linear-gradient(135deg, #e92691 0%, #E91E8C 100%);
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.wst-topbar__add:hover {
+  background: var(--pink-700);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(233,30,140,0.38);
+}
+
+/* Legend */
+.wst-legend {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.wst-legend__item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.wst-legend__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* ─────────────────────────────────────────────
+   Body Layout (Canvas & Sidebar)
+   ───────────────────────────────────────────── */
+.wst-body {
+  display: flex;
+  flex: 1;
+  min-height: 0; /* ล็อกสัดส่วนความสูงไม่ให้ขยายเกิน parent container */
+  height: calc(100% - 60px); /* หักลบความสูง Topbar ในอัตราส่วน % */
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Canvas Area */
+.wst-canvas-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.wst-canvas-heading {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.wst-canvas-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.wst-canvas-sub {
+  font-size: 0.82rem;
+  color: #64748b;
+  margin: 2px 0 0 0;
+}
+
+.wst-canvas-wrap {
+  flex: 1;
+  position: relative;
+  min-height: 0;
+  height: 100%;
+}
+
+.wst-canvas-scroll {
+  width: 100%;
+  height: 100%;
+}
+
+/* ─────────────────────────────────────────────
+   React Flow Toolbar Overlay
+   ───────────────────────────────────────────── */
+.wst-canvas-toolbar {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  display: flex;
+  padding: 4px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+}
+
+.wst-toolbar-btn {
+  background: transparent;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s;
+  gap: 4px;
+  border: 1px solid transparent;
+}
+
+.wst-toolbar-btn:hover {
+  background-color: #f1f5f9;
+  color: #334155;
+}
+
+.wst-toolbar-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.wst-toolbar-btn--select-active {
+  background-color: #eff6ff !important;
+  color: #2563eb !important;
+  border-color: #bfdbfe !important;
+  font-weight: 700;
+}
+
+.wst-toolbar-btn--delete-active {
+  background-color: #fef2f2 !important;
+  color: #ef4444 !important;
+  border-color: #fecaca !important;
+  font-weight: 700;
+}
+
+.wst-toolbar-btn--connect-active {
+  background-color: #eff6ff !important;
+  color: #2563eb !important;
+  border-color: #bfdbfe !important;
+  font-weight: 700;
+}
+
+.wst-toolbar-btn--pan-active {
+  background-color: #f8fafc !important;
+  color: #475569 !important;
+  border-color: #cbd5e1 !important;
+  font-weight: 700;
+}
+
+.wst-toolbar-btn--add-active {
+  background-color: #eff6ff !important;
+  color: #2563eb !important;
+  border-color: #bfdbfe !important;
+  font-weight: 700;
+}
+
+/* ─────────────────────────────────────────────
+   React Flow Custom Node (StoryNode)
+   ───────────────────────────────────────────── */
+.wst-node-card {
+  width: 260px;
+  background: #ffffff;
+  border: 2px solid #38bdf8;
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.02);
+  text-align: left;
+  position: relative;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s;
+}
+
+.wst-node-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+}
+
+.wst-node-card__badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.8;
+  padding-right: 70px; /* เว้นระยะไม่ให้ชนกับ badge มุมขวาบน */
+}
+
+/* ป้ายสถานะ เผยแพร่ / ฉบับร่าง มุมบนขวาของการ์ดโหนด */
+.wst-node-card__publish-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  z-index: 5;
+}
+
+.wst-node-card__publish-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+
+.wst-node-card__publish-badge--published {
+  background-color: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+}
+
+.wst-node-card__publish-badge--published .wst-node-card__publish-dot {
+  background-color: #2563eb;
+}
+
+.wst-node-card__publish-badge--draft {
+  background-color: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+.wst-node-card__publish-badge--draft .wst-node-card__publish-dot {
+  background-color: #94a3b8;
+}
+
+.wst-node-card__scene-num {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.wst-node-card__title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.wst-node-card__desc {
+  font-size: 0.78rem;
+  line-height: 1.5;
+  opacity: 0.85;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+}
+
+.wst-node-card__edit {
+  align-self: flex-start;
+  margin-top: 4px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.wst-node-card__edit:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+  transform: translateY(-1px);
+}
+
+/* React Flow Handle custom style */
+.react-flow__handle {
+  width: 10px !important;
+  height: 10px !important;
+  background: #94a3b8 !important;
+  border: 2px solid #ffffff !important;
+}
+
+/* ─────────────────────────────────────────────
+   Connect Mode: Highlight ทั้งกราฟตั้งแต่เลือก source node
+   ───────────────────────────────────────────── */
+.wst-node-card--connect-source {
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.45), 0 10px 25px -5px rgba(37, 99, 235, 0.25) !important;
+}
+
+.wst-node-card--valid-target {
+  background-color: rgba(22, 163, 74, 0.08) !important;
+  box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.35) !important;
+  cursor: pointer;
+}
+
+.wst-node-card--invalid-target {
+  background-color: rgba(239, 68, 68, 0.08) !important;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.3) !important;
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
+/* ─────────────────────────────────────────────
+   Sidebar & Stats
+   ───────────────────────────────────────────── */
+.wst-sidebar {
+  width: 320px;
+  background: #ffffff;
+  border-right: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  max-height: 100%;
+  padding: 16px;
+  gap: 16px;
+  flex-shrink: 0;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.01);
+  box-sizing: border-box;
+}
+
+/* Stats Grid 2x2 */
+.wst-sidebar__stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.wst-sidebar__stat-card {
+  background: #ffffff;
+  border: 1px solid #f1f5f9;
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.01);
+  transition: all 0.2s;
+}
+
+.wst-sidebar__stat-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+}
+
+.wst-sidebar__stat-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.wst-sidebar__stat-header svg {
+  stroke-width: 2.2;
+}
+
+.wst-sidebar__stat-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.wst-sidebar__divider {
+  height: 1px;
+  background-color: #f1f5f9;
+  width: 100%;
+  margin: 2px 0;
+  flex-shrink: 0;
+}
+
+/* ─────────────────────────────────────────────
+   Scene Details Card
+   ───────────────────────────────────────────── */
+.wst-scene-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.wst-scene-details__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wst-scene-details__scene-number {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.wst-scene-details__type-badge {
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.wst-scene-details__title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* Action Buttons */
+.wst-scene-details__actions {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.wst-scene-details__btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  outline: none;
+}
+
+.wst-scene-details__btn svg {
+  flex-shrink: 0;
+}
+
+.wst-scene-details__btn--edit {
+  background: #fff1f2;
+  border: 1px solid #ffe4e6;
+  color: #db2777;
+}
+
+.wst-scene-details__btn--edit:hover {
+  background: #ffe4e6;
+  border-color: #fbcfe8;
+}
+
+/* Meta Tags Section */
+.wst-scene-details__meta-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.wst-scene-details__tag {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  color: #475569;
+  font-weight: 600;
+}
+
+.wst-scene-details__tag svg {
+  color: #94a3b8;
+}
+
+/* Excerpt & Choices Section Header */
+.wst-scene-details__section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #475569;
+  margin-bottom: 4px;
+}
+
+.wst-scene-details__section-header svg {
+  color: #94a3b8;
+}
+
+.wst-scene-details__excerpt-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.wst-scene-details__excerpt-box {
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+  border-radius: 8px;
+  padding: 10px;
+  color: #475569;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  max-height: 80px;
+  overflow-y: auto;
+  word-break: break-word;
+}
+
+.wst-scene-details__choices-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.wst-scene-details__choices-count-badge {
+  background: #fff1f2;
+  color: #db2777;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.wst-scene-details__choices-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 350px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+/* ─────────────────────────────────────────────
+   Choice Card component
+   ───────────────────────────────────────────── */
+.wst-choice-card {
+  background: #ffffff;
+  border: 1px solid #f1f5f9;
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.01);
+}
+
+.wst-choice-card:hover {
+  filter: brightness(0.98);
+  transform: translateX(2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+}
+
+.wst-choice-card__left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.wst-choice-card__number {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff1f2;
+  color: #db2777;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.wst-choice-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.wst-choice-card__text {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wst-choice-card__dest {
+  font-size: 0.72rem;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wst-choice-card__arrow {
+  color: #cbd5e1;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding-left: 4px;
+}
+
+.wst-scene-details__empty-state {
+  padding: 16px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.8rem;
+  border: 1px dashed #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+/* ─────────────────────────────────────────────
+   React Flow Controls & MiniMap
+   (ขยับปุ่มและเครื่องมือขึ้นสูงจากขอบล่าง 32px เพื่อเลี่ยงการถูกบัง)
+   ───────────────────────────────────────────── */
+.react-flow__controls {
+  bottom: 32px !important;
+  left: 24px !important;
+}
+
+.react-flow__minimap {
+  bottom: 32px !important;
+  right: 24px !important;
+}
+
+/* ─────────────────────────────────────────────
+   Floating Guidance Banner (แสดงด้านล่างตรงกลาง ไม่บดบัง Toolbar ด้านบน)
+   ───────────────────────────────────────────── */
+.wst-canvas-guidance-banner {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(239, 246, 255, 0.95); /* โทนฟ้า/น้ำเงินพาสเทลโปร่งแสง */
+  backdrop-filter: blur(8px);
+  color: #1e40af;       /* ข้อความสีน้ำเงินเข้มข้น */
+  border: 1.5px solid #bfdbfe; /* เส้นขอบฟ้าน้ำเงินบาง */
+  padding: 8px 20px;
+  border-radius: 99px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.15);
+  pointer-events: none;
+  z-index: 100;
+  white-space: nowrap;
+  box-sizing: border-box;
+  animation: bannerFadeInBottom 0.25s ease-out;
+}
+
+@keyframes bannerFadeInBottom {
+  from { opacity: 0; transform: translate(-50%, 10px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* ─────────────────────────────────────────────
+   Modal Popup (สไตล์คอนเฟิร์มการเชื่อม - ธีมสีน้ำเงิน)
+   ───────────────────────────────────────────── */
+.wst-modal-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(30, 22, 44, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.wst-modal-bg.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.wst-modal {
+  background: #ffffff;
+  border-radius: 20px;
+  width: 400px;
+  max-width: calc(100vw - 32px);
+  box-shadow: 0 20px 60px rgba(37, 99, 235, 0.15);
+  transform: translateY(15px) scale(0.97);
+  transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.wst-modal-bg.open .wst-modal {
+  transform: translateY(0) scale(1);
+}
+
+.wst-modal-header {
+  padding: 20px 20px 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.wst-modal-eyebrow {
+  font-size: 0.72rem;
+  color: #1d4ed8; /* น้ำเงินเข้มพรีเมียม */
+  font-weight: 700;
+  margin-bottom: 3px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.wst-modal-eyebrow i {
+  font-size: 13px;
+}
+
+.wst-modal-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.wst-modal-close {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #64748b;
+  font-size: 0.8rem;
+  transition: all 0.15s;
+}
+
+.wst-modal-close:hover {
+  background: #fff1f2;
+  color: #db2777;
+  border-color: #ffe4e6;
+}
+
+/* เส้นทางเชื่อมต่อ (Route Card) */
+.wst-modal-route {
+  display: flex;
+  align-items: center;
+  margin: 0 20px 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.wst-route-node {
+  flex: 1;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.wst-route-node-label {
+  font-size: 0.65rem;
+  color: #94a3b8;
+  margin-bottom: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+}
+
+.wst-route-node-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wst-route-node-id {
+  font-size: 0.72rem;
+  color: #64748b;
+  margin-top: 1px;
+}
+
+.wst-route-arrow {
+  padding: 0 8px;
+  color: #1d4ed8; /* น้ำเงินเข้มพรีเมียม */
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.wst-route-divider {
+  width: 1px;
+  height: 44px;
+  background: #e2e8f0;
+  align-self: center;
+  flex-shrink: 0;
+}
+
+/* ฟิลด์กรอกข้อมูลตัวเลือก */
+.wst-modal-body {
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.wst-field-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #475569;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.wst-field-label i {
+  font-size: 14px;
+  color: #64748b;
+}
+
+.wst-field-label .req {
+  color: #db2777;
+}
+
+.wst-field-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  font-size: 0.85rem;
+  font-family: inherit;
+  color: #0f172a;
+  outline: none;
+  transition: all 0.15s ease-in-out;
+}
+
+.wst-field-input:focus {
+  border-color: #1d4ed8; /* สีน้ำเงินเข้มพรีเมียม */
+  box-shadow: none;      /* เอาเงาสามพิกเซลที่ทำให้เกิดขอบสองสีซ้อนกันออก */
+  outline: none;
+}
+
+.wst-field-input::placeholder {
+  color: #cbd5e1;
+}
+
+.wst-field-hint {
+  font-size: 0.72rem;
+  color: #64748b;
+  margin-top: 6px;
+  margin-bottom: 16px;
+}
+
+.wst-modal-footer {
+  padding: 16px 20px;
+  display: flex;
+  gap: 10px;
+  border-top: 1px solid #f1f5f9;
+  background: #f8fafc;
+}
+
+.wst-modal-btn-cancel {
+  flex: 1;
+  padding: 9px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #475569;
+  transition: all 0.12s;
+}
+
+.wst-modal-btn-cancel:hover {
+  background: #f1f5f9;
+}
+
+.wst-modal-btn-confirm {
+  flex: 1;
+  padding: 9px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: #1d4ed8; /* น้ำเงินเข้มพรีเมียม ไม่แสบตา */
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.12s;
+}
+
+.wst-modal-btn-confirm:hover {
+  background: #1e3a8a; /* สีกรมท่าสุภาพ */
+}
+
+.wst-modal-btn-confirm:disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+}
+
+/* Toast ลอยแจ้งความสำเร็จ / ข้อความแจ้งเตือน */
+.wst-toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: 99px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 100000;
+  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.3);
+  animation: slideUpToast 0.25s ease-out;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  letter-spacing: 0.2px;
+}
+
+@keyframes slideUpToast {
+  from { bottom: 10px; opacity: 0; transform: translate(-50%, 10px); }
+  to { bottom: 30px; opacity: 1; transform: translate(-50%, 0); }
+}
+
+.wst-toast.info {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  color: #ffffff;
+  border: 1.5px solid #475569;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.45);
+}
+
+.wst-toast.success {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  color: #ffffff;
+  box-shadow: 0 10px 30px rgba(5, 150, 105, 0.35);
+}
+
+.wst-toast.warn {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  color: #ffffff;
+  box-shadow: 0 10px 30px rgba(217, 119, 6, 0.35);
+}
+
+.wst-toast.error {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: #ffffff;
+  box-shadow: 0 10px 30px rgba(220, 38, 38, 0.35);
+}
+
+.wst-toast i {
+  font-size: 18px;
+}
+
+/* ─────────────────────────────────────────────
+   React Flow Edges & Labels custom style
+   ───────────────────────────────────────────── */
+.react-flow__edge,
+.react-flow__edge-path,
+.react-flow__edge-interaction {
+  pointer-events: all !important;
+  cursor: pointer !important;
+}
+
+.react-flow__edge-path {
+  stroke-linejoin: round;
+  transition: stroke-width 0.12s ease, stroke 0.12s ease;
+}
+
+.react-flow__edge-path:hover {
+  stroke: #ef4444 !important; /* ปรับไฮไลท์ให้เด่นขึ้นเวลาชี้ลบ */
+  stroke-width: 4px !important;
+}
+
+.react-flow__edge-text {
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  fill: #334155 !important;
+  font-family: "Outfit", "Sarabun", sans-serif !important;
+  pointer-events: none !important; /* ยอมให้เมาส์คลิกทะลุข้อความตัวอักษร */
+}
+
+.react-flow__edge-textbg {
+  fill: #ffffff !important;
+  rx: 6px;
+  ry: 6px;
+  stroke: #e2e8f0 !important;
+  stroke-width: 1px !important;
+  pointer-events: none !important; /* ยอมให้เมาส์คลิกทะลุพื้นหลังข้อความ */
+}
+/* ==========================================
+   DAG Guard: ฟีดแบ็กภาพเวลาเชื่อม/ย้ายเส้นแล้วปลายทางไม่ถูกต้อง (Backward/Cycle)
+   React Flow จะเติมคลาส .valid ให้ handle ที่เชื่อมได้ระหว่างลาก (ผ่าน isValidConnection)
+   ส่วน handle ที่ลากได้ต้นทางจะมีคลาส .connectable/.source อยู่แล้วตามปกติของไลบรารี
+   ========================================== */
+.react-flow__handle.valid {
+  background: #16a34a !important;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.25);
+}
+
+.react-flow__handle.connectingfrom {
+  background: #2563eb !important;
+}
+
+/* handle ปลายทางที่ลากไปปล่อยไม่ได้ (isValidConnection คืน false) จะได้คลาส .invalid จาก React Flow เอง */
+.react-flow__handle.invalid {
+  background: #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25);
+}
+
+/* เส้น preview ระหว่างลากเชื่อม (ยังไม่ปล่อยเมาส์) */
+.react-flow__connection-path {
+  stroke: #2563eb;
+  stroke-width: 2px;
+  stroke-dasharray: 5, 5;
+}
+/* ─────────────────────────────────────────────────────────────
+   Toggle Switch for Structure / Analytics
+   ───────────────────────────────────────────────────────────── */
+.wsg-toggle-wrap {
+  display: flex;
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+}
+
+.wsg-toggle-btn {
+  background: transparent;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 16px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.wsg-toggle-btn.active {
+  background: #ffffff;
+  color: #db2777;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}

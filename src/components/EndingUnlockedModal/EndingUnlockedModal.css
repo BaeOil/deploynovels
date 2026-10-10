@@ -1,0 +1,356 @@
+/* Modal Overlay */
+.eum-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background-color: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: eumFadeIn 0.25s ease-out forwards;
+}
+
+@keyframes eumFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Modal Card */
+.eum-card {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  background: var(--reader-surface, #ffffff);
+  border-radius: 28px;
+  padding: 28px 24px 22px 24px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.22);
+  animation: eumScaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  max-height: 90vh;
+  overflow-y: auto;
+  font-family: 'Prompt', 'Outfit', 'Sarabun', sans-serif;
+  color: var(--reader-text, #1e293b);
+  box-sizing: border-box;
+}
+
+@keyframes eumScaleUp {
+  from { transform: scale(0.9) translateY(20px); opacity: 0; }
+  to { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+/* Close Button ✕ */
+.eum-close-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--reader-surface-soft, #f1f5f9);
+  border: none;
+  color: var(--reader-muted, #94a3b8);
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.eum-close-btn:hover {
+  background: var(--reader-border, #e2e8f0);
+  color: var(--reader-text, #475569);
+}
+
+/* Eyebrow Badge */
+.eum-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px auto;
+  padding: 4px 14px;
+  border-radius: 20px;
+  background: #fef3c7;
+  color: #b45309;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  border: 1px solid #fde68a;
+  display: table;
+}
+
+/* Main Hero Section */
+.eum-hero {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.eum-hero-emoji {
+  font-size: 42px;
+  line-height: 1;
+  margin-bottom: 8px;
+  animation: eumBounce 1s ease infinite alternate;
+}
+
+@keyframes eumBounce {
+  from { transform: translateY(0); }
+  to { transform: translateY(-4px); }
+}
+
+.eum-hero-type {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.eum-hero-title {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--reader-text, #0f172a);
+  margin: 0 0 6px 0;
+  line-height: 1.3;
+}
+
+.eum-hero-desc {
+  font-size: 0.85rem;
+  color: var(--reader-muted, #64748b);
+  margin: 0;
+  line-height: 1.45;
+  padding: 0 10px;
+}
+
+.eum-divider {
+  height: 1px;
+  background-color: var(--reader-border, #f1f5f9);
+  margin: 16px 0;
+}
+
+/* Collection Section */
+.eum-collection-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--reader-muted, #64748b);
+  text-align: center;
+  margin: 0 0 12px 0;
+}
+
+/* Grid Layout 2x2 */
+.eum-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 1fr;
+  align-items: stretch;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.eum-slot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1.5px solid var(--reader-border, #e2e8f0);
+  background-color: var(--reader-surface-soft, #f8fafc);
+  transition: all 0.2s ease;
+  height: 100%;
+  min-height: 56px;
+  box-sizing: border-box;
+}
+
+.eum-slot-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+  flex: 1;
+  min-width: 0;
+}
+
+.eum-slot-emoji {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.eum-slot-emoji--locked {
+  opacity: 0.4;
+  font-size: 15px;
+}
+
+.eum-slot-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.eum-slot-type {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+.eum-slot-type--locked {
+  color: #94a3b8;
+}
+
+.eum-slot-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--reader-text, #1e293b);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+  line-height: 1.3;
+  margin-top: 2px;
+}
+
+.eum-slot-title--locked {
+  color: var(--reader-muted, #cbd5e1);
+  font-weight: 600;
+}
+
+/* Badge ใหม่ */
+.eum-badge-new {
+  background: #db2777;
+  color: #ffffff;
+  font-size: 0.6rem;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  letter-spacing: 0.2px;
+  box-shadow: 0 2px 6px rgba(219, 39, 119, 0.3);
+}
+
+/* Progress Group */
+.eum-progress-group {
+  margin-bottom: 20px;
+}
+
+.eum-progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--reader-muted, #64748b);
+  margin-bottom: 6px;
+}
+
+.eum-progress-val {
+  color: var(--reader-text, #0f172a);
+}
+
+.eum-progress-track {
+  width: 100%;
+  height: 6px;
+  background-color: var(--reader-border, #f1f5f9);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.eum-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ec4899 0%, #db2777 100%);
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+
+/* Actions */
+.eum-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.eum-btn {
+  width: 100%;
+  padding: 12px 18px;
+  border-radius: 14px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+  box-sizing: border-box;
+}
+
+.eum-btn--primary {
+  background: linear-gradient(135deg, #e92691 0%, #E91E8C 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(233, 30, 140, 0.35);
+}
+
+.eum-btn--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(233, 30, 140, 0.45);
+}
+
+.eum-btn--secondary {
+  background: var(--reader-surface-soft, #f1f5f9);
+  color: var(--reader-text, #334155);
+  border: 1px solid var(--reader-border, #e2e8f0);
+}
+
+.eum-btn--secondary:hover {
+  background: var(--reader-border, #e2e8f0);
+  color: var(--reader-text, #0f172a);
+}
+
+.eum-btn-text {
+  background: transparent;
+  border: none;
+  color: var(--reader-muted, #64748b);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 4px;
+  padding: 4px 8px;
+  transition: color 0.15s;
+}
+
+.eum-btn-text:hover {
+  color: var(--reader-text, #0f172a);
+}
+
+/* Confetti Particles Animation */
+.eum-confetti-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100000;
+  overflow: hidden;
+}
+
+.eum-confetti-particle {
+  position: absolute;
+  top: -20px;
+  border-radius: 3px;
+  opacity: 1;
+  animation: eumConfettiFall 1.8s ease-out forwards;
+}
+
+@keyframes eumConfettiFall {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg) scale(0.3);
+    opacity: 0;
+  }
+}

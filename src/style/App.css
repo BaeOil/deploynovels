@@ -1,0 +1,156 @@
+/* src/App.css */
+/* Global design tokens — ตาม SKILL.md ของโปรเจค StoryVerse */
+
+/* ── Google Fonts ── */
+/* Open Sans + Sarabun loaded via public/index.html */
+
+/* ── CSS Variables (Design System) ── */
+:root {
+  /* Primary */
+  --pink-50:   #FFF0F5;
+  --pink-100:  #FFD6E7;
+  --pink-300:  #FF85B3;
+  --pink-500:  #E91E8C;
+  --pink-700:  #B5166E;
+
+  /* Neutral */
+  --white:     #FFFFFF;
+  --gray-50:   #F9F9FB;
+  --gray-100:  #F0EEF4;
+  --gray-300:  #C8C3D4;
+  --gray-600:  #6B6578;
+  --black:     #1A1624;
+
+  /* Accent */
+  --lavender:  #9B8EC4;
+  --blush:     #F7C5D5;
+  --ink:       #2D1B3D;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(45, 27, 61, 0.08);
+  --shadow-md: 0 8px 24px rgba(45, 27, 61, 0.12);
+  --shadow-lg: 0 16px 48px rgba(45, 27, 61, 0.14);
+
+  /* Border radius */
+  --r-sm:  8px;
+  --r-md:  12px;
+  --r-lg:  16px;
+  --r-xl:  24px;
+}
+
+/* ── Reset ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Base ── */
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Sarabun', sans-serif;
+  background-color: var(--gray-50);
+  color: var(--ink);
+  line-height: 1.6;
+  margin: 0;
+  overflow-x: hidden;
+
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Open Sans', serif;
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+button {
+  font-family: 'Sarabun', sans-serif;
+  cursor: pointer;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ── App wrapper ── */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Focus visible (accessibility) ── */
+:focus-visible {
+  outline: 2px solid var(--pink-500);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--gray-50);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gray-300);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--pink-300);
+}
+
+/* ======================================================
+   Reader Layout
+====================================================== */
+
+.reader-layout {
+  min-height: 100vh;
+}
+
+/* ======================================================
+   Auth Layout (เต็มจอ ไม่มี Navbar)
+====================================================== */
+
+.auth-page-wrapper {
+  min-height: 100vh;
+  width: 100%;
+
+}
+
+/* ======================================================
+   Writer Layout
+====================================================== */
+
+.writer-layout {
+  min-height: calc(100vh - 83px);
+  display: flex;
+  flex-direction: column;
+}
+
+.writer-layout__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}

@@ -1,0 +1,281 @@
+/* Theme / layout align with site (pink - white) */
+:root {
+  --fw-bg-0: #fffbfd;
+  --fw-header-bg: rgba(255, 255, 255, 0.96);
+  --fw-accent: #f526a2;
+  --fw-accent-dark: #c81e86;
+  --fw-muted: #8a7683;
+  --fw-neutral-border: #f6dcec;
+  --fw-neutral-border-soft: #fdeaf5;
+  --fw-text-soft: #8a7683;
+  --fw-text-strong: #2b1c27;
+}
+
+.following-page {
+  min-height: 100vh;
+  background: var(--fw-bg-0);
+  font-family: "Sarabun", sans-serif;
+  color: var(--fw-text-strong);
+  padding-bottom: 48px;
+}
+
+.following-page__sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  margin: 0;
+  background: var(--fw-header-bg);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--fw-neutral-border);
+}
+
+.following-page__top {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 18px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 14px;
+}
+
+.following-page__heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.following-page__labels {
+  min-width: 0;
+}
+
+.following-page__eyebrow {
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fw-accent);
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.following-page__title {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--fw-text-strong);
+}
+
+.following-page__count {
+  font-size: 13px;
+  color: var(--fw-muted);
+  white-space: nowrap;
+}
+
+.following-page__container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 18px 20px 64px;
+}
+
+.backBtn {
+  background: #fff;
+  border: 1px solid var(--fw-neutral-border);
+  border-radius: 10px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--fw-text-strong);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.backBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(245, 38, 162, 0.12);
+}
+
+/* Filters row */
+.filterRow {
+  display: flex;
+  gap: 12px;
+  margin: 18px 0;
+  align-items: center;
+}
+
+/* Search */
+.searchBar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--fw-neutral-border-soft);
+  box-shadow: 0 6px 18px rgba(45,27,61,0.03);
+}
+.searchIcon {
+  color: var(--fw-muted);
+  display: flex;
+  align-items: center;
+}
+.searchInput {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: var(--ink);
+  background: transparent;
+  font-family: inherit;
+}
+
+/* Clear / small controls */
+.clearBtn {
+  background: #fff;
+  border: 1px solid var(--fw-neutral-border);
+  border-radius: 10px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  color: var(--fw-text-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Sort trigger */
+.sortWrapper { position: relative; }
+.sortTrigger {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid var(--fw-neutral-border);
+  color: var(--fw-text-soft);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sortTrigger:hover { box-shadow: var(--shadow-sm); }
+
+/* คลิกพื้นที่ว่างนอกเมนูเพื่อปิด dropdown — เดิมไม่มี CSS เลยทำให้ div นี้ไม่ทำงานตามที่ตั้งใจ */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 39;
+  background: transparent;
+}
+
+/* Dropdown */
+.dropdownMenu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(45,27,61,0.12);
+  border: 1px solid var(--fw-neutral-border-soft);
+  z-index: 40;
+  overflow: hidden;
+  min-width: 180px;
+  padding: 6px 0; /* ensure item backgrounds align to menu edges */
+}
+.dropdownItem {
+  display: flex;               /* full-width clickable row */
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 14px;         /* consistent padding across full width */
+  font-size: 14px;
+  color: var(--fw-text-strong);
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  white-space: nowrap;        /* keep single-line items */
+}
+.dropdownItem:hover {
+  background: #FEF6FA;        /* full-row hover color */
+  color: var(--fw-accent-dark);
+}
+.dropdownItemActive {
+  background: #FEF0F6;        /* full-row active color */
+  color: var(--fw-accent);
+  font-weight: 700;
+}
+
+/* Empty states */
+.emptyState {
+  text-align: center;
+  padding: 60px 24px;
+  color: var(--fw-muted);
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid var(--fw-neutral-border-soft);
+  box-shadow: 0 12px 26px rgba(245, 38, 162, 0.06);
+}
+.emptyIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--fw-accent);
+  margin-bottom: 12px;
+}
+.emptyTitle { font-weight: 700; font-size: 15px; color: var(--fw-text-strong); margin-bottom: 6px; }
+.emptyText { font-size: 13px; line-height: 1.6; }
+
+/* List grid -> responsive card list (two-column on wide screens with equal card heights) */
+.listGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 16px;
+  margin-top: 6px;
+}
+
+@media (max-width: 880px) {
+  .listGrid { grid-template-columns: 1fr; }
+  .following-page__top,
+  .following-page__container { padding-left: 16px; padding-right: 16px; }
+}
+
+@media (max-width: 560px) {
+  .following-page__top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .following-page__count {
+    margin-top: 6px;
+  }
+}
+
+@media (max-width: 420px) {
+  .following-page__top,
+  .following-page__container {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+
+  .filterRow {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .sortTrigger {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .dropdownMenu {
+    right: 0;
+    left: 0;
+    min-width: 0;
+  }
+}

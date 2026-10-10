@@ -1,0 +1,538 @@
+/* ดีไซน์หน้าแสดงผลลัพธ์การค้นหาเวอร์ชันพรีเมียมแบบคอลัมน์เดี่ยวเต็มจอ */
+:root {
+  --pink-500: #e91e63;
+  --pink-600: #db2777;
+  --pink-50: #fdf2f8;
+  --pink-100: #fbcfe8;
+  --slate-900: #0f172a;
+  --slate-800: #1e293b;
+  --slate-700: #334155;
+  --slate-500: #64748b;
+  --slate-100: #f1f5f9;
+  --white: #ffffff;
+  --bg-cream: #faf9f6;
+  --pastel-pink: #ffeef6;
+  --rose-light: #fff5f8;
+}
+
+.search-page {
+  min-height: 100vh;
+  background-color: #fffafe;
+  font-family: 'Prompt', 'Sarabun', sans-serif;
+  color: var(--slate-900);
+  padding: 40px 24px 80px;
+}
+
+.search-page-container {
+  max-width: 960px; /* ลดความกว้างสูงสุดเพื่อให้เลย์เอาต์ 1 คอลัมน์ดูพอดีสายตา ไม่ยืดเกินไป */
+  margin: 0 auto;
+}
+
+/* ── 1. Search Header ส่วนหัว ── */
+.search-header {
+  margin-bottom: 28px;
+  border-bottom: 1px dashed rgba(219, 39, 119, 0.15);
+  padding-bottom: 16px;
+}
+
+.search-title {
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: var(--slate-900);
+  margin: 0 0 6px 0;
+  letter-spacing: -0.5px;
+}
+
+.search-title .highlight-text {
+  color: var(--pink-600);
+  background: linear-gradient(120deg, rgba(219,39,119,0.08) 0%, rgba(219,39,119,0.02) 100%);
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.search-title .search-category-in {
+  color: var(--slate-500);
+  font-weight: 600;
+  font-size: 1.6rem;
+}
+
+.search-count {
+  font-size: 0.95rem;
+  color: var(--slate-500);
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ── 2. Filters Bar แถบตัวกรอง ── */
+.filter-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* แถบแคปซูลเลือกประเภทค้นหาด้านบน */
+.search-type-tabs {
+  display: flex;
+  gap: 6px;
+  background: rgba(219, 39, 119, 0.04);
+  padding: 4px;
+  border-radius: 999px;
+  border: 1px solid rgba(219, 39, 119, 0.08);
+}
+
+.search-type-tab-btn {
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--slate-700);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.search-type-tab-btn:hover {
+  color: var(--pink-600);
+}
+
+.search-type-tab-btn.active {
+  background: var(--pink-600);
+  color: var(--white);
+  box-shadow: 0 4px 10px rgba(219, 39, 119, 0.2);
+}
+
+.btn-clear-filters,
+.panel-clear-btn {
+  border: 1px solid rgba(219, 39, 119, 0.15);
+  background: #fff7fb;
+  color: var(--pink-600);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-clear-filters:hover,
+.panel-clear-btn:hover {
+  background: var(--pink-600);
+  color: var(--white);
+  border-color: var(--pink-600);
+}
+
+/* ปุ่ม จัดเรียง / ตัวกรอง */
+.filter-toggle-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.btn-toggle-filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--white);
+  border: 1.5px solid rgba(219, 39, 119, 0.15);
+  border-radius: 999px;
+  padding: 8px 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--pink-600);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 8px rgba(219, 39, 119, 0.04);
+}
+
+.btn-toggle-filters:hover, 
+.btn-toggle-filters.panel-open {
+  background: var(--pink-600);
+  color: var(--white);
+  border-color: var(--pink-600);
+  box-shadow: 0 4px 12px rgba(219, 39, 119, 0.2);
+}
+
+/* ── 3. Dropdown Filters Panel แผงตัวกรองและเรียงลำดับ ── */
+.dropdown-filters-panel {
+  background: var(--white);
+  border: 1.5px solid rgba(219, 39, 119, 0.1);
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 30px;
+  box-shadow: 0 10px 30px rgba(219, 39, 119, 0.05);
+  animation: slideDownPanel 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideDownPanel {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.filter-panel-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 28px;
+}
+
+@media (max-width: 768px) {
+  .filter-panel-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+.panel-filter-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.panel-column-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--slate-800);
+  border-bottom: 1.5px solid var(--slate-100);
+  padding-bottom: 6px;
+}
+
+.panel-categories-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.panel-cat-btn {
+  background: var(--slate-100);
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--slate-700);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+}
+
+.panel-cat-btn:hover {
+  background: #e2e8f0;
+}
+
+.panel-cat-btn.active {
+  background: var(--pastel-pink);
+  color: var(--pink-600);
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1px rgba(219, 39, 119, 0.25);
+}
+
+/* คอลัมน์จัดเรียง */
+.panel-sort-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.panel-sort-btn {
+  text-align: left;
+  background: var(--white);
+  border: 1px solid var(--slate-100);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--slate-700);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.panel-sort-btn:hover {
+  background: var(--slate-100);
+}
+
+.panel-sort-btn.active {
+  background: var(--pink-600);
+  color: var(--white);
+  border-color: var(--pink-600);
+  font-weight: 700;
+}
+
+/* ── 4. Layout 1 คอลัมน์เดี่ยวแบบขยายเต็มพื้นที่ ── */
+.search-body-layout-full {
+  width: 100%;
+}
+
+.search-results-area-full {
+  width: 100%;
+}
+
+.search-loading {
+  text-align: center;
+  padding: 60px 0;
+  font-size: 1.1rem;
+  color: var(--slate-500);
+  font-weight: 600;
+}
+
+.search-error {
+  text-align: center;
+  padding: 40px;
+  color: #ef4444;
+  background: #fef2f2;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.search-empty-state {
+  text-align: center;
+  padding: 80px 24px;
+  background: var(--white);
+  border-radius: 24px;
+  border: 1.5px solid rgba(219, 39, 119, 0.08);
+  box-shadow: 0 4px 20px rgba(219, 39, 119, 0.02);
+}
+
+.search-empty-state .empty-icon {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  background: #ffffff;
+  border: 1px solid #fbcfe8;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(233, 30, 140, 0.08);
+  margin: 0 auto 16px auto; /* จัดวางบล็อกวงกลมให้อยู่กึ่งกลางหน้าจออย่างสมบูรณ์ */
+}
+
+.search-empty-state h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: var(--slate-800);
+}
+
+.search-empty-state p {
+  color: var(--slate-500);
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* ── 5. รายการการ์ดนิยายแบบยาว (Horizontal Cards) ── */
+.novel-list-vertical-full {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.novel-horiz-card-full {
+  display: flex;
+  background: var(--white);
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1.5px solid rgba(219, 39, 119, 0.05);
+  box-shadow: 0 4px 15px rgba(219, 39, 119, 0.015);
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.novel-horiz-card-full:hover {
+  transform: translateY(-3px);
+  border-color: rgba(219, 39, 119, 0.15);
+  box-shadow: 0 10px 25px rgba(219, 39, 119, 0.05);
+}
+
+/* หน้าปกนิยาย */
+.novel-horiz-cover-full {
+  width: 140px;
+  min-width: 140px;
+  height: 196px;
+  background: var(--slate-100);
+  position: relative;
+  overflow: hidden;
+}
+
+.novel-horiz-cover-full img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.novel-horiz-card-full:hover .novel-horiz-cover-full img {
+  transform: scale(1.05);
+}
+
+.novel-cover-placeholder-full {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  background: linear-gradient(135deg, #fbcfe8 0%, #f472b6 100%);
+}
+
+/* รายละเอียดนิยาย */
+.novel-horiz-details-full {
+  flex: 1;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0; /* ป้องกันเนื้อหาดันกรอบทะลุ */
+}
+
+.novel-horiz-header-full {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 6px;
+}
+
+.novel-horiz-title-full {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--slate-900);
+  margin: 0;
+  transition: color 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.novel-horiz-card-full:hover .novel-horiz-title-full {
+  color: var(--pink-600);
+}
+
+@media (max-width: 560px) {
+  .search-page {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .novel-horiz-card-full {
+    flex-direction: column;
+  }
+
+  .novel-horiz-cover-full {
+    width: 100%;
+    min-width: 0;
+    height: min(58vw, 220px);
+  }
+
+  .novel-horiz-details-full {
+    padding: 16px;
+  }
+
+  .novel-horiz-header-full {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .novel-horiz-title-full {
+    white-space: normal;
+  }
+
+  .novel-meta-info-full {
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+}
+
+.novel-horiz-author-full {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--slate-500);
+  white-space: nowrap;
+  background: var(--slate-100);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.novel-horiz-synopsis-full {
+  font-size: 0.85rem;
+  color: var(--slate-500);
+  line-height: 1.5;
+  margin: 0 0 16px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* แสดงแค่ 2 บรรทัด */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ส่วนท้ายของการ์ด */
+.novel-horiz-footer-full {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  border-top: 1px dashed var(--slate-100);
+  padding-top: 14px;
+}
+
+/* Tags */
+.novel-tags-full {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.novel-tag-item-full {
+  background: var(--rose-light);
+  color: var(--pink-600);
+  border: 1px solid rgba(219, 39, 119, 0.08);
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* สถิติเข้าชม */
+.novel-meta-info-full {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.novel-horiz-stat-item-full {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  color: var(--slate-500);
+  font-weight: 600;
+}
+
+/* badges */
+.status-badge-full {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+
+.status-badge-full.finished {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status-badge-full.writing {
+  background: #fef3c7;
+  color: #92400e;
+}
