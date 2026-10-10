@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { UserCheck, FileClock, Ban, Search, Filter, Edit, Trash2, Eye, Award, Loader2, AlertTriangle, ExternalLink, ChevronLeft, ChevronRight, RotateCcw, Calendar, ArrowDown, ArrowUp } from 'lucide-react';
 import axios from 'axios';
 import './Manageusers.css';
+import { resolveMediaUrl } from '../../../utils/mediaUrl';
 
 const Manageusers = () => {
   const [users, setUsers] = useState([]);
@@ -433,7 +434,7 @@ const Manageusers = () => {
                             <td className="row-username-col">
                               {user.pic_profile ? (
                                 <img
-                                  src={user.pic_profile}
+                                  src={resolveMediaUrl(user.pic_profile)}
                                   alt={user.username}
                                   className="user-avatar-img"
                                   onError={(e) => { e.target.style.display = "none"; e.target.nextSibling.style.display = "flex"; }}
@@ -577,7 +578,7 @@ const Manageusers = () => {
                 <div className="modal-profile-header">
                   {viewUserModal.user.pic_profile ? (
                     <img
-                      src={viewUserModal.user.pic_profile}
+                      src={resolveMediaUrl(viewUserModal.user.pic_profile)}
                       alt={viewUserModal.user.username}
                       className="profile-large-avatar-img"
                       onError={(e) => { e.target.style.display = "none"; e.target.nextSibling.style.display = "flex"; }}

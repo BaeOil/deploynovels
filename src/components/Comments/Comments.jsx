@@ -1,5 +1,6 @@
 import React from "react";
 import "./Comments.css";
+import { resolveMediaUrl } from "../../utils/mediaUrl";
 
 // สีพาสเทลสำหรับ avatar คอมเมนต์ — เลือกตามชื่อผู้ใช้แบบ deterministic
 // (คนเดิมจะได้สีเดิมเสมอ ไม่ต้องเก็บ state เพิ่ม)
@@ -126,7 +127,7 @@ const Comments = ({
             <article key={c.id || c.comment_id} className="novel-detail__comment-card">
               {avatarUrl ? (
                 <div className="novel-detail__comment-avatar">
-                  <img src={avatarUrl} alt={displayName} className="novel-detail__comment-avatar-img" />
+                  <img src={resolveMediaUrl(avatarUrl)} alt={displayName} className="novel-detail__comment-avatar-img" />
                 </div>
               ) : (
                 <div className="novel-detail__comment-avatar" style={{ background: getAvatarColor(displayName) }}>

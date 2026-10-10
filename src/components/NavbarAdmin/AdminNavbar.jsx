@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import ReactDOM from "react-dom";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./AdminNavbar.css";
+import { resolveMediaUrl } from "../../utils/mediaUrl";
 import {
     LayoutDashboard,
     Users,
@@ -203,8 +204,7 @@ const AdminNavbar = () => {
                                 aria-label="เมนูผู้ใช้งาน"
                             >
                                 <img
-                                    src={
-                                        userData.pic_profile ||
+                                    src={resolveMediaUrl(userData.pic_profile) ||
                                         "https://api.dicebear.com/7.x/bottts/svg?seed=storyverse-admin"
                                     }
                                     alt="avatar"
@@ -393,7 +393,7 @@ const AdminNavbar = () => {
                     <div className="admin-drawer__footer-user">
                         <div className="admin-drawer__footer-avatar">
                             {userData.pic_profile ? (
-                                <img src={userData.pic_profile} alt="" className="admin-drawer__avatar-img" />
+                                <img src={resolveMediaUrl(userData.pic_profile)} alt="" className="admin-drawer__avatar-img" />
                             ) : (
                                 <Shield size={20} color="#64748b" />
                             )}

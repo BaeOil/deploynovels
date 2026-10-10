@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { resolveMediaUrl } from '../../../utils/mediaUrl';
 import {
   Search,
   X,
@@ -90,7 +91,7 @@ const UserAvatar = ({ src, name, className }) => {
   if (src && !broken) {
     return (
       <img
-        src={src}
+        src={resolveMediaUrl(src)}
         alt={displayName(name)}
         className={className}
         onError={() => setBroken(true)}

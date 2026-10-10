@@ -1,6 +1,7 @@
 // src/components/Notification/NotificationItem.jsx
 
 import "./NotificationItem.css";
+import { resolveMediaUrl } from "../../utils/mediaUrl";
 
 const formatRelativeTime = (iso) => {
   const diff = (Date.now() - new Date(iso)) / 1000;
@@ -87,7 +88,7 @@ export default function NotificationItem({
           >
             {notification.actor?.avatar ? (
               <img
-                src={notification.actor.avatar}
+                src={resolveMediaUrl(notification.actor.avatar)}
                 alt={actorName}
                 className="notification-avatar-img"
               />
@@ -120,7 +121,7 @@ export default function NotificationItem({
             <div className="notification-preview">
               {notification.novelCover && (
                 <img
-                  src={notification.novelCover}
+                  src={resolveMediaUrl(notification.novelCover)}
                   alt=""
                   className="notification-cover"
                 />

@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
+import { resolveMediaUrl } from "../../../utils/mediaUrl";
 import {
     Search,
     X,
@@ -980,7 +981,7 @@ export default function AdminReportsDashboard() {
                                                              <td>
                                                                  <div className="admin-story-cell">
                                                                      <img
-                                                                         src={cover}
+                                                                         src={resolveMediaUrl(cover)}
                                                                          alt={title}
                                                                          className="admin-story-thumb"
                                                                          onError={(e) => {
@@ -1098,7 +1099,7 @@ export default function AdminReportsDashboard() {
                                                 <div key={novelId} className="admin-story-card-mobile">
                                                     <div className="admin-story-card-mobile__header">
                                                         <img
-                                                            src={cover}
+                                                            src={resolveMediaUrl(cover)}
                                                             alt={title}
                                                             className="admin-story-card-mobile__thumb"
                                                             onError={(e) => {
@@ -1453,7 +1454,7 @@ export default function AdminReportsDashboard() {
                                                             <td>
                                                                 <div className="admin-story-cell">
                                                                     <img
-                                                                        src={report.novel_cover || "/default-cover.png"}
+                                                                        src={resolveMediaUrl(report.novel_cover) || "/default-cover.png"}
                                                                         alt={report.novel_title}
                                                                         className="admin-story-thumb admin-story-thumb--sm"
                                                                         onError={(e) => {
@@ -1836,7 +1837,7 @@ export default function AdminReportsDashboard() {
                             <div className="admin-review-grid">
                                 <div className="admin-review-cover-wrap">
                                     <img
-                                        src={selectedReport.novel_cover || "/default-cover.png"}
+                                        src={resolveMediaUrl(selectedReport.novel_cover) || "/default-cover.png"}
                                         alt={selectedReport.novel_title}
                                         className="admin-review-cover"
                                         onError={(e) => {

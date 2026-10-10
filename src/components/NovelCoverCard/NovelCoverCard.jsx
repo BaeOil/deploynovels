@@ -2,6 +2,7 @@
 import React from "react";
 import "./NovelCoverCard.css";
 import StatBadge from "../StatBadge/StatBadge";
+import { resolveMediaUrl } from "../../utils/mediaUrl";
 
 /**
  * NovelCoverCard — แสดงภาพปกนิยายและสถิติ 4 ตัว
@@ -23,7 +24,7 @@ const NovelCoverCard = ({ novel }) => {
         )}
         {coverImage ? (
           <img
-            src={coverImage}
+            src={resolveMediaUrl(coverImage)}
             alt={`ภาพปกนิยาย ${title}`}
             className="novel-cover-card__img"
           />

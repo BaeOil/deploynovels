@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { resolveMediaUrl } from "../../utils/mediaUrl";
 import Cropper from "react-easy-crop";
 import getCroppedImg from "../../utils/cropImage.js";
 import "./Coverupload.css";
@@ -97,7 +98,7 @@ const CoverUpload = ({ value, onChange }) => {
 
         {preview ? (
           <div className="cup__preview">
-            <img src={preview} alt="ภาพปก" className="cup__img" />
+            <img src={resolveMediaUrl(preview)} alt="ภาพปก" className="cup__img" />
             <div className="cup__overlay">
               <button
                 type="button"

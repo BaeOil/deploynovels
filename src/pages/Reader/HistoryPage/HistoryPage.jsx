@@ -4,6 +4,7 @@ import axios from "axios";
 import { ArrowLeft, ChevronDown, ChevronUp, Trash2, X, Map, Play, History } from "lucide-react";
 import LoadingScreen from "../../../components/LoadingScreen/LoadingScreen";
 import "./HistoryPage.css";
+import { resolveMediaUrl } from "../../../utils/mediaUrl";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 
@@ -184,7 +185,7 @@ const HistoryCard = ({ book, onContinue, onViewMap, onRequestDelete, onCardClick
 
       <div className="history-card__cover">
         {book.coverImage ? (
-          <img src={book.coverImage} alt={book.title} />
+          <img src={resolveMediaUrl(book.coverImage)} alt={book.title} />
         ) : (
           <div className="history-card__cover-placeholder">
             {String(book.title || "-").slice(0, 1).toUpperCase()}

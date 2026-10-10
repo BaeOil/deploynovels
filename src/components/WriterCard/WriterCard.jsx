@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Users, BookOpen, Bell, ChevronDown, ChevronRight, BookImage } from "lucide-react";
 import FollowButton from "../FollowButton/FollowButton";
 import "./WriterCard.css";
+import { resolveMediaUrl } from "../../utils/mediaUrl";
 
 const STATUS_CFG = {
   ongoing:  { label: "กำลังเขียน", color: "#059669", bg: "#ECFDF5" },
@@ -34,7 +35,7 @@ function Avatar({ writer, size = 52 }) {
     >
       {avatarSrc ? (
         <img
-          src={avatarSrc}
+          src={resolveMediaUrl(avatarSrc)}
           alt={writer.name}
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
           onError={(e) => {
@@ -154,7 +155,7 @@ export default function WriterCard({ writer, onUnfollow, isFollowing = false }) 
                   >
                     {n.cover ? (
                       <img
-                        src={n.cover}
+                        src={resolveMediaUrl(n.cover)}
                         alt={n.title}
                         className="novelCover"
                       />

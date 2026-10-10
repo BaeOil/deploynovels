@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import Cropper from "react-easy-crop";
 import getCroppedImg from "../../utils/cropImage.js";
 import "./Writerregisterpage.css";
+import { resolveMediaUrl } from "../../utils/mediaUrl";
 import { useNavigate } from "react-router-dom";
 import ReactQuill from "react-quill-new";
 import "quill/dist/quill.snow.css";
@@ -228,7 +229,7 @@ const AvatarUpload = ({ preview, onChange }) => {
             >
                 {preview ? (
                     <div className="wr-avatar__img-wrapper">
-                        <img src={preview} alt="รูปโปรไฟล์" className="wr-avatar__img" />
+                        <img src={resolveMediaUrl(preview)} alt="รูปโปรไฟล์" className="wr-avatar__img" />
                     </div>
                 ) : (
                     <div className="wr-avatar__placeholder">
@@ -414,7 +415,7 @@ const SummaryCard = ({ data, genreOptions }) => {
         <div className="wr-summary">
             <div className="wr-summary__avatar">
                 {data.avatarPreview ? (
-                    <img src={data.avatarPreview} alt="รูปโปรไฟล์" className="wr-summary__avatar-img" />
+                    <img src={resolveMediaUrl(data.avatarPreview)} alt="รูปโปรไฟล์" className="wr-summary__avatar-img" />
                 ) : (
                     <div className="wr-summary__avatar-placeholder">
                         <span>{initialLetter}</span>

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./NovelCard.css";
 import { getNovelStatusInfo } from "../../utils/novelStatus";
+import { resolveMediaUrl } from "../../utils/mediaUrl";
 
 /**
  * NovelCard — การ์ดนิยายมาตรฐาน
@@ -87,7 +88,7 @@ const NovelCard = ({ novel, onClick, showLike = true }) => {
         {novel.coverImage
           ? (
             <img
-              src={novel.coverImage}
+              src={resolveMediaUrl(novel.coverImage)}
               alt={novel.title}
               className="novel-card__cover-img"
               loading="lazy"
