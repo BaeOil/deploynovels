@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"strings"
 	"time"
 
 	"github.com/minio/minio-go/v7"
@@ -20,14 +21,17 @@ type MediaRepository interface {
 type MinIOMediaRepository struct {
 	client         *minio.Client
 	endpoint       string
-	publicEndpoint string // URL ที่ frontend สามารถเข้าถึงได้
+	publicEndpoint string // URL เต็มที่ browser เรียกได้จริง (เช่น https://<ref>.storage.supabase.co/storage/v1/object/public/image/...)
 }
 
-func NewMinIOMediaRepository(client *minio.Client, endpoint string) MediaRepository {
+// NewMinIOMediaRepository สร้าง repository สำหรับ MinIO/S3-compatible storage
+// endpoint: internal endpoint สำหรับ client (เช่น https://<ref>.storage.supabase.co/storage/v1/s3)
+// publicEndpoint: public base URL ที่ browser เรียกได้ (เช่น https://<ref>.storage.supabase.co/storage/v1/object/public)
+func NewMinIOMediaRepository(client *minio.Client, endpoint, publicEndpoint string) MediaRepository {
 	return &MinIOMediaRepository{
 		client:         client,
 		endpoint:       endpoint,
-		publicEndpoint: "localhost:9000", // ค่าเริ่มต้นให้ frontend สามารถเข้าถึง
+		publicEndpoint: strings.TrimSuffix(publicEndpoint, "/"),
 	}
 }
 
@@ -45,7 +49,7 @@ func (m *MinIOMediaRepository) EnsureBucketExists(ctx context.Context, bucketNam
 	return nil
 }
 
-// 🟢 ส่วนนี้จะคืนค่า URL เต็มรูปแบบเพื่อบันทึกลง Database
+// UploadFile อัปโหลดไฟล์และคืน URL เต็มแบบ public สำหรับบันทึกลง Database
 func (m *MinIOMediaRepository) UploadFile(ctx context.Context, bucketName, objectName string, reader io.Reader, objectSize int64, contentType string) (string, error) {
 	_, err := m.client.PutObject(ctx, bucketName, objectName, reader, objectSize, minio.PutObjectOptions{
 		ContentType: contentType,
@@ -54,8 +58,8 @@ func (m *MinIOMediaRepository) UploadFile(ctx context.Context, bucketName, objec
 		return "", fmt.Errorf("failed to upload file: %w", err)
 	}
 
-	// สร้าง URL จาก publicEndpoint ให้ frontend สามารถเข้าถึง (แทนการใช้ internal endpoint)
-	url := fmt.Sprintf("http://%s/%s/%s", m.publicEndpoint, bucketName, objectName)
+	// สร้าง URL เต็มจาก publicEndpoint: https://<ref>.storage.supabase.co/storage/v1/object/public/image/uploads/xxx.jpg
+	url := fmt.Sprintf("%s/%s/%s", m.publicEndpoint, bucketName, objectName)
 	return url, nil
 }
 

@@ -1,2 +1,11 @@
 # Environment variables
 .env
+
+# Go build artifacts
+/main
+/main.exe
+*.exe
+
+# Editor / OS
+.DS_Store
+*.local

@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	NovelImagesBucket = "novel-buckets"
+	NovelImagesBucket = "image"
 
 	// NovelCoverMaxBytes ตาม VAL-08: รูปปกนิยายไม่เกิน 10MB
 	NovelCoverMaxBytes int64 = 10 * 1024 * 1024

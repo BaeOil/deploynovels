@@ -43,11 +43,12 @@ func main() {
 	fmt.Println("✅ DB Connected")
 
 	// -----------------------
-	// 3. Connect MinIO
+	// 3. Connect MinIO / Supabase Storage (S3-compatible)
 	// -----------------------
 	minioClient, err := minio.New(cfg.MinIOEndpoint, &minio.Options{
 		Creds:  credentials.NewStaticV4(cfg.MinIOAccessKey, cfg.MinIOSecretKey, ""),
 		Secure: cfg.MinIOUseSSL,
+		Region: cfg.MinIORegion,
 	})
 	if err != nil {
 		log.Fatalf("❌ MinIO connect fail: %v", err)
@@ -67,7 +68,7 @@ func main() {
 	chapterRepo := repository.NewChapterRepository(dbConn)
 	socialRepo := repository.NewSocialRepository(dbConn)
 	readingRepo := repository.NewReadingRepository(dbConn)
-	mediaRepo := repository.NewMinIOMediaRepository(minioClient, cfg.MinIOEndpoint)
+	mediaRepo := repository.NewMinIOMediaRepository(minioClient, cfg.MinIOEndpoint, cfg.GetMinIOPublicBaseURL())
 	categoryRepo := repository.NewCategoryRepository(dbConn)
 	authRepo := repository.NewAuthRepository(dbConn)
 	writerRepo := repository.NewWriterRepository(dbConn) // 👈 ผูกเชื่อมตารางสมัครนักเขียนเข้าฐานข้อมูลจริง
@@ -82,8 +83,8 @@ func main() {
 		fmt.Println("✅ Audit Log Indexes Ready")
 	}
 
-	// Ensure MinIO bucket exists
-	if err := mediaRepo.EnsureBucketExists(ctx, "novel-buckets"); err != nil {
+	// Ensure MinIO bucket exists (Supabase Storage bucket: image)
+	if err := mediaRepo.EnsureBucketExists(ctx, service.NovelImagesBucket); err != nil {
 		log.Fatalf("❌ failed to ensure MinIO bucket: %v", err)
 	}
 	fmt.Println("✅ MinIO Bucket Ready")
@@ -164,6 +165,14 @@ func main() {
 		auditService,
 		dashboardService,
 	)
+
+	// Health check endpoint สำหรับ Railway / uptime monitor
+	// mux จับคู่ pattern ที่เฉพาะเจาะจงกว่า "/" ก่อน จึงไม่ทับ route เดิม (แม้จะมี register ตัวที่ขึ้นต้นด้วย / อยู่)
+	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte(`{"status":"ok"}`))
+	})
 
 	// -----------------------
 	// 7. Start Server
