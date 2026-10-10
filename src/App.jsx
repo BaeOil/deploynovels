@@ -24,12 +24,12 @@ import FollowingWriters from "./pages/Reader/FollowingWriters/FollowingWriters";
 import NotificationPage from "./pages/Reader/NotificationPage/NotificationPage";
 import ReaderSetting from "./pages/Reader/ReaderSetting/ReaderSetting";
 
-import WriterDashboardPage from "./pages/Writer/WriterDashboardPage/WriterDashboardPage";
+import WriterDashboardPage from "./pages/Writer/Writerdashboardpage/Writerdashboardpage";
 import CreateNovelPage from "./pages/Writer/Createnovelpage/Createnovelpage";
 import ChapterManagerPage from "./pages/Writer/Chaptermanagerpage/Chaptermanagerpage";
-import WriterStoryTreePage from "./pages/Writer/WriterStoryTreePage/WriterStoryTreePage";
+import WriterStoryTreePage from "./pages/Writer/Writerstorytreepage/Writerstorytreepage";
 import SceneEditorPage from "./pages/Writer/Sceneeditorpage/Sceneeditorpage";
-import EditNovelPage from "./pages/Writer/Editnovelpage/Editnovelpage";
+import EditNovelPage from "./pages/Writer/EditNovelPage/EditNovelPage";
 import WriterProfile from "./pages/Writer/WriterProfile/WriterProfile";
 import StatisticsGraph from "./pages/Writer/StatisticsGraph/StatisticsGraph";
 
@@ -41,8 +41,8 @@ import AdminCategoryPage from "./pages/Admin/AdminCategoryPage/AdminCategoryPage
 import Adminauditlog from "./pages/Admin/Adminauditlog/Adminauditlog";
 import AdminDashboardPage from "./pages/Admin/AdminDashboardPage/AdminDashboardPage";
 
-import AuthPage from "./pages/Auth/AuthPage";
-import WriterRegisterPage from "./pages/Auth/WriterRegisterPage";
+import AuthPage from "./pages/Auth/Authpage";
+import WriterRegisterPage from "./pages/Auth/Writerregisterpage";
 
 import "./style/App.css";
 import "./style/index.css";
