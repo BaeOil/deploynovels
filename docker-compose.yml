@@ -1,0 +1,13 @@
+services:
+  app:
+    build: .
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    env_file: .env 
+    networks:
+      - novels_network
+
+networks:
+  novels_network:
+    external: true
+    name: novels_network
