@@ -7,7 +7,7 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import { useParams, useNavigate } from "react-router-dom";
 import ReactQuill from "react-quill-new";
 import "quill/dist/quill.snow.css";
-import "./SceneEditorPage.css";
+import "./Sceneeditorpage.css";
 import Toggle from "../../../components/Toggle/Toggle";
 import EndingSettings from "../../../components/EndingSettings/EndingSettings";
 import LoadingScreen from "../../../components/LoadingScreen/LoadingScreen";

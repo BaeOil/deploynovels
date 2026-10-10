@@ -5,7 +5,7 @@
 // ══════════════════════════════════════════════════════════
 
 import React, { useState, useEffect } from "react";
-import "./AuthPage.css";
+import "./Authpage.css";
 
 // ══════════════════════════════════════════════════════════
 //  Icons (inline SVG components)

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import ReactDOM from "react-dom";
-import "./WriterRegisterPage.css";
+import "./Writerregisterpage.css";
 import { useNavigate } from "react-router-dom";
 import ReactQuill from "react-quill-new";
 import "quill/dist/quill.snow.css";
