@@ -3310,7 +3310,7 @@ let orphanCounter = 0;
                 <span>ลบ</span>
               </button>
               <button 
-                title="จัดเรียงตำแหน่งฉากอัตโนมัติและบันทึกลงฐานข้อมูลทันที" 
+                title="จัดเรียงตำแหน่งฉากอัตโนมัติและบันทึกลงระบบทันที" 
                 className="wst-toolbar-btn"
                 onClick={handleAutoLayout}
                 style={{

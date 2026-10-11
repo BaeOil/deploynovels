@@ -1556,6 +1556,7 @@ const SceneEditorPage = ({
   const [expandedChapters, setExpandedChapters] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true);
+  const [hasLoadedData, setHasLoadedData] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isUnsaved, setIsUnsaved] = useState(false);
   const [pendingAction, setPendingAction] = useState(null);
@@ -1608,7 +1609,7 @@ const SceneEditorPage = ({
   );
 
   const restoreDraft = useCallback(() => {
-    if (!sceneDraftKey) return;
+    if (!sceneDraftKey || !hasLoadedData) return;
     try {
       const rawDraft = localStorage.getItem(sceneDraftKey);
       if (!rawDraft) return;
@@ -1639,7 +1640,7 @@ const SceneEditorPage = ({
     } catch (err) {
       console.warn("Unable to restore scene draft:", err);
     }
-  }, [sceneDraftKey]);
+  }, [sceneDraftKey, hasLoadedData]);
 
   const clearDraft = useCallback(() => {
     if (!sceneDraftKey) return;
@@ -1648,7 +1649,7 @@ const SceneEditorPage = ({
   }, [sceneDraftKey]);
 
   const saveDraftToStorage = useCallback(() => {
-    if (!sceneDraftKey) return;
+    if (!sceneDraftKey || !hasLoadedData) return;
 
     const draftPayload = {
       sceneTitle,
@@ -1669,7 +1670,7 @@ const SceneEditorPage = ({
     } catch (err) {
       console.warn("Unable to save scene draft:", err);
     }
-  }, [sceneDraftKey, sceneTitle, sceneLabel, content, sceneType, endingTitle, endingType, endingDescription, endingDescriptionEnabled, choices]);
+  }, [sceneDraftKey, hasLoadedData, sceneTitle, sceneLabel, content, sceneType, endingTitle, endingType, endingDescription, endingDescriptionEnabled, choices]);
 
   const normalizeMinioUrl = useCallback((url) => {
     if (!url) return url;
@@ -1756,6 +1757,7 @@ const SceneEditorPage = ({
 
   const fetchSceneData = useCallback(async (silent = false) => {
     if (!silent) setIsLoading(true);
+    setHasLoadedData(false);
     setErrorMsg(null);
     try {
       const headers = {};
@@ -1928,6 +1930,7 @@ const SceneEditorPage = ({
           }
         }
       }
+      setHasLoadedData(true);
     } catch (err) {
       console.error("Fetch Scene Data Error:", err);
       setErrorMsg(err.message || "เกิดข้อผิดพลาดในการโหลดข้อมูล");
@@ -1970,7 +1973,7 @@ const SceneEditorPage = ({
 
   // Autosave: debounce and trigger when any editable field changes
   useEffect(() => {
-    if (!sceneDraftKey) return;
+    if (!sceneDraftKey || !hasLoadedData) return;
     const timer = setTimeout(() => {
       try {
         saveDraftToStorage();
@@ -1983,6 +1986,7 @@ const SceneEditorPage = ({
     // include all editable fields so any change triggers autosave
   }, [
     sceneDraftKey,
+    hasLoadedData,
     sceneTitle,
     sceneLabel,
     content,

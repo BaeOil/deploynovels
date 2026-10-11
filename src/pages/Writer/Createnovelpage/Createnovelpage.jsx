@@ -263,7 +263,7 @@ const CreateNovelPage = () => {
                     
                     // 🎯 แก้ไขจุดที่ 2: เจาะจงดึงลิงก์รูปแบบยาวจาก full_url ลงสู่ตัวแปรส่งเข้าฐานข้อมูล
                     coverImageUrl = uploadData.data?.full_url || ""; 
-                    console.log("🖼️ ลิงก์รูปภาพที่จะใช้บันทึกลงฐานข้อมูล:", coverImageUrl);
+                    console.log("🖼️ ลิงก์รูปภาพที่จะใช้บันทึกลงระบบ:", coverImageUrl);
                 } else {
                     console.error("อัปโหลดภาพปกไม่สำเร็จ แต่ระบบจะดำเนินการสร้างนิยายต่อ");
                 }

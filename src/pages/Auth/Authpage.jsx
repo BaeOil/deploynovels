@@ -5,6 +5,8 @@
 // ══════════════════════════════════════════════════════════
 
 import React, { useState, useEffect } from "react";
+import Cropper from "react-easy-crop";
+import getCroppedImg from "../../utils/cropImage.js";
 import "./Authpage.css";
 
 // Backend API base URL — ต้องชี้ไปที่ Railway (ไม่ได้ใช้ relative path เพราะ Vercel ไม่มี backend)
