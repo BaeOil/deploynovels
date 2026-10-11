@@ -729,7 +729,7 @@ const WriterRegisterPage = ({ onComplete, onBack }) => {
 
         } catch (error) {
             console.error("Submission Error:", error);
-            alert(error instanceof Error ? error.message : "เกิดข้อผิดพลาดในการติดต่อฐานข้อมูลหลังบ้าน");
+            alert(error instanceof Error ? error.message : "เกิดข้อผิดพลาดในการติดต่อระบบ กรุณาลองใหม่อีกครั้ง");
         } finally {
             setIsSubmitting(false);
         }
