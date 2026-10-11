@@ -1617,9 +1617,12 @@ const SceneEditorPage = ({
       if (!savedDraft || typeof savedDraft !== "object") return;
 
       // เพิ่มการเช็กเผื่อเวลาที่ข้อมูลหลังบ้านเพิ่งโหลดเสร็จ จะได้ไม่โดนทับ
-      if (savedDraft.sceneTitle !== undefined) setSceneTitle(savedDraft.sceneTitle);
-      if (savedDraft.sceneLabel !== undefined) setSceneLabel(savedDraft.sceneLabel);
-      if (savedDraft.content !== undefined) setContent(savedDraft.content);
+      // หมายเหตุ: เช็กค่าว่างด้วย — draft เก่าที่เคยเซฟตอนฟอร์มว่าง (sceneTitle/content = "")
+      // ต้องไม่ทับค่าจริงจาก backend ทิ้ง
+      const hasNonEmpty = (v) => typeof v === "string" ? v.trim() !== "" : v !== undefined && v !== null;
+      if (hasNonEmpty(savedDraft.sceneTitle)) setSceneTitle(savedDraft.sceneTitle);
+      if (hasNonEmpty(savedDraft.sceneLabel)) setSceneLabel(savedDraft.sceneLabel);
+      if (hasNonEmpty(savedDraft.content)) setContent(savedDraft.content);
       if (savedDraft.sceneType) setSceneType(savedDraft.sceneType);
 
       setEndingTitle(savedDraft.endingTitle || "");
@@ -1820,16 +1823,19 @@ const SceneEditorPage = ({
         setChapterTitle(sceneData.chapterTitle || sceneData.chapter_title || "ไม่ระบุชื่อตอน");
 
         // ─── ✨ 2. ผสานค่าระหว่าง Draft กับ Backend ✨ ───
-        const resolvedSceneTitle = draftData?.sceneTitle !== undefined ? draftData.sceneTitle : (sceneData.sceneTitle || sceneData.scene_title || sceneData.title || "");
+        // หมายเหตุ: draft ต้องมีค่าจริง (ไม่ว่าง) ถึงจะทับ backend ได้ —
+        // กัน draft เก่าที่เคยเซฟตอนฟอร์มว่างล้างค่าจริงทิ้ง
+        const draftHas = (v) => typeof v === "string" ? v.trim() !== "" : v !== undefined && v !== null;
+        const resolvedSceneTitle = draftHas(draftData?.sceneTitle) ? draftData.sceneTitle : (sceneData.sceneTitle || sceneData.scene_title || sceneData.title || "");
         setSceneTitle(resolvedSceneTitle);
 
         setSceneLabel(
-          draftData?.sceneLabel !== undefined
+          draftHas(draftData?.sceneLabel)
             ? draftData.sceneLabel
             : (sceneData.sceneLabel || sceneData.scene_label || sceneData.sceneTitle || sceneData.scene_title || sceneData.title || `ฉาก ${sceneData.scene_id || sceneData.id}`)
         );
 
-        setContent(draftData?.content !== undefined ? draftData.content : (sceneData.content || ""));
+        setContent(draftHas(draftData?.content) ? draftData.content : (sceneData.content || ""));
 
         const resolvedSceneType = draftData?.sceneType !== undefined ? draftData.sceneType : (sceneData.type || sceneData.scene_type || "normal");
         setSceneType(resolvedSceneType);
