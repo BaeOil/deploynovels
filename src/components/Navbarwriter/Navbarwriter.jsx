@@ -161,24 +161,37 @@ const Navbarwriter = () => {
         }, 10000);
 
         // SSE Real-time Notification Stream (ถ้าเซิร์ฟเวอร์รองรับ)
+        // ถ้า SSE ล้มเหลว ให้ backoff แล้วเลิก ไม่ให้ reconnect วนไม่หยุด (error flood)
         let eventSource = null;
-        if (token) {
+        let reconnectTimer = null;
+        let reconnectAttempts = 0;
+        const MAX_SSE_RECONNECT = 3;
+        const connectSSE = () => {
             try {
                 eventSource = new EventSource(
                     `${API_BASE_URL}/notifications/stream?token=${encodeURIComponent(token)}`
                 );
                 eventSource.onmessage = refreshNotifications;
+                eventSource.onerror = () => {
+                    try { eventSource?.close(); } catch (e) {}
+                    if (reconnectAttempts >= MAX_SSE_RECONNECT) return;
+                    reconnectAttempts += 1;
+                    const delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 15000);
+                    reconnectTimer = setTimeout(connectSSE, delay);
+                };
             } catch (e) {
                 console.warn("SSE connection error:", e);
             }
-        }
+        };
+        if (token) connectSSE();
 
         return () => {
+            if (reconnectTimer) clearTimeout(reconnectTimer);
             window.removeEventListener("scroll", handleScroll);
             window.removeEventListener("notifications-updated", refreshNotifications);
             window.removeEventListener("focus", refreshNotifications);
             clearInterval(intervalId);
-            eventSource?.close();
+            try { eventSource?.close(); } catch (e) {}
         };
     }, []);
 

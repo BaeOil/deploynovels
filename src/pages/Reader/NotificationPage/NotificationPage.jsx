@@ -316,11 +316,33 @@ export default function NotificationPage() {
     const token = localStorage.getItem("token");
     if (!token) return undefined;
 
-    const eventSource = new EventSource(
-      `${API_BASE_URL}/notifications/stream?token=${encodeURIComponent(token)}`
-    );
-
-    eventSource.onmessage = async (event) => {
+    let eventSource = null;
+    let reconnectTimer = null;
+    let reconnectAttempts = 0;
+    const MAX_SSE_RECONNECT = 3;
+    const connectSSE = () => {
+      try {
+        eventSource = new EventSource(
+          `${API_BASE_URL}/notifications/stream?token=${encodeURIComponent(token)}`
+        );
+        // เก็บ handler เดิมไว้ใช้ใหม่ตอน reconnect
+        const origOnMessage = connectSSE.handler;
+        if (origOnMessage) eventSource.onmessage = origOnMessage;
+        eventSource.onerror = () => {
+          // ถ้า SSE ล้มเหลว (Railway ไม่รองรับ) ให้ backoff แล้วหยุด ไม่ให้ reconnect วนไม่หยุด
+          try { eventSource?.close(); } catch (e) {}
+          if (reconnectAttempts >= MAX_SSE_RECONNECT) return;
+          reconnectAttempts += 1;
+          const delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 15000);
+          reconnectTimer = setTimeout(connectSSE, delay);
+        };
+      } catch (e) {
+        console.warn("NotificationPage SSE error:", e);
+      }
+    };
+    // handler ของ onmessage (ต้องกำหนดก่อนเรียก connectSSE() ครั้งแรก และเก็บไว้ที่
+    // connectSSE.handler เพื่อให้ reconnect ครั้งต่อไปเอาไปใช้ใหม่)
+    connectSSE.handler = async (event) => {
       try {
         const eventPayload = JSON.parse(event.data);
         const incoming = normalizeNotification(eventPayload);
@@ -370,6 +392,9 @@ export default function NotificationPage() {
       }
     };
 
+    // เริ่มเชื่อม SSE ครั้งแรก ตอนนี้ handler พร้อมแล้ว (และถูกบันทึกไว้ที่ connectSSE.handler เพื่อใช้ตอน reconnect)
+    connectSSE();
+
     const handleNotificationsUpdate = () => {
       fetchNotifications();
     };
@@ -377,7 +402,8 @@ export default function NotificationPage() {
     window.addEventListener("notifications-updated", handleNotificationsUpdate);
     return () => {
       active = false;
-      eventSource.close();
+      if (reconnectTimer) clearTimeout(reconnectTimer);
+      try { eventSource?.close(); } catch (e) {}
       window.removeEventListener("notifications-updated", handleNotificationsUpdate);
     };
   }, [reloadKey]);

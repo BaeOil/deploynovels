@@ -172,24 +172,46 @@ export function useNotifications(isLoggedIn) {
         const intervalId = setInterval(refresh, 60000);
 
         // ต่อ SSE ไว้ด้วย เผื่อมีแจ้งเตือนใหม่แบบ real-time
+        // ถ้า SSE ล้มเหลว (เช่น Railway ไม่รองรับ) ให้ backoff แล้วหยุด
+        // ไม่งั้น browser จะ reconnect วนไม่หยุดจนเป็น error flood ใน console
         const token = localStorage.getItem("token");
         let eventSource = null;
+        let reconnectTimer = null;
+        let reconnectAttempts = 0;
+        const MAX_SSE_RECONNECT = 3;
         if (token) {
             try {
                 eventSource = new EventSource(
                     `${API_BASE_URL}/notifications/stream?token=${encodeURIComponent(token)}`
                 );
                 eventSource.onmessage = refresh;
+                eventSource.onerror = () => {
+                    // ปิดตัวเก่าและ backoff ก่อน reconnect ถ้าพยายามครบถ้วนให้เลิกเลย
+                    try { eventSource?.close(); } catch (e) {}
+                    if (reconnectAttempts >= MAX_SSE_RECONNECT) return;
+                    reconnectAttempts += 1;
+                    const delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 15000);
+                    reconnectTimer = setTimeout(() => {
+                        try {
+                            eventSource = new EventSource(
+                                `${API_BASE_URL}/notifications/stream?token=${encodeURIComponent(token)}`
+                            );
+                            eventSource.onmessage = refresh;
+                            eventSource.onerror = eventSource.onerror;
+                        } catch (e) { console.warn("useNotifications: SSE reconnect error:", e); }
+                    }, delay);
+                };
             } catch (e) {
                 console.warn("useNotifications: SSE error:", e);
             }
         }
 
         return () => {
+            if (reconnectTimer) clearTimeout(reconnectTimer);
             window.removeEventListener("notifications-updated", refresh);
             window.removeEventListener("focus", refresh);
             clearInterval(intervalId);
-            eventSource?.close();
+            try { eventSource?.close(); } catch (e) {}
         };
     }, [isLoggedIn, fetchUnreadCount]);
 
