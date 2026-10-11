@@ -321,7 +321,7 @@ const StoryTreeInner = ({ activeNovelId, effectiveUserId, onNavigate }) => {
 
       const response = await fetch(`${BASE_URL}/novels/${activeNovelId}/story-tree${query}`, { headers });
       if (!response.ok) {
-        throw new Error("ไม่สามารถเรียกดูแผนผังนิยายกิ่งไม้จากฐานข้อมูลได้");
+        throw new Error("ไม่สามารถเรียกดูแผนผังนิยายจากระบบได้ กรุณาลองใหม่อีกครั้ง");
       }
 
       const resData = await response.json();
