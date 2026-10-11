@@ -671,7 +671,7 @@ const Navbar = () => {
                                         aria-expanded={isDropdownOpen}
                                     >
                                         <img
-                                            src={userData.pic_profile || "https://api.dicebear.com/7.x/bottts/svg?seed=Lucky"}
+                                            src={resolveMediaUrl(userData.pic_profile) || "https://api.dicebear.com/7.x/bottts/svg?seed=Lucky"}
                                             alt="User Avatar"
                                             className="nav-avatar-img"
                                         />
@@ -1058,7 +1058,7 @@ const Navbar = () => {
                             <div className="nav-drawer__footer-user">
                                 <div className="nav-drawer__footer-avatar">
                                     {userData.pic_profile ? (
-                                        <img src={userData.pic_profile} alt="" className="nav-drawer__avatar-img" />
+                                        <img src={resolveMediaUrl(userData.pic_profile)} alt="" className="nav-drawer__avatar-img" />
                                     ) : (
                                         <span>{(userData.username || "U").charAt(0).toUpperCase()}</span>
                                     )}

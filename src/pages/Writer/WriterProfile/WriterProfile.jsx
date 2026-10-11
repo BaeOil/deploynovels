@@ -1003,7 +1003,7 @@ function EditProfileModal({ writerInfo, onClose, onSuccess }) {
   };
 
   const currentAvatarSrc =
-    avatarPreview ||
+    resolveMediaUrl(avatarPreview) ||
     `https://api.dicebear.com/7.x/notionists/svg?seed=${encodeURIComponent(writerInfo?.name || "writer")}`;
 
   return (

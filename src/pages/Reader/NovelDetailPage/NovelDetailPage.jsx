@@ -1125,7 +1125,7 @@ const fetchFirstSceneAndNavigate = async (previewSuffix) => {
                 onClick={handleAuthorClick}
               >
                 {novel.author.avatarUrl ? (
-                  <img src={novel.author.avatarUrl} alt={novel.author.displayName} />
+                  <img src={resolveMediaUrl(novel.author.avatarUrl)} alt={novel.author.displayName} />
                 ) : (
                   <span>👤</span>
                 )}

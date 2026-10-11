@@ -875,7 +875,7 @@ const Navbarwriter = () => {
                                 aria-label="เมนูผู้ใช้งาน"
                             >
                                 <img
-                                    src={userData.pic_profile || "https://api.dicebear.com/7.x/bottts/svg?seed=storyverse"}
+                                    src={resolveMediaUrl(userData.pic_profile) || "https://api.dicebear.com/7.x/bottts/svg?seed=storyverse"}
                                     alt="avatar"
                                     className="nav-avatar-img"
                                 />

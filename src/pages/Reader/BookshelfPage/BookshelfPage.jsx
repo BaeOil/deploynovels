@@ -613,7 +613,7 @@ const BookshelfPage = () => {
                                                         className="bookshelf-card__cover"
                                                         onClick={() => navigate(`/novel/${book.id}`)}
                                                     >
-                                                        <img src={book.coverImage} alt={`${book.title} ปกนิยาย`} />
+                                                        <img src={resolveMediaUrl(book.coverImage)} alt={`${book.title} ปกนิยาย`} />
                                                         <span className={`bookshelf-card__status bookshelf-card__status--${book.reading_status}`}>
                                                             {statusLabels[book.reading_status] || "ไม่ระบุสถานะ"}
                                                         </span>
