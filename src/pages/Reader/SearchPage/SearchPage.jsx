@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getNovelStatusInfo } from "../../../utils/novelStatus";
 import { Eye, Heart, Bookmark, Pencil, SlidersHorizontal, Check } from "lucide-react";
-import LoadingScreen from "../../../components/LoadingScreen/LoadingScreen";
+import { NovelCardGridSkeleton, DataLoadError } from "../../../components/Skeleton";
 import "./SearchPage.css";
 import { resolveMediaUrl } from "../../../utils/mediaUrl";
 
@@ -337,8 +337,8 @@ const SearchPage = () => {
         {/* Layout แสดงผลการ์ดแบบ 2 คอลัมน์ต่อ 1 แถว */}
         <div className="search-body-layout-full">
           <main className="search-results-area-full">
-            {loading ? (
-              <LoadingScreen compact message="กำลังค้นหานิยาย..." />
+            {loading && novels.length === 0 ? (
+              <NovelCardGridSkeleton count={6} />
             ) : error ? (
               <div className="search-error">{error}</div>
             ) : filteredAndSortedNovels.length === 0 ? (

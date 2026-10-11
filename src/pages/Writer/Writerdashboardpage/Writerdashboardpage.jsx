@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./WriterDashboardPage.css";
 import { getNovelStatusInfo, registerBannedNovel, cleanBanReason, extractBanDetails, getBannedRegistry, getCardBanReason } from "../../../utils/novelStatus";
-import LoadingScreen from "../../../components/LoadingScreen/LoadingScreen";
+import { WriterDashboardSkeleton, DataLoadError, ButtonSpinner } from "../../../components/Skeleton";
 import { ShieldAlert, X, Layers, FileText, Pencil, BarChart2, Library, Book, Heart, Eye, Bookmark } from "lucide-react";
 import { resolveMediaUrl } from "../../../utils/mediaUrl";
 
@@ -162,7 +162,27 @@ const WriterDashboardPage = ({ onNavigate, onSelectNovel }) => {
   };
 
   if (loading) {
-    return <LoadingScreen message="กำลังดึงข้อมูลแดชบอร์ดนักเขียน..." />;
+    return (
+      <div className="wdb-page">
+        <div className="wdb">
+          <WriterDashboardSkeleton />
+        </div>
+      </div>
+    );
+  }
+
+  if (error && novels.length === 0) {
+    return (
+      <div className="wdb-page">
+        <div className="wdb">
+          <DataLoadError
+            title="เกิดข้อผิดพลาดในการโหลดแดชบอร์ดนักเขียน"
+            message={error}
+            onRetry={fetchDashboardData}
+          />
+        </div>
+      </div>
+    );
   }
 
   const suspendedNovels = novels.filter(isSuspendedNovel);
@@ -386,7 +406,7 @@ const NovelCard = ({ novel, onEdit, onTree, onAnalytics, onDelete }) => {
 
   const categoryList = novel.categories || novel.Categories || [];
   const parsedCategories = Array.isArray(categoryList)
-    ? categoryList.map(c => c.name || c.Name).filter(Boolean)
+    ? Array.from(new Set(categoryList.map(c => c.name || c.Name).filter(Boolean)))
     : [];
 
   const maxDisplay = 2;

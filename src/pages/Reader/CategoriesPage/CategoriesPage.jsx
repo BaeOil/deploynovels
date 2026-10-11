@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getNovelStatusInfo } from "../../../utils/novelStatus";
 import { Eye, Heart, Bookmark, Pencil } from "lucide-react";
-import LoadingScreen from "../../../components/LoadingScreen/LoadingScreen";
+import { NovelCardGridSkeleton, DataLoadError } from "../../../components/Skeleton";
 import "./CategoriesPage.css";
 import { resolveMediaUrl } from "../../../utils/mediaUrl";
 
@@ -350,10 +350,10 @@ const CategoriesPage = () => {
         </div>
 
         {/* 4. แสดงผลการ์ดนิยาย */}
-        {loading ? (
-          <LoadingScreen compact message="กำลังโหลดนิยาย..." />
-        ) : error ? (
-          <div className="search-error">{error}</div>
+        {loading && novels.length === 0 ? (
+          <NovelCardGridSkeleton count={8} />
+        ) : error && novels.length === 0 ? (
+          <DataLoadError title="ไม่สามารถโหลดข้อมูลนิยายได้" message={error} onRetry={loadData} />
         ) : paginatedNovels.length === 0 ? (
           <div className="search-empty-state">
             <div className="empty-icon">🔍</div>
